@@ -1036,8 +1036,8 @@ function init () {
     });
   });
 
-  // 添加咨询按钮点击事件
-  $(document).on('click', '#consultationBtn', function(e) {
+  // 添加咨询/转接按钮点击事件
+  $(document).on('click', '#consultationBtn, #transferBtn', function(e) {
     e.preventDefault();
     
     var modalHtml = 
@@ -1046,7 +1046,7 @@ function init () {
       '<div class="modal-dialog modal-dialog-lg">' +
       '<div class="modal-content">' +
       '<div class="modal-header">' +
-      '<h5 class="modal-title">咨询操作</h5>' +
+      '<h5 class="modal-title">转接/咨询操作</h5>' +
       '<button type="button" class="btn-close" onclick="ModalUtil.hide(\'consultationModal\')"></button>' +
       '</div>' +
       '<div class="modal-body" id="consultationModalBody">' +
