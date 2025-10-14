@@ -83,6 +83,7 @@ function onConferenceEnd () {
   document.getElementById("endConference").setAttribute("disabled", "true");
   document.getElementById("startConference").removeAttribute("disabled");
   document.getElementById("conference_member_list").style.display = "none";
+  
   // 启用外呼按钮
   $("#callBtn").addClass('on');
   // 启用置闲按钮
@@ -100,6 +101,7 @@ function onConferenceEnd () {
 function onConferenceStart () {
   document.getElementById("endConference").removeAttribute("disabled");
   document.getElementById("conference_member_list").style.display = "block";
+  
   let tips = "多方通话进行中";
   $("#callStatus").text(tips);
   $("#agentStatus").text(tips);
@@ -250,25 +252,6 @@ function scrollToBottom () {
 
 
 function init () {
-  // 添加会议弹窗HTML
-  $('body').append(`
-    <div class="modal fade" id="conferenceModal" tabindex="-1">
-      <div class="modal-dialog">
-        <div class="modal-content">
-          <div class="modal-header">
-            <h5 class="modal-title">会议操作</h5>
-            <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
-          </div>
-          <div class="modal-body">
-            <p>请选择操作：</p>
-            <button type="button" class="btn btn-primary w-100 mb-2" onclick="$('#conferenceModal').modal('hide');$('#conference_area').show();">发起新会议</button>
-            <button type="button" class="btn btn-secondary w-100" onclick="$('#conferenceModal').modal('hide');alert('加入已有会议功能待开发')">加入已有会议</button>
-          </div>
-        </div>
-      </div>
-    </div>
-  `);
-
   console.log($('#app'));
 
   $('#app').html(`
@@ -810,7 +793,41 @@ function init () {
   // 添加会议按钮点击事件
   $(document).on('click', '#conferenceBtn', function(e) {
     e.preventDefault();
-    new bootstrap.Modal('#conferenceModal').show();
+    
+    var modalHtml = '<div class="modal fade" id="conferenceModal" tabindex="-1">' +
+      '<div class="modal-dialog modal-lg">' +
+      '<div class="modal-content">' +
+      '<div class="modal-header">' +
+      '<h5 class="modal-title">会议管理</h5>' +
+      '<button type="button" class="btn-close" data-bs-dismiss="modal"></button>' +
+      '</div>' +
+      '<div class="modal-body" id="conferenceModalBody">' +
+      '</div>' +
+      '</div>' +
+      '</div>' +
+      '</div>';
+
+    // 如果已经存在弹窗，先移除
+    $('#conferenceModal').remove();
+    
+    // 添加弹窗到页面
+    $('body').append(modalHtml);
+    
+    // 把 conference_area 的内容移动到弹窗中（不是克隆，是移动）
+    var conferenceContent = $('#conference_area > td > div').detach();
+    $('#conferenceModalBody').append(conferenceContent);
+    $('#conference_area').hide();
+    
+    // 显示弹窗
+    var modal = new bootstrap.Modal(document.getElementById('conferenceModal'));
+    modal.show();
+    
+    // 弹窗关闭时，把内容移回原位
+    $('#conferenceModal').on('hidden.bs.modal', function () {
+      var conferenceContent = $('#conferenceModalBody > div').detach();
+      $('#conference_area > td').append(conferenceContent);
+      $('#conferenceModal').remove();
+    });
   });
 
 
