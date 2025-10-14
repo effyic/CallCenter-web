@@ -6,6 +6,32 @@ var opnum = '1103'; //工号
 
 var jsSipUAInstance = new jsSipUA();
 
+// 弹窗工具函数（不依赖Bootstrap）
+var ModalUtil = {
+  show: function(modalId) {
+    var modal = document.getElementById(modalId);
+    var overlay = document.getElementById(modalId + '-overlay');
+    if (modal) {
+      modal.classList.add('show');
+      if (overlay) overlay.classList.add('show');
+    }
+  },
+  hide: function(modalId) {
+    var modal = document.getElementById(modalId);
+    var overlay = document.getElementById(modalId + '-overlay');
+    if (modal) {
+      modal.classList.remove('show');
+      if (overlay) overlay.classList.remove('show');
+    }
+  },
+  remove: function(modalId) {
+    var modal = document.getElementById(modalId);
+    var overlay = document.getElementById(modalId + '-overlay');
+    if (modal) modal.remove();
+    if (overlay) overlay.remove();
+  }
+};
+
 var skillLevel = 9; //技能等级
 var groupId = 1; // 业务组id
 if (window.location.href.toString().indexOf("?") != -1) {
@@ -820,326 +846,6 @@ function init () {
       console.log(msg);
   });
 
-  // 添加咨询按钮点击事件
-  $(document).on('click', '#consultationBtn', function(e) {
-    e.preventDefault();
-    
-    var modalHtml = '<style>' +
-      '#consultationModal .modal-content {' +
-      '  border: none;' +
-      '  border-radius: 12px;' +
-      '  box-shadow: 0 4px 20px rgba(0,0,0,0.08);' +
-      '  overflow: hidden;' +
-      '}' +
-      '#consultationModal .modal-header {' +
-      '  background: #6b9aff;' +
-      '  color: white;' +
-      '  border: none;' +
-      '  padding: 20px 30px;' +
-      '}' +
-      '#consultationModal .modal-title {' +
-      '  font-size: 18px;' +
-      '  font-weight: 600;' +
-      '}' +
-      '#consultationModal .btn-close {' +
-      '  filter: brightness(0) invert(1);' +
-      '  opacity: 0.8;' +
-      '}' +
-      '#consultationModal .btn-close:hover {' +
-      '  opacity: 1;' +
-      '}' +
-      '#consultationModal .modal-body {' +
-      '  padding: 30px;' +
-      '  background: #f6f9ff;' +
-      '}' +
-      '#consultationModal select {' +
-      '  padding: 10px 12px;' +
-      '  border: 1px solid #d1dff7;' +
-      '  border-radius: 6px;' +
-      '  font-size: 14px;' +
-      '  transition: all 0.3s ease;' +
-      '  background: white;' +
-      '}' +
-      '#consultationModal select:focus {' +
-      '  outline: none;' +
-      '  border-color: #6b9aff;' +
-      '  box-shadow: 0 0 0 3px rgba(107, 154, 255, 0.1);' +
-      '}' +
-      '#consultationModal input[type="text"] {' +
-      '  padding: 10px 12px;' +
-      '  border: 1px solid #d1dff7;' +
-      '  border-radius: 6px;' +
-      '  font-size: 14px;' +
-      '  transition: all 0.3s ease;' +
-      '}' +
-      '#consultationModal input[type="text"]:focus {' +
-      '  outline: none;' +
-      '  border-color: #6b9aff;' +
-      '  box-shadow: 0 0 0 3px rgba(107, 154, 255, 0.1);' +
-      '}' +
-      '#consultationModal input[type="button"] {' +
-      '  padding: 8px 16px;' +
-      '  border: none;' +
-      '  border-radius: 6px;' +
-      '  font-size: 13px;' +
-      '  font-weight: 500;' +
-      '  cursor: pointer;' +
-      '  transition: all 0.2s ease;' +
-      '  background: #6b9aff;' +
-      '  color: white;' +
-      '  margin: 5px;' +
-      '  min-width: 80px;' +
-      '  white-space: nowrap;' +
-      '}' +
-      '#consultationModal input[type="button"]:hover {' +
-      '  background: #5b8def;' +
-      '  box-shadow: 0 2px 8px rgba(107, 154, 255, 0.3);' +
-      '}' +
-      '#consultationModal input[type="button"]:active {' +
-      '  transform: translateY(1px);' +
-      '}' +
-      '#consultationModal table {' +
-      '  background: white;' +
-      '  border-radius: 8px;' +
-      '  padding: 20px;' +
-      '  box-shadow: 0 1px 4px rgba(0,0,0,0.05);' +
-      '}' +
-      '#consultationModal td {' +
-      '  padding: 12px 15px;' +
-      '}' +
-      '</style>' +
-      '<div class="modal fade" id="consultationModal" tabindex="-1">' +
-      '<div class="modal-dialog modal-lg">' +
-      '<div class="modal-content">' +
-      '<div class="modal-header">' +
-      '<h5 class="modal-title">咨询操作</h5>' +
-      '<button type="button" class="btn-close" data-bs-dismiss="modal"></button>' +
-      '</div>' +
-      '<div class="modal-body" id="consultationModalBody">' +
-      '</div>' +
-      '</div>' +
-      '</div>' +
-      '</div>';
-
-    // 如果已经存在弹窗，先移除
-    $('#consultationModal').remove();
-    
-    // 添加弹窗到页面
-    $('body').append(modalHtml);
-    
-    // 把 transfer_area 的内容移动到弹窗中（不是克隆，是移动）
-    var transferContent = $('#transfer_area > td > table').detach();
-    $('#consultationModalBody').append(transferContent);
-    $('#transfer_area').hide();
-    
-    // 显示弹窗
-    var modal = new bootstrap.Modal(document.getElementById('consultationModal'));
-    modal.show();
-
-    // 等弹窗显示后再初始化数据
-    setTimeout(function() {
-      populateGroupIdOptions();
-    }, 100);
-    
-    // 弹窗关闭时，把内容移回原位
-    $('#consultationModal').on('hidden.bs.modal', function () {
-      var transferContent = $('#consultationModalBody table').detach();
-      $('#transfer_area > td').append(transferContent);
-      $('#consultationModal').remove();
-    });
-  });
-
-  // 添加会议按钮点击事件
-  $(document).on('click', '#conferenceBtn', function(e) {
-    e.preventDefault();
-    
-    var modalHtml = '<style>' +
-      '#conferenceModal .modal-content {' +
-      '  border: none;' +
-      '  border-radius: 12px;' +
-      '  box-shadow: 0 4px 20px rgba(0,0,0,0.08);' +
-      '  overflow: hidden;' +
-      '}' +
-      '#conferenceModal .modal-header {' +
-      '  background: #6b9aff;' +
-      '  color: white;' +
-      '  border: none;' +
-      '  padding: 20px 30px;' +
-      '}' +
-      '#conferenceModal .modal-title {' +
-      '  font-size: 18px;' +
-      '  font-weight: 600;' +
-      '}' +
-      '#conferenceModal .btn-close {' +
-      '  filter: brightness(0) invert(1);' +
-      '  opacity: 0.8;' +
-      '}' +
-      '#conferenceModal .btn-close:hover {' +
-      '  opacity: 1;' +
-      '}' +
-      '#conferenceModal .modal-body {' +
-      '  padding: 30px;' +
-      '  background: #f6f9ff;' +
-      '}' +
-      '#conferenceModal select {' +
-      '  padding: 10px 12px;' +
-      '  border: 1px solid #d1dff7;' +
-      '  border-radius: 6px;' +
-      '  font-size: 14px;' +
-      '  transition: all 0.3s ease;' +
-      '  background: white;' +
-      '}' +
-      '#conferenceModal select:focus {' +
-      '  outline: none;' +
-      '  border-color: #6b9aff;' +
-      '  box-shadow: 0 0 0 3px rgba(107, 154, 255, 0.1);' +
-      '}' +
-      '#conferenceModal input[type="text"], ' +
-      '#conferenceModal input[name*="member"] {' +
-      '  padding: 10px 12px;' +
-      '  border: 1px solid #d1dff7;' +
-      '  border-radius: 6px;' +
-      '  font-size: 14px;' +
-      '  transition: all 0.3s ease;' +
-      '  background: white;' +
-      '}' +
-      '#conferenceModal input[type="text"]:focus, ' +
-      '#conferenceModal input[name*="member"]:focus {' +
-      '  outline: none;' +
-      '  border-color: #6b9aff;' +
-      '  box-shadow: 0 0 0 3px rgba(107, 154, 255, 0.1);' +
-      '}' +
-      '#conferenceModal input[type="button"], ' +
-      '#conferenceModal input[name*="Conference"], ' +
-      '#conferenceModal input[name*="ConfMember"] {' +
-      '  padding: 8px 16px;' +
-      '  border: none;' +
-      '  border-radius: 6px;' +
-      '  font-size: 13px;' +
-      '  font-weight: 500;' +
-      '  cursor: pointer;' +
-      '  transition: all 0.2s ease;' +
-      '  margin: 5px;' +
-      '  min-width: 90px;' +
-      '  white-space: nowrap;' +
-      '}' +
-      '#conferenceModal input[name="startConference"], ' +
-      '#conferenceModal input[name="addConfMember"] {' +
-      '  background: #6b9aff;' +
-      '  color: white;' +
-      '}' +
-      '#conferenceModal input[name="startConference"]:hover, ' +
-      '#conferenceModal input[name="addConfMember"]:hover {' +
-      '  background: #5b8def;' +
-      '  box-shadow: 0 2px 8px rgba(107, 154, 255, 0.3);' +
-      '}' +
-      '#conferenceModal input[name="endConference"] {' +
-      '  background: #a0b3d8;' +
-      '  color: white;' +
-      '}' +
-      '#conferenceModal input[name="endConference"]:hover {' +
-      '  background: #8fa3cc;' +
-      '  box-shadow: 0 2px 8px rgba(160, 179, 216, 0.3);' +
-      '}' +
-      '#conferenceModal input[type="button"]:disabled {' +
-      '  opacity: 0.5;' +
-      '  cursor: not-allowed;' +
-      '}' +
-      '#conferenceModal input[type="button"]:active:not(:disabled) {' +
-      '  transform: translateY(1px);' +
-      '}' +
-      '#conferenceModal #conference_start {' +
-      '  background: white;' +
-      '  border-radius: 8px;' +
-      '  padding: 20px;' +
-      '  box-shadow: 0 1px 4px rgba(0,0,0,0.05);' +
-      '  margin-bottom: 20px;' +
-      '}' +
-      '#conferenceModal #conference_member_list {' +
-      '  background: white;' +
-      '  border-radius: 8px;' +
-      '  padding: 20px;' +
-      '  box-shadow: 0 1px 4px rgba(0,0,0,0.05);' +
-      '}' +
-      '#conferenceModal #conference_member_list ul {' +
-      '  list-style: none;' +
-      '  padding: 0;' +
-      '  margin: 0;' +
-      '}' +
-      '#conferenceModal #conference_member_list li {' +
-      '  padding: 12px 0;' +
-      '  border-bottom: 1px solid #e8eff9;' +
-      '}' +
-      '#conferenceModal #conference_member_list li:last-child {' +
-      '  border-bottom: none;' +
-      '}' +
-      '#conferenceModal .conf_member_item_row {' +
-      '  background: #f6f9ff;' +
-      '  padding: 15px !important;' +
-      '  border-radius: 6px !important;' +
-      '  margin: 10px 0 !important;' +
-      '  border: none !important;' +
-      '}' +
-      '#conferenceModal .conf_member_item_row:hover {' +
-      '  background: #e8eff9;' +
-      '}' +
-      '#conferenceModal .conf_name, ' +
-      '#conferenceModal .conf_phone, ' +
-      '#conferenceModal .conf_status {' +
-      '  display: inline-block;' +
-      '  margin-right: 10px;' +
-      '  font-size: 14px;' +
-      '}' +
-      '#conferenceModal .conf_remove a, ' +
-      '#conferenceModal .conf_re_invite a {' +
-      '  color: #6b9aff;' +
-      '  text-decoration: none;' +
-      '  font-weight: 500;' +
-      '  padding: 5px 10px;' +
-      '  border-radius: 4px;' +
-      '  transition: all 0.2s ease;' +
-      '}' +
-      '#conferenceModal .conf_remove a:hover, ' +
-      '#conferenceModal .conf_re_invite a:hover {' +
-      '  background: rgba(107, 154, 255, 0.1);' +
-      '}' +
-      '</style>' +
-      '<div class="modal fade" id="conferenceModal" tabindex="-1">' +
-      '<div class="modal-dialog modal-lg">' +
-      '<div class="modal-content">' +
-      '<div class="modal-header">' +
-      '<h5 class="modal-title">会议管理</h5>' +
-      '<button type="button" class="btn-close" data-bs-dismiss="modal"></button>' +
-      '</div>' +
-      '<div class="modal-body" id="conferenceModalBody">' +
-      '</div>' +
-      '</div>' +
-      '</div>' +
-      '</div>';
-
-    // 如果已经存在弹窗，先移除
-    $('#conferenceModal').remove();
-    
-    // 添加弹窗到页面
-    $('body').append(modalHtml);
-    
-    // 把 conference_area 的内容移动到弹窗中（不是克隆，是移动）
-    var conferenceContent = $('#conference_area > td > div').detach();
-    $('#conferenceModalBody').append(conferenceContent);
-    $('#conference_area').hide();
-    
-    // 显示弹窗
-    var modal = new bootstrap.Modal(document.getElementById('conferenceModal'));
-    modal.show();
-    
-    // 弹窗关闭时，把内容移回原位
-    $('#conferenceModal').on('hidden.bs.modal', function () {
-      var conferenceContent = $('#conferenceModalBody > div').detach();
-      $('#conference_area > td').append(conferenceContent);
-      $('#conferenceModal').remove();
-    });
-  });
-
 
   // 电话工具条参数配置;
   _callConfig = {
@@ -1180,138 +886,50 @@ function init () {
   $(document).on('click', '#onLineBtn', function(e) {
     e.preventDefault();
     
-    var signinModalHtml = '<style>' +
-      '#signinModal .modal-content {' +
-      '  border: none;' +
-      '  border-radius: 12px;' +
-      '  box-shadow: 0 4px 20px rgba(0,0,0,0.08);' +
-      '  overflow: hidden;' +
-      '}' +
-      '#signinModal .modal-header {' +
-      '  background: #6b9aff;' +
-      '  color: white;' +
-      '  border: none;' +
-      '  padding: 20px 30px;' +
-      '}' +
-      '#signinModal .modal-title {' +
-      '  font-size: 18px;' +
-      '  font-weight: 600;' +
-      '}' +
-      '#signinModal .btn-close {' +
-      '  filter: brightness(0) invert(1);' +
-      '  opacity: 0.8;' +
-      '}' +
-      '#signinModal .btn-close:hover {' +
-      '  opacity: 1;' +
-      '}' +
-      '#signinModal .modal-body {' +
-      '  padding: 30px;' +
-      '  background: #f6f9ff;' +
-      '}' +
-      '#signinModal .signin-form-group {' +
-      '  margin-bottom: 20px;' +
-      '  position: relative;' +
-      '}' +
-      '#signinModal .signin-label {' +
-      '  display: block;' +
-      '  font-size: 14px;' +
-      '  font-weight: 500;' +
-      '  color: #495057;' +
-      '  margin-bottom: 8px;' +
-      '}' +
-      '#signinModal .signin-input {' +
-      '  width: 100%;' +
-      '  padding: 10px 14px;' +
-      '  font-size: 14px;' +
-      '  border: 1px solid #d1dff7;' +
-      '  border-radius: 6px;' +
-      '  transition: all 0.3s ease;' +
-      '  background: white;' +
-      '}' +
-      '#signinModal .signin-input:focus {' +
-      '  outline: none;' +
-      '  border-color: #6b9aff;' +
-      '  box-shadow: 0 0 0 3px rgba(107, 154, 255, 0.1);' +
-      '}' +
-      '#signinModal .signin-input::placeholder {' +
-      '  color: #adb5bd;' +
-      '}' +
-      '#signinModal .modal-footer {' +
-      '  border: none;' +
-      '  padding: 20px 30px;' +
-      '  background: #f6f9ff;' +
-      '  display: flex;' +
-      '  gap: 12px;' +
-      '}' +
-      '#signinModal .signin-btn {' +
-      '  flex: 1;' +
-      '  padding: 10px 20px;' +
-      '  font-size: 14px;' +
-      '  font-weight: 500;' +
-      '  border: none;' +
-      '  border-radius: 6px;' +
-      '  cursor: pointer;' +
-      '  transition: all 0.2s ease;' +
-      '}' +
-      '#signinModal .signin-btn-cancel {' +
-      '  background: white;' +
-      '  color: #6c757d;' +
-      '  border: 1px solid #d1dff7;' +
-      '}' +
-      '#signinModal .signin-btn-cancel:hover {' +
-      '  background: #f6f9ff;' +
-      '  border-color: #a0b3d8;' +
-      '}' +
-      '#signinModal .signin-btn-confirm {' +
-      '  background: #6b9aff;' +
-      '  color: white;' +
-      '}' +
-      '#signinModal .signin-btn-confirm:hover {' +
-      '  background: #5b8def;' +
-      '  box-shadow: 0 2px 8px rgba(107, 154, 255, 0.3);' +
-      '}' +
-      '#signinModal .signin-btn-confirm:active {' +
-      '  transform: translateY(1px);' +
-      '}' +
-      '</style>' +
-      '<div class="modal fade" id="signinModal" tabindex="-1">' +
-      '<div class="modal-dialog modal-dialog-centered">' +
+    var signinModalHtml = 
+      '<div class="modal-overlay" id="signinModal-overlay"></div>' +
+      '<div class="modal" id="signinModal">' +
+      '<div class="modal-dialog">' +
       '<div class="modal-content">' +
       '<div class="modal-header">' +
       '<h5 class="modal-title">座席签入</h5>' +
-      '<button type="button" class="btn-close" data-bs-dismiss="modal"></button>' +
+      '<button type="button" class="btn-close" onclick="ModalUtil.hide(\'signinModal\')"></button>' +
       '</div>' +
       '<div class="modal-body">' +
-      '<div class="signin-form-group">' +
-      '<label class="signin-label">分机工号</label>' +
-      '<input type="text" class="signin-input" id="signinOpnum" placeholder="请输入分机工号">' +
+      '<div class="form-group">' +
+      '<label class="form-label">分机工号</label>' +
+      '<input type="text" class="form-input" id="signinOpnum" placeholder="请输入分机工号">' +
       '</div>' +
-      '<div class="signin-form-group">' +
-      '<label class="signin-label">座席密码</label>' +
-      '<input type="password" class="signin-input" id="signinPassword" placeholder="请输入座席密码">' +
+      '<div class="form-group">' +
+      '<label class="form-label">座席密码</label>' +
+      '<input type="password" class="form-input" id="signinPassword" placeholder="请输入座席密码">' +
       '</div>' +
-      '<div class="signin-form-group">' +
-      '<label class="signin-label">分机号码</label>' +
-      '<input type="text" class="signin-input" id="signinExtnum" placeholder="请输入分机号码">' +
+      '<div class="form-group">' +
+      '<label class="form-label">分机号码</label>' +
+      '<input type="text" class="form-input" id="signinExtnum" placeholder="请输入分机号码">' +
       '</div>' +
       '</div>' +
       '<div class="modal-footer">' +
-      '<button type="button" class="signin-btn signin-btn-cancel" data-bs-dismiss="modal">取消</button>' +
-      '<button type="button" class="signin-btn signin-btn-confirm" id="confirmSigninBtn">确认签入</button>' +
+      '<button type="button" class="btn btn-secondary" onclick="ModalUtil.hide(\'signinModal\')">取消</button>' +
+      '<button type="button" class="btn btn-primary" id="confirmSigninBtn">确认签入</button>' +
       '</div>' +
       '</div>' +
       '</div>' +
       '</div>';
 
     // 如果已经存在弹窗，先移除
-    $('#signinModal').remove();
+    ModalUtil.remove('signinModal');
     
     // 添加弹窗到页面
     $('body').append(signinModalHtml);
     
     // 显示弹窗
-    var modal = new bootstrap.Modal(document.getElementById('signinModal'));
-    modal.show();
+    ModalUtil.show('signinModal');
+    
+    // 点击遮罩层关闭
+    $('#signinModal-overlay').click(function() {
+      ModalUtil.hide('signinModal');
+    });
 
     // 确认签入按钮点击事件
     $(document).on('click', '#confirmSigninBtn', function() {
@@ -1325,7 +943,7 @@ function init () {
       }
       
       // 关闭弹窗
-      modal.hide();
+      ModalUtil.hide('signinModal');
       
       // 更新全局变量
       extnum = extnumValue;
@@ -1415,6 +1033,105 @@ function init () {
           clearInterval(checkInterval);
         }
       }, 100); // 每100ms检查一次
+    });
+  });
+
+  // 添加咨询按钮点击事件
+  $(document).on('click', '#consultationBtn', function(e) {
+    e.preventDefault();
+    
+    var modalHtml = 
+      '<div class="modal-overlay" id="consultationModal-overlay"></div>' +
+      '<div class="modal" id="consultationModal">' +
+      '<div class="modal-dialog modal-dialog-lg">' +
+      '<div class="modal-content">' +
+      '<div class="modal-header">' +
+      '<h5 class="modal-title">咨询操作</h5>' +
+      '<button type="button" class="btn-close" onclick="ModalUtil.hide(\'consultationModal\')"></button>' +
+      '</div>' +
+      '<div class="modal-body" id="consultationModalBody">' +
+      '</div>' +
+      '</div>' +
+      '</div>' +
+      '</div>';
+
+    // 如果已经存在弹窗，先移除
+    ModalUtil.remove('consultationModal');
+    
+    // 添加弹窗到页面
+    $('body').append(modalHtml);
+    
+    // 把 transfer_area 的内容移动到弹窗中
+    var transferContent = $('#transfer_area > td > table').detach();
+    $('#consultationModalBody').append(transferContent);
+    $('#transfer_area').hide();
+    
+    // 显示弹窗
+    ModalUtil.show('consultationModal');
+    
+    // 点击遮罩层关闭
+    $('#consultationModal-overlay').click(function() {
+      var transferContent = $('#consultationModalBody table').detach();
+      $('#transfer_area > td').append(transferContent);
+      ModalUtil.hide('consultationModal');
+    });
+
+    // 等弹窗显示后再初始化数据
+    setTimeout(function() {
+      populateGroupIdOptions();
+    }, 100);
+    
+    // 弹窗关闭处理
+    $(document).on('click', '.btn-close', function() {
+      var transferContent = $('#consultationModalBody table').detach();
+      $('#transfer_area > td').append(transferContent);
+    });
+  });
+
+  // 添加会议按钮点击事件
+  $(document).on('click', '#conferenceBtn', function(e) {
+    e.preventDefault();
+    
+    var modalHtml = 
+      '<div class="modal-overlay" id="conferenceModal-overlay"></div>' +
+      '<div class="modal" id="conferenceModal">' +
+      '<div class="modal-dialog modal-dialog-lg">' +
+      '<div class="modal-content">' +
+      '<div class="modal-header">' +
+      '<h5 class="modal-title">会议管理</h5>' +
+      '<button type="button" class="btn-close" onclick="ModalUtil.hide(\'conferenceModal\')"></button>' +
+      '</div>' +
+      '<div class="modal-body" id="conferenceModalBody">' +
+      '</div>' +
+      '</div>' +
+      '</div>' +
+      '</div>';
+
+    // 如果已经存在弹窗，先移除
+    ModalUtil.remove('conferenceModal');
+    
+    // 添加弹窗到页面
+    $('body').append(modalHtml);
+    
+    // 把 conference_area 的内容移动到弹窗中
+    var conferenceContent = $('#conference_area > td > div').detach();
+    $('#conferenceModalBody').append(conferenceContent);
+    $('#conference_area').hide();
+    
+    // 显示弹窗
+    ModalUtil.show('conferenceModal');
+    
+    // 点击遮罩层关闭
+    $('#conferenceModal-overlay').click(function() {
+      var conferenceContent = $('#conferenceModalBody > div').detach();
+      $('#conference_area > td').append(conferenceContent);
+      ModalUtil.hide('conferenceModal');
+    });
+    
+    // 弹窗关闭处理
+    $(document).on('click', '.btn-close', function() {
+      var conferenceContent = $('#conferenceModalBody > div').detach();
+      $('#conference_area > td').append(conferenceContent);
     });
   });
 

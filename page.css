@@ -1,11 +1,11 @@
 @charset "utf-8";
 /* CSS Document */
-body{ background:#eef3fa;}
+/* body{ background:#eef3fa;} */
 
 html,body,table,tr,td,div,ol,ul,li,dl,dt,dd,dir,h1,h2,h3,h4,h5,h6,p{text-align: left; margin: 0px;padding: 0px;border: 0px;list-style-type: none; font-size:12px; font-weight:normal;}
 div,select,textarea,table td,table td,table tr{font-family:myFirstFont;font-size:12px; color:#768595;}
 
-.main{ margin:0px 10px;}
+/* .main{ margin:0px 10px;} */
 
 /***头部区***/
 .head_btn{ height:50px; margin-bottom:10px;}
@@ -36,7 +36,7 @@ div,select,textarea,table td,table td,table tr{font-family:myFirstFont;font-size
     background: #095db1; /* Old browsers */  
     background: -moz-linear-gradient(top, #095db1 0%, #095db1 100%); /* FF3.6+ */  
     background: -webkit-gradient(linear, left top, left bottombottom, color-stop(0%,#095db1), color-stop(100%,#095db1)); /* Chrome,Safari4+ */  
-    background: -webkit-linear-gradient(top, #095db1 0%,#ff000 100%); /* Chrome10+,Safari5.1+ */  
+    background: -webkit-linear-gradient(top, #095db1 0%,#095db1 100%); /* Chrome10+,Safari5.1+ */  
     background: -o-linear-gradient(top, #095db1 0%,#095db1 100%); /* Opera 11.10+ */  
     background: -ms-linear-gradient(top, #095db1 0%,#095db1 100%); /* IE10+ */  
     background: linear-gradient(top, #095db1 0%,#095db1 100%); /* W3C */  
@@ -53,7 +53,7 @@ div,select,textarea,table td,table td,table tr{font-family:myFirstFont;font-size
     border-style: solid;   
     border-width: 1px;  
     border-color: #dfe5e7 #dfe5e7 #eef3fa #dfe5e7;  
-    width: 700px;
+    /* width: 700px; */
     line-height: 35px;
 }
 
@@ -223,3 +223,522 @@ qiangjie_btn,.qiangjie_btn.on{background:url(./images/phonebar/qiangjie.png) no-
     font-weight: bold;
     margin-bottom: 5px;
 }
+/* 签入弹窗样式开始 */
+
+/* 弹窗样式 */
+.modal-overlay {
+    display: none;
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.5);
+    z-index: 9998;
+    animation: fadeIn 0.3s ease;
+}
+
+.modal-overlay.show {
+    display: block;
+}
+
+.modal {
+    display: none;
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    background: white;
+    border-radius: 12px;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.15);
+    z-index: 9999;
+    max-width: 90%;
+    max-height: 90vh;
+    overflow-y: auto;
+    animation: slideIn 0.3s ease;
+}
+
+.modal.show {
+    display: block;
+}
+
+.modal-dialog {
+    width: 100%;
+}
+
+.modal-dialog-lg {
+    width: auto;
+    /* min-width: 800px; */
+}
+
+.modal-content {
+    background: white;
+    border-radius: 12px;
+    overflow: hidden;
+    width:500px;
+}
+
+.modal-header {
+    background: #6b9aff;
+    color: white;
+    padding: 20px 30px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.modal-title {
+    font-size: 18px;
+    font-weight: 600;
+    margin: 0;
+}
+
+.btn-close {
+    background: transparent;
+    border: none;
+    color: white;
+    font-size: 24px;
+    cursor: pointer;
+    opacity: 0.8;
+    padding: 0;
+    width: 30px;
+    height: 30px;
+    line-height: 24px;
+}
+
+.btn-close:hover {
+    opacity: 1;
+}
+
+.btn-close:before {
+    content: '×';
+}
+
+.modal-body {
+    padding: 30px;
+    background: #f6f9ff;
+    min-height: 200px;
+}
+
+.modal-footer {
+    padding: 20px 30px;
+    background: #f6f9ff;
+    display: flex;
+    gap: 12px;
+    justify-content: flex-end;
+}
+
+/* 表单样式 */
+.form-group {
+    margin-bottom: 20px;
+}
+
+.form-label {
+    display: block;
+    font-size: 14px;
+    font-weight: 500;
+    color: #495057;
+    margin-bottom: 8px;
+}
+
+.form-input {
+    width: 100%;
+    padding: 10px 14px;
+    font-size: 14px;
+    border: 1px solid #d1dff7;
+    border-radius: 6px;
+    transition: all 0.3s ease;
+    background: white;
+    box-sizing: border-box;
+}
+
+.form-input:focus {
+    outline: none;
+    border-color: #6b9aff;
+    box-shadow: 0 0 0 3px rgba(107, 154, 255, 0.1);
+}
+
+.form-input::placeholder {
+    color: #adb5bd;
+}
+
+/* 按钮样式 */
+.btn {
+    padding: 10px 20px;
+    font-size: 14px;
+    font-weight: 500;
+    border: none;
+    border-radius: 6px;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    min-width: 80px;
+}
+
+.btn-primary {
+    background: #6b9aff;
+    color: white;
+}
+
+.btn-primary:hover {
+    background: #5b8def;
+    box-shadow: 0 2px 8px rgba(107, 154, 255, 0.3);
+}
+
+.btn-secondary {
+    background: white;
+    color: #6c757d;
+    border: 1px solid #d1dff7;
+}
+
+.btn-secondary:hover {
+    background: #f6f9ff;
+    border-color: #a0b3d8;
+}
+
+.btn:active {
+    transform: translateY(1px);
+}
+
+.btn:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+}
+
+.btn-success {
+    background: #6b9aff;
+    color: white;
+}
+
+.btn-danger {
+    background: #a0b3d8;
+    color: white;
+}
+
+/* 动画 */
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+    }
+    to {
+        opacity: 1;
+    }
+}
+
+@keyframes slideIn {
+    from {
+        transform: translate(-50%, -55%);
+        opacity: 0;
+    }
+    to {
+        transform: translate(-50%, -50%);
+        opacity: 1;
+    }
+}
+
+/* 咨询弹窗特殊样式 */
+#consultationModal .modal-content {
+    width: 650px;
+    max-width: 90vw;
+}
+
+#consultationModal select {
+    padding: 10px 12px;
+    border: 1px solid #d1dff7;
+    border-radius: 6px;
+    font-size: 14px;
+    transition: all 0.3s ease;
+    background: white;
+}
+
+#consultationModal select:focus {
+    outline: none;
+    border-color: #6b9aff;
+    box-shadow: 0 0 0 3px rgba(107, 154, 255, 0.1);
+}
+
+#consultationModal input[type="text"] {
+    padding: 10px 12px;
+    border: 1px solid #d1dff7;
+    border-radius: 6px;
+    font-size: 14px;
+    transition: all 0.3s ease;
+}
+
+#consultationModal input[type="text"]:focus {
+    outline: none;
+    border-color: #6b9aff;
+    box-shadow: 0 0 0 3px rgba(107, 154, 255, 0.1);
+}
+
+#consultationModal input[type="button"] {
+    padding: 8px 16px;
+    border: none;
+    border-radius: 6px;
+    font-size: 13px;
+    font-weight: 500;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    background: #6b9aff;
+    color: white;
+    margin: 5px;
+    min-width: 80px;
+    white-space: nowrap;
+}
+
+#consultationModal input[type="button"]:hover {
+    background: #5b8def;
+    box-shadow: 0 2px 8px rgba(107, 154, 255, 0.3);
+}
+
+#consultationModal input[type="button"]:active {
+    transform: translateY(1px);
+}
+
+#consultationModal table {
+    background: white;
+    border-radius: 8px;
+    padding: 20px;
+    box-shadow: 0 1px 4px rgba(0,0,0,0.05);
+}
+
+#consultationModal td {
+    padding: 12px 15px;
+}
+
+/* 会议弹窗特殊样式 */
+#conferenceModal .modal-content {
+    width: 650px;
+    max-width: 90vw;
+}
+
+#conferenceModal select {
+    padding: 10px 12px;
+    border: 1px solid #d1dff7;
+    border-radius: 6px;
+    font-size: 14px;
+    transition: all 0.3s ease;
+    background: white;
+}
+
+#conferenceModal select:focus {
+    outline: none;
+    border-color: #6b9aff;
+    box-shadow: 0 0 0 3px rgba(107, 154, 255, 0.1);
+}
+
+#conferenceModal input[type="text"],
+#conferenceModal input[name*="member"] {
+    padding: 10px 12px;
+    border: 1px solid #d1dff7;
+    border-radius: 6px;
+    font-size: 14px;
+    transition: all 0.3s ease;
+    background: white;
+}
+
+#conferenceModal input[type="text"]:focus,
+#conferenceModal input[name*="member"]:focus {
+    outline: none;
+    border-color: #6b9aff;
+    box-shadow: 0 0 0 3px rgba(107, 154, 255, 0.1);
+}
+
+#conferenceModal input[type="button"],
+#conferenceModal input[name*="Conference"],
+#conferenceModal input[name*="ConfMember"] {
+    padding: 8px 16px;
+    border: none;
+    border-radius: 6px;
+    font-size: 13px;
+    font-weight: 500;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    margin: 5px;
+    min-width: 90px;
+    white-space: nowrap;
+}
+
+#conferenceModal input[name="startConference"],
+#conferenceModal input[name="addConfMember"] {
+    background: #6b9aff;
+    color: white;
+}
+
+#conferenceModal input[name="startConference"]:hover,
+#conferenceModal input[name="addConfMember"]:hover {
+    background: #5b8def;
+    box-shadow: 0 2px 8px rgba(107, 154, 255, 0.3);
+}
+
+#conferenceModal input[name="endConference"] {
+    background: #a0b3d8;
+    color: white;
+}
+
+#conferenceModal input[name="endConference"]:hover {
+    background: #8fa3cc;
+    box-shadow: 0 2px 8px rgba(160, 179, 216, 0.3);
+}
+
+#conferenceModal input[type="button"]:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+}
+
+#conferenceModal input[type="button"]:active:not(:disabled) {
+    transform: translateY(1px);
+}
+
+#conferenceModal #conference_start {
+    background: white;
+    border-radius: 8px;
+    padding: 20px;
+    box-shadow: 0 1px 4px rgba(0,0,0,0.05);
+    margin-bottom: 20px;
+}
+
+#conferenceModal #conference_member_list {
+    background: transparent;
+    border-radius: 8px;
+    padding: 20px 0;
+}
+
+#conferenceModal #conference_member_list ul {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+}
+
+#conferenceModal #conference_member_list li {
+    padding: 12px 15px;
+    border-bottom: 1px solid #e8eff9;
+    background: white;
+    border-radius: 6px;
+    margin-bottom: 8px;
+}
+
+#conferenceModal #conference_member_list li:last-child {
+    margin-bottom: 0;
+}
+
+#conferenceModal #conference_header {
+    background: white;
+    padding: 20px !important;
+    border-radius: 8px !important;
+    border: 1px solid #e8eff9 !important;
+    margin-bottom: 15px;
+    box-shadow: 0 1px 3px rgba(107, 154, 255, 0.05);
+    display: flex;
+    align-items: center;
+    justify-content: flex-start;
+    gap: 12px;
+    flex-wrap: nowrap;
+}
+
+#conferenceModal #conference_header > span {
+    flex: 0 0 auto;
+}
+
+#conferenceModal #conference_header .conf_name,
+#conferenceModal #conference_header .conf_phone {
+    display: inline-block;
+    vertical-align: middle;
+    margin-right: 0;
+}
+
+#conferenceModal #conference_header .conf_call_type,
+#conferenceModal #conference_header .conf_video_level {
+    display: inline-block;
+    vertical-align: middle;
+    margin-right: 0;
+}
+
+#conferenceModal #conference_header input[type="text"],
+#conferenceModal #conference_header input[name="member_name"],
+#conferenceModal #conference_header input[name="member_phone"] {
+    padding: 10px 12px;
+    border: 1px solid #d1dff7;
+    border-radius: 6px;
+    font-size: 14px;
+    transition: all 0.3s ease;
+    background: white;
+}
+
+#conferenceModal #conference_header input:focus {
+    outline: none;
+    border-color: #6b9aff;
+    box-shadow: 0 0 0 3px rgba(107, 154, 255, 0.15);
+    transform: translateY(-1px);
+}
+
+#conferenceModal #conference_header input[name="addConfMember"] {
+    display: inline-block;
+    vertical-align: middle;
+    padding: 8px 16px;
+    background: #6b9aff;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    font-size: 13px;
+    font-weight: 500;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    box-shadow: 0 2px 6px rgba(107, 154, 255, 0.2);
+    margin-left: auto;
+    flex-shrink: 0;
+    white-space: nowrap;
+    min-width: 90px;
+}
+
+#conferenceModal #conference_header input[name="addConfMember"]:hover {
+    background: #5b8def;
+    box-shadow: 0 3px 10px rgba(107, 154, 255, 0.35);
+    transform: translateY(-1px);
+}
+
+#conferenceModal #conference_header input[name="addConfMember"]:active {
+    transform: translateY(0);
+    box-shadow: 0 2px 6px rgba(107, 154, 255, 0.2);
+}
+
+#conferenceModal .conf_member_item_row {
+    background: white;
+    padding: 15px !important;
+    border-radius: 6px !important;
+    margin: 8px 0 !important;
+    border: 1px solid #e8eff9 !important;
+    box-shadow: 0 1px 3px rgba(107, 154, 255, 0.05);
+    transition: all 0.2s ease;
+}
+
+#conferenceModal .conf_member_item_row:hover {
+    background: #f6f9ff;
+    border-color: #d1dff7 !important;
+    box-shadow: 0 2px 6px rgba(107, 154, 255, 0.1);
+    transform: translateY(-1px);
+}
+
+#conferenceModal .conf_name,
+#conferenceModal .conf_phone,
+#conferenceModal .conf_status {
+    display: inline-block;
+    margin-right: 10px;
+    font-size: 14px;
+}
+
+#conferenceModal .conf_remove a,
+#conferenceModal .conf_re_invite a {
+    color: #6b9aff;
+    text-decoration: none;
+    font-weight: 500;
+    padding: 5px 10px;
+    border-radius: 4px;
+    transition: all 0.2s ease;
+}
+
+#conferenceModal .conf_remove a:hover,
+#conferenceModal .conf_re_invite a:hover {
+    background: rgba(107, 154, 255, 0.1);
+}
+
+/* 样式结束 */
