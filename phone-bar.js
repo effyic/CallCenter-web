@@ -314,7 +314,11 @@ function init () {
         <td width="70%" colspan="2" height="35" style="text-indent: 20px;">
           <b>签入时间：</b> <span id="loginTime" title="" class="status4">00:00:00</span> &nbsp;&nbsp;
           <b>状态：</b> <span id="agentStatus" title="" class="status4">空闲</span> &nbsp;&nbsp;
-          <b>当前排队人数：</b><span id="queueStat" title="" class="status4">0</span>
+          <b>当前排队人数：</b><span id="queueStat" title="" class="status4">0</span> &nbsp;&nbsp;
+          <label style="cursor: pointer;">
+            <input type="checkbox" id="autoAnswerToggle" checked style="cursor: pointer;" />
+            <b>自动接听</b>
+          </label>
 
         </td>
       </tr>
@@ -1019,7 +1023,7 @@ function init () {
           jsSipUAInstance.setCallAnswerTimeOut(20);
 
           // 设置来电是否自动应答
-          jsSipUAInstance.setAutoAnswer(false);
+          jsSipUAInstance.setAutoAnswer(true);
 
           jsSipUAInstance.register(_phoneConfig);
 
@@ -1034,6 +1038,15 @@ function init () {
         }
       }, 100); // 每100ms检查一次
     });
+  });
+
+  // 添加自动接听切换事件
+  $(document).on('change', '#autoAnswerToggle', function() {
+    var isChecked = $(this).is(':checked');
+    if (typeof jsSipUAInstance !== 'undefined') {
+      jsSipUAInstance.setAutoAnswer(isChecked);
+      console.log('自动接听已' + (isChecked ? '启用' : '禁用'));
+    }
   });
 
   // 添加咨询/转接按钮点击事件
@@ -1324,25 +1337,25 @@ window.continueWithoutPermission = function() {
 function transferBtnClickUI() {
     if (typeof _phoneBar !== 'undefined') {
         _phoneBar.transferBtnClickUI();
-        // 不关闭弹窗，保持打开状态
-        // var transferContent = $('#consultationModalBody table').detach();
-        // $('#transfer_area > td').append(transferContent);
-        // $('#transfer_area').hide();
-        // ModalUtil.hide('consultationModal');
-    }
-}
-
-function stopCallWaitBtnClickUI() {
-    if (typeof _phoneBar !== 'undefined') {
-        _phoneBar.stopCallWaitBtnClickUI();
-        setTimeout(() => {
-            jsSipUAInstance.answer();
-        }, 2000);
-        // 先移回内容再关闭
         var transferContent = $('#consultationModalBody table').detach();
         $('#transfer_area > td').append(transferContent);
         $('#transfer_area').hide();
         ModalUtil.hide('consultationModal');
+    }
+}
+
+// 接回客户
+function stopCallWaitBtnClickUI() {
+    if (typeof _phoneBar !== 'undefined') {
+        var transferContent = $('#consultationModalBody table').detach();
+        $('#transfer_area > td').append(transferContent);
+        $('#transfer_area').hide();
+        ModalUtil.hide('consultationModal');
+
+        _phoneBar.stopCallWaitBtnClickUI();
+        setTimeout(() => {
+            jsSipUAInstance.answer();
+        }, 2000);
     }
 }
 
@@ -1354,23 +1367,20 @@ function consultationBtnClickUI() {
         setTimeout(() => {
             jsSipUAInstance.answer();
         }, 2000);
-        // 先移回内容再关闭
-        // var transferContent = $('#consultationModalBody table').detach();
-        // $('#transfer_area > td').append(transferContent);
-        // $('#transfer_area').hide();
-        // ModalUtil.hide('consultationModal');
     }
 }
 
 
 function transferCallWaitBtnClickUI() {
   if (typeof _phoneBar !== 'undefined') {
+     // 先移回内容再关闭
+     var transferContent = $('#consultationModalBody table').detach();
+     $('#transfer_area > td').append(transferContent);
+     $('#transfer_area').hide();
+     ModalUtil.hide('consultationModal');
+     
     _phoneBar.transferCallWaitBtnClickUI();
-    // 先移回内容再关闭
-    var transferContent = $('#consultationModalBody table').detach();
-    $('#transfer_area > td').append(transferContent);
-    $('#transfer_area').hide();
-    ModalUtil.hide('consultationModal');
+   
   }
 }
 

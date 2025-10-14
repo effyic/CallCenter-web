@@ -396,7 +396,7 @@ function ccPhoneBarSocket() {
 						$("#stopCallWait").show();
 						$("#doConsultationBtn").hide();
 						$("#callStatus").text("客户电话等待中.");
-						_cc.showTransferAreaUI();
+						// _cc.showTransferAreaUI();
 					}
 
 					if (parseInt(resp_status) === parseInt(ccPhoneBarSocket.eventList.customer_channel_off_call_wait)) {
