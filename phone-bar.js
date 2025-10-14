@@ -813,6 +813,56 @@ function init () {
       console.log('收到呼入来电，请弹窗确认框，以便确认是否接听...', msg);
       $("#answer_btn").removeClass("off").addClass("on");
       $("#hangUpBtn").removeClass("off").addClass("on");
+      
+      // 显示来电弹窗
+      var caller = msg.caller || '未知号码';
+      var modalHtml =
+        '<div class="modal-overlay" id="incomingCallModal-overlay"></div>' +
+        '<div class="modal" id="incomingCallModal">' +
+        '<div class="modal-dialog">' +
+        '<div class="modal-content">' +
+        '<div class="modal-header">' +
+        '<h5 class="modal-title">来电提醒</h5>' +
+        '</div>' +
+        '<div class="modal-body" style="text-align: center; padding: 30px 20px;">' +
+        '<div style="font-size: 18px; margin-bottom: 10px;">来电号码</div>' +
+        '<div style="font-size: 24px; font-weight: bold; color: #4a90e2; margin-bottom: 30px;">' + caller + '</div>' +
+        '</div>' +
+        '<div class="modal-footer" style="text-align: center; padding: 20px;">' +
+        '<button type="button" class="btn btn-success" id="answerCallBtn" style="margin-right: 20px; padding: 10px 30px; font-size: 16px;">接听</button>' +
+        '<button type="button" class="btn btn-danger" id="rejectCallBtn" style="padding: 10px 30px; font-size: 16px;">取消</button>' +
+        '</div>' +
+        '</div>' +
+        '</div>' +
+        '</div>';
+      
+      // 移除旧弹窗
+      ModalUtil.remove('incomingCallModal');
+      
+      // 添加弹窗到页面
+      $('body').append(modalHtml);
+      
+      // 显示弹窗
+      ModalUtil.show('incomingCallModal');
+      
+      // 接听按钮点击事件
+      $(document).off('click', '#answerCallBtn').on('click', '#answerCallBtn', function() {
+        console.log('用户点击接听按钮');
+        jsSipUAInstance.answer();
+        ModalUtil.hide('incomingCallModal');
+        setTimeout(function() {
+          ModalUtil.remove('incomingCallModal');
+        }, 300);
+      });
+      
+      // 取消按钮点击事件
+      $(document).off('click', '#rejectCallBtn').on('click', '#rejectCallBtn', function() {
+        jsSipUAInstance.hangup();
+        ModalUtil.hide('incomingCallModal');
+        setTimeout(function() {
+          ModalUtil.remove('incomingCallModal');
+        }, 300);
+      });
   });
 
   jsSipUAInstance.on('disconnected', function (msg) {
@@ -829,9 +879,25 @@ function init () {
       console.log('电话接通', msg, 'confirmed');
       jsSipUAInstance.playAnsweredSound();
       $("#answer_btn").removeClass("on").addClass("off");
+      
+      // 电话接通后关闭来电弹窗
+      if ($('#incomingCallModal').length > 0) {
+        ModalUtil.hide('incomingCallModal');
+        setTimeout(function() {
+          ModalUtil.remove('incomingCallModal');
+        }, 300);
+      }
   });
   jsSipUAInstance.on('hungup', function (msg) {
       console.log('通话结束', 'hungup');
+      
+      // 挂断后关闭来电弹窗（如果还存在）
+      if ($('#incomingCallModal').length > 0) {
+        ModalUtil.hide('incomingCallModal');
+        setTimeout(function() {
+          ModalUtil.remove('incomingCallModal');
+        }, 300);
+      }
   });
 
   //通话保持；双方无法听到彼此的声音

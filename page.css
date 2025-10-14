@@ -742,4 +742,62 @@ qiangjie_btn,.qiangjie_btn.on{background:url(./images/phonebar/qiangjie.png) no-
     background: rgba(107, 154, 255, 0.1);
 }
 
+/* 来电弹窗样式 */
+#incomingCallModal .modal-content {
+    width: 400px;
+    max-width: 90vw;
+}
+
+#incomingCallModal .modal-header {
+    background: linear-gradient(135deg, #6b9aff 0%, #4a7cfa 100%);
+    color: white;
+    border-radius: 12px 12px 0 0;
+}
+
+#incomingCallModal .modal-header .modal-title {
+    color: white;
+    font-size: 20px;
+}
+
+#incomingCallModal .modal-body {
+    background: white;
+}
+
+#incomingCallModal .modal-footer {
+    background: white;
+    border-top: 1px solid #e8eff9;
+    border-radius: 0 0 12px 12px;
+}
+
+#incomingCallModal .btn-success {
+    background: #6b9aff;
+    border: none;
+    color: white;
+    border-radius: 8px;
+    font-weight: 500;
+    transition: all 0.3s ease;
+    box-shadow: 0 4px 15px rgba(107, 154, 255, 0.3);
+}
+
+#incomingCallModal .btn-success:hover {
+    background: #5a8aef;
+    transform: translateY(-2px);
+    box-shadow: 0 6px 20px rgba(107, 154, 255, 0.4);
+}
+
+#incomingCallModal .btn-danger {
+    background: #f5f6fa;
+    border: 1px solid #e8eff9;
+    color: #666;
+    border-radius: 8px;
+    font-weight: 500;
+    transition: all 0.3s ease;
+}
+
+#incomingCallModal .btn-danger:hover {
+    background: #e8eff9;
+    color: #333;
+    transform: translateY(-2px);
+}
+
 /* 样式结束 */
