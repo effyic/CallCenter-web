@@ -111,7 +111,7 @@ function onConferenceEnd () {
   document.getElementById("endConference").setAttribute("disabled", "true");
   document.getElementById("startConference").removeAttribute("disabled");
   document.getElementById("conference_member_list").style.display = "none";
-  
+
   // 启用外呼按钮
   $("#callBtn").addClass('on');
   // 启用置闲按钮
@@ -129,7 +129,7 @@ function onConferenceEnd () {
 function onConferenceStart () {
   document.getElementById("endConference").removeAttribute("disabled");
   document.getElementById("conference_member_list").style.display = "block";
-  
+
   let tips = "多方通话进行中";
   $("#callStatus").text(tips);
   $("#agentStatus").text(tips);
@@ -162,7 +162,7 @@ function populateGroupIdOptions () {
     console.error('找不到 transfer_to_groupIds 元素');
     return;
   }
-  
+
   transferToGroupId.length = 0; //清除所有选项
   let groups = _phoneBar.callConfig.groups;
   console.log('groups = ', groups);
@@ -185,7 +185,7 @@ function populateMemberIdOptions (members, selectedGroupId) {
     console.error('找不到 transfer_to_member 元素');
     return;
   }
-  
+
   if (!Array.isArray(members)) {
     console.error("populateMemberOptions: members is not a Array.", members);
     return;
@@ -205,12 +205,12 @@ function populateMemberIdOptions (members, selectedGroupId) {
 function refreshMemberIdList () {
   const transferToGroupId = document.getElementById("transfer_to_groupIds");
   const transferToMember = document.getElementById("transfer_to_member");
-  
+
   if (!transferToGroupId || !transferToMember) {
     console.error('找不到转接相关元素');
     return;
   }
-  
+
   const selectedGroupId = transferToGroupId.value;
   if (selectedGroupId != "") {
     let origValue = transferToMember.value;
@@ -239,16 +239,16 @@ _phoneBar.on(ccPhoneBarSocket.eventList.asr_process_end_agent, function (msg) {
 const chatMessages = document.getElementById('chat-messages');
 $("#chat-container").hide();
 function handleAsrMessage (data) {
-  $("#chat-container").show();
-  const { status, object } = data;
-  if (status === 619 && object) {
-    const { role, text, vadType } = object;
-    if (vadType == 1) {
-      //addMessageToChat(role, text);
-    }
-  } else if (status === 620 || status === 621) {
-    addSystemMessage("对话已结束。");
-  }
+  // $("#chat-container").show();
+  // const { status, object } = data;
+  // if (status === 619 && object) {
+  //   const { role, text, vadType } = object;
+  //   if (vadType == 1) {
+  //     addMessageToChat(role, text);
+  //   }
+  // } else if (status === 620 || status === 621) {
+  //   addSystemMessage("对话已结束。");
+  // }
 }
 function addMessageToChat (role, text) {
   const messageDiv = document.createElement('div');
@@ -421,7 +421,7 @@ function init () {
                 <input type="hidden" value="audio" id="conf_call_type" name="conf_call_type" />
                 &nbsp;
                 <input type="button" name="startConference" id="startConference"
-                  onclick="_phoneBar.conferenceStartBtnUI('')" style="width: 70px;" value="启动会议">
+                  onclick="conferenceStartBtnUI('')" style="width: 70px;" value="启动会议">
                 &nbsp;
                 <input type="button" name="endConference" id="endConference" onclick="_phoneBar.conferenceEnd()"
                   disabled="disabled" style="width: 70px;" value="结束会议">
@@ -516,15 +516,15 @@ function init () {
                 &nbsp;
 
                 &nbsp;&nbsp; <input type="button" name="stopCallWait" id="stopCallWait"
-                  onclick="_phoneBar.stopCallWaitBtnClickUI()" style="width: 70px;" value="接回客户"
+                  onclick="stopCallWaitBtnClickUI()" style="width: 70px;" value="接回客户"
                   title="在咨询失败的情况下使用该按钮，接回处于等待中的电话。" /> &nbsp;
 
                 &nbsp;&nbsp; <input type="button" name="transferCallWait" id="transferCallWait"
-                  onclick="_phoneBar.transferCallWaitBtnClickUI()" style="width: 70px;" value="转接客户"
+                  onclick="transferCallWaitBtnClickUI()" style="width: 70px;" value="转接客户"
                   title="在咨询成功的情况下使用该按钮，把电话转接给专家坐席。" /> &nbsp;
 
                 <input type="button" name="doConsultationBtn" id="doConsultationBtn"
-                  onclick="_phoneBar.consultationBtnClickUI()" style="width: 70px;" value="拨号咨询" title="" />
+                  onclick="consultationBtnClickUI()" style="width: 70px;" value="拨号咨询" title="" />
 
               </td>
             </tr>
@@ -801,10 +801,16 @@ function init () {
     onTransferToConferenceSuccess(msg);
   });
 
+  _phoneBar.on(ccPhoneBarSocket.eventList.new_inbound_call, function (msg) {
+      $("#answer_btn").removeClass("off").addClass("on");
+      console.log("分配的新来电: ", msg.object.uuid);
+    });
+
 
   // JsSIP 网页电话
   jsSipUAInstance.on('inbound_call', function (msg) {
       console.log('收到呼入来电，请弹窗确认框，以便确认是否接听...', msg);
+      $("#answer_btn").removeClass("off").addClass("on");
       $("#hangUpBtn").removeClass("off").addClass("on");
   });
 
@@ -885,8 +891,8 @@ function init () {
   // 添加签入按钮点击事件 - 显示签入信息弹窗
   $(document).on('click', '#onLineBtn', function(e) {
     e.preventDefault();
-    
-    var signinModalHtml = 
+
+    var signinModalHtml =
       '<div class="modal-overlay" id="signinModal-overlay"></div>' +
       '<div class="modal" id="signinModal">' +
       '<div class="modal-dialog">' +
@@ -919,13 +925,13 @@ function init () {
 
     // 如果已经存在弹窗，先移除
     ModalUtil.remove('signinModal');
-    
+
     // 添加弹窗到页面
     $('body').append(signinModalHtml);
-    
+
     // 显示弹窗
     ModalUtil.show('signinModal');
-    
+
     // 点击遮罩层关闭
     $('#signinModal-overlay').click(function() {
       ModalUtil.hide('signinModal');
@@ -936,42 +942,42 @@ function init () {
       var opnumValue = $('#signinOpnum').val();
       var passwordValue = $('#signinPassword').val();
       var extnumValue = $('#signinExtnum').val();
-      
+
       if (!opnumValue || !passwordValue || !extnumValue) {
         alert('请填写完整的签入信息！');
         return;
       }
-      
+
       // 关闭弹窗
       ModalUtil.hide('signinModal');
-      
+
       // 更新全局变量
       extnum = extnumValue;
       opnum = opnumValue;
-      
+
       console.log('开始签入流程：', {
         opnum: opnumValue,
         password: passwordValue,
         extnum: extnumValue
       });
-      
+
       // 按顺序调用加载函数
       loadLoginToken();
       loadExtPassword(passwordValue);
-      
+
       // 等待所有脚本加载完成后初始化配置
       var checkCount = 0;
       var maxCheckCount = 100; // 最多检查100次（10秒）
       var checkInterval = setInterval(function() {
         checkCount++;
-        
+
         // 检查必需的全局变量是否都已加载
         var tokenLoaded = typeof(loginToken) !== "undefined";
         var passwordLoaded = typeof(_phoneEncryptPassword) !== "undefined";
-        
+
         if (tokenLoaded && passwordLoaded) {
           clearInterval(checkInterval);
-          
+
           // 配置 loginToken
           if (typeof (loginToken) != "undefined") {
             _callConfig["loginToken"] = loginToken;
@@ -1009,7 +1015,7 @@ function init () {
 
           var _phoneConfig = {
               'extnum': extnumValue,		//分机号
-              'password': passwordValue,	//分机密码  
+              'password': passwordValue,	//分机密码
               'fsHost': scriptServer,//电话服务器主机host地址，必须是 “域名格式的”，不能是ip地址
               'fsPort': '5066',		//电话服务器端口，必须是数字
               'audioHandler': document.getElementById("audioHandler"),
@@ -1027,7 +1033,7 @@ function init () {
 
           // 建立 WebSocket 连接
           _phoneBar.connect();
-          
+
         } else if (checkCount >= maxCheckCount) {
           // 超时处理
           clearInterval(checkInterval);
@@ -1039,8 +1045,8 @@ function init () {
   // 添加咨询/转接按钮点击事件
   $(document).on('click', '#consultationBtn, #transferBtn', function(e) {
     e.preventDefault();
-    
-    var modalHtml = 
+
+    var modalHtml =
       '<div class="modal-overlay" id="consultationModal-overlay"></div>' +
       '<div class="modal" id="consultationModal">' +
       '<div class="modal-dialog modal-dialog-lg">' +
@@ -1057,18 +1063,18 @@ function init () {
 
     // 如果已经存在弹窗，先移除
     ModalUtil.remove('consultationModal');
-    
+
     // 添加弹窗到页面
     $('body').append(modalHtml);
-    
+
     // 把 transfer_area 的内容移动到弹窗中
     var transferContent = $('#transfer_area > td > table').detach();
     $('#consultationModalBody').append(transferContent);
     $('#transfer_area').hide();
-    
+
     // 显示弹窗
     ModalUtil.show('consultationModal');
-    
+
     // 点击遮罩层关闭
     $('#consultationModal-overlay').click(function() {
       var transferContent = $('#consultationModalBody table').detach();
@@ -1080,7 +1086,7 @@ function init () {
     setTimeout(function() {
       populateGroupIdOptions();
     }, 100);
-    
+
     // 弹窗关闭处理
     $(document).on('click', '.btn-close', function() {
       var transferContent = $('#consultationModalBody table').detach();
@@ -1091,8 +1097,8 @@ function init () {
   // 添加会议按钮点击事件
   $(document).on('click', '#conferenceBtn', function(e) {
     e.preventDefault();
-    
-    var modalHtml = 
+
+    var modalHtml =
       '<div class="modal-overlay" id="conferenceModal-overlay"></div>' +
       '<div class="modal" id="conferenceModal">' +
       '<div class="modal-dialog modal-dialog-lg">' +
@@ -1109,25 +1115,25 @@ function init () {
 
     // 如果已经存在弹窗，先移除
     ModalUtil.remove('conferenceModal');
-    
+
     // 添加弹窗到页面
     $('body').append(modalHtml);
-    
+
     // 把 conference_area 的内容移动到弹窗中
     var conferenceContent = $('#conference_area > td > div').detach();
     $('#conferenceModalBody').append(conferenceContent);
     $('#conference_area').hide();
-    
+
     // 显示弹窗
     ModalUtil.show('conferenceModal');
-    
+
     // 点击遮罩层关闭
     $('#conferenceModal-overlay').click(function() {
       var conferenceContent = $('#conferenceModalBody > div').detach();
       $('#conference_area > td').append(conferenceContent);
       ModalUtil.hide('conferenceModal');
     });
-    
+
     // 弹窗关闭处理
     $(document).on('click', '.btn-close', function() {
       var conferenceContent = $('#conferenceModalBody > div').detach();
@@ -1161,9 +1167,9 @@ class AudioPermissionChecker {
             }
 
             // 请求录音权限
-            const stream = await navigator.mediaDevices.getUserMedia({ 
+            const stream = await navigator.mediaDevices.getUserMedia({
                 audio: true,
-                video: false 
+                video: false
             });
 
             // 获取权限成功，立即停止录音流
@@ -1176,10 +1182,10 @@ class AudioPermissionChecker {
         } catch (error) {
             this.hasPermission = false;
             console.error('录音权限获取失败:', error);
-            
+
             // 根据错误类型显示不同的提示信息
             let errorMessage = '录音权限获取失败：';
-            
+
             if (error.name === 'NotAllowedError') {
                 errorMessage += '用户拒绝了录音权限。请在浏览器设置中允许此网站使用麦克风。';
             } else if (error.name === 'NotFoundError') {
@@ -1189,7 +1195,7 @@ class AudioPermissionChecker {
             } else {
                 errorMessage += error.message || '未知错误';
             }
-            
+
             this.showPermissionDialog(errorMessage);
             return false;
         } finally {
@@ -1274,13 +1280,13 @@ class AudioPermissionChecker {
                 </div>
             </div>
         `;
-        
+
         // 移除已存在的对话框
         const existingModal = document.getElementById('audioPermissionModal');
         if (existingModal) {
             existingModal.remove();
         }
-        
+
         // 添加新对话框
         document.body.insertAdjacentHTML('beforeend', dialogHtml);
     }
@@ -1316,3 +1322,39 @@ window.continueWithoutPermission = function() {
     window.audioPermissionChecker.hidePermissionDialog();
     console.warn('用户选择在没有录音权限的情况下继续使用');
 };
+
+function stopCallWaitBtnClickUI() {
+    if (typeof _phoneBar !== 'undefined') {
+        _phoneBar.stopCallWaitBtnClickUI();
+        setTimeout(() => {
+            jsSipUAInstance.answer();
+        }, 2000);
+        ModalUtil.hide('consultationModal')
+    }
+}
+
+function consultationBtnClickUI() {
+    if (typeof _phoneBar !== 'undefined') {
+        _phoneBar.consultationBtnClickUI();
+        setTimeout(() => {
+            jsSipUAInstance.answer();
+        }, 2000);
+        ModalUtil.hide('consultationModal')
+    }
+}
+
+
+function transferCallWaitBtnClickUI() {
+    _phoneBar.transferCallWaitBtnClickUI();
+    ModalUtil.hide('consultationModal')
+}
+
+function conferenceStartBtnUI() {
+    if (typeof _phoneBar !== 'undefined') {
+        _phoneBar.conferenceStartBtnUI('');
+        setTimeout(() => {
+            jsSipUAInstance.answer();
+        }, 2000);
+    }
+}
+
