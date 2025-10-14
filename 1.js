@@ -749,7 +749,91 @@ function init () {
   $(document).on('click', '#consultationBtn', function(e) {
     e.preventDefault();
     
-    var modalHtml = '<div class="modal fade" id="consultationModal" tabindex="-1">' +
+    var modalHtml = '<style>' +
+      '#consultationModal .modal-content {' +
+      '  border: none;' +
+      '  border-radius: 12px;' +
+      '  box-shadow: 0 4px 20px rgba(0,0,0,0.08);' +
+      '  overflow: hidden;' +
+      '}' +
+      '#consultationModal .modal-header {' +
+      '  background: #6b9aff;' +
+      '  color: white;' +
+      '  border: none;' +
+      '  padding: 20px 30px;' +
+      '}' +
+      '#consultationModal .modal-title {' +
+      '  font-size: 18px;' +
+      '  font-weight: 600;' +
+      '}' +
+      '#consultationModal .btn-close {' +
+      '  filter: brightness(0) invert(1);' +
+      '  opacity: 0.8;' +
+      '}' +
+      '#consultationModal .btn-close:hover {' +
+      '  opacity: 1;' +
+      '}' +
+      '#consultationModal .modal-body {' +
+      '  padding: 30px;' +
+      '  background: #f6f9ff;' +
+      '}' +
+      '#consultationModal select {' +
+      '  padding: 10px 12px;' +
+      '  border: 1px solid #d1dff7;' +
+      '  border-radius: 6px;' +
+      '  font-size: 14px;' +
+      '  transition: all 0.3s ease;' +
+      '  background: white;' +
+      '}' +
+      '#consultationModal select:focus {' +
+      '  outline: none;' +
+      '  border-color: #6b9aff;' +
+      '  box-shadow: 0 0 0 3px rgba(107, 154, 255, 0.1);' +
+      '}' +
+      '#consultationModal input[type="text"] {' +
+      '  padding: 10px 12px;' +
+      '  border: 1px solid #d1dff7;' +
+      '  border-radius: 6px;' +
+      '  font-size: 14px;' +
+      '  transition: all 0.3s ease;' +
+      '}' +
+      '#consultationModal input[type="text"]:focus {' +
+      '  outline: none;' +
+      '  border-color: #6b9aff;' +
+      '  box-shadow: 0 0 0 3px rgba(107, 154, 255, 0.1);' +
+      '}' +
+      '#consultationModal input[type="button"] {' +
+      '  padding: 8px 16px;' +
+      '  border: none;' +
+      '  border-radius: 6px;' +
+      '  font-size: 13px;' +
+      '  font-weight: 500;' +
+      '  cursor: pointer;' +
+      '  transition: all 0.2s ease;' +
+      '  background: #6b9aff;' +
+      '  color: white;' +
+      '  margin: 5px;' +
+      '  min-width: 80px;' +
+      '  white-space: nowrap;' +
+      '}' +
+      '#consultationModal input[type="button"]:hover {' +
+      '  background: #5b8def;' +
+      '  box-shadow: 0 2px 8px rgba(107, 154, 255, 0.3);' +
+      '}' +
+      '#consultationModal input[type="button"]:active {' +
+      '  transform: translateY(1px);' +
+      '}' +
+      '#consultationModal table {' +
+      '  background: white;' +
+      '  border-radius: 8px;' +
+      '  padding: 20px;' +
+      '  box-shadow: 0 1px 4px rgba(0,0,0,0.05);' +
+      '}' +
+      '#consultationModal td {' +
+      '  padding: 12px 15px;' +
+      '}' +
+      '</style>' +
+      '<div class="modal fade" id="consultationModal" tabindex="-1">' +
       '<div class="modal-dialog modal-lg">' +
       '<div class="modal-content">' +
       '<div class="modal-header">' +
@@ -794,7 +878,158 @@ function init () {
   $(document).on('click', '#conferenceBtn', function(e) {
     e.preventDefault();
     
-    var modalHtml = '<div class="modal fade" id="conferenceModal" tabindex="-1">' +
+    var modalHtml = '<style>' +
+      '#conferenceModal .modal-content {' +
+      '  border: none;' +
+      '  border-radius: 12px;' +
+      '  box-shadow: 0 4px 20px rgba(0,0,0,0.08);' +
+      '  overflow: hidden;' +
+      '}' +
+      '#conferenceModal .modal-header {' +
+      '  background: #6b9aff;' +
+      '  color: white;' +
+      '  border: none;' +
+      '  padding: 20px 30px;' +
+      '}' +
+      '#conferenceModal .modal-title {' +
+      '  font-size: 18px;' +
+      '  font-weight: 600;' +
+      '}' +
+      '#conferenceModal .btn-close {' +
+      '  filter: brightness(0) invert(1);' +
+      '  opacity: 0.8;' +
+      '}' +
+      '#conferenceModal .btn-close:hover {' +
+      '  opacity: 1;' +
+      '}' +
+      '#conferenceModal .modal-body {' +
+      '  padding: 30px;' +
+      '  background: #f6f9ff;' +
+      '}' +
+      '#conferenceModal select {' +
+      '  padding: 10px 12px;' +
+      '  border: 1px solid #d1dff7;' +
+      '  border-radius: 6px;' +
+      '  font-size: 14px;' +
+      '  transition: all 0.3s ease;' +
+      '  background: white;' +
+      '}' +
+      '#conferenceModal select:focus {' +
+      '  outline: none;' +
+      '  border-color: #6b9aff;' +
+      '  box-shadow: 0 0 0 3px rgba(107, 154, 255, 0.1);' +
+      '}' +
+      '#conferenceModal input[type="text"], ' +
+      '#conferenceModal input[name*="member"] {' +
+      '  padding: 10px 12px;' +
+      '  border: 1px solid #d1dff7;' +
+      '  border-radius: 6px;' +
+      '  font-size: 14px;' +
+      '  transition: all 0.3s ease;' +
+      '  background: white;' +
+      '}' +
+      '#conferenceModal input[type="text"]:focus, ' +
+      '#conferenceModal input[name*="member"]:focus {' +
+      '  outline: none;' +
+      '  border-color: #6b9aff;' +
+      '  box-shadow: 0 0 0 3px rgba(107, 154, 255, 0.1);' +
+      '}' +
+      '#conferenceModal input[type="button"], ' +
+      '#conferenceModal input[name*="Conference"], ' +
+      '#conferenceModal input[name*="ConfMember"] {' +
+      '  padding: 8px 16px;' +
+      '  border: none;' +
+      '  border-radius: 6px;' +
+      '  font-size: 13px;' +
+      '  font-weight: 500;' +
+      '  cursor: pointer;' +
+      '  transition: all 0.2s ease;' +
+      '  margin: 5px;' +
+      '  min-width: 90px;' +
+      '  white-space: nowrap;' +
+      '}' +
+      '#conferenceModal input[name="startConference"], ' +
+      '#conferenceModal input[name="addConfMember"] {' +
+      '  background: #6b9aff;' +
+      '  color: white;' +
+      '}' +
+      '#conferenceModal input[name="startConference"]:hover, ' +
+      '#conferenceModal input[name="addConfMember"]:hover {' +
+      '  background: #5b8def;' +
+      '  box-shadow: 0 2px 8px rgba(107, 154, 255, 0.3);' +
+      '}' +
+      '#conferenceModal input[name="endConference"] {' +
+      '  background: #a0b3d8;' +
+      '  color: white;' +
+      '}' +
+      '#conferenceModal input[name="endConference"]:hover {' +
+      '  background: #8fa3cc;' +
+      '  box-shadow: 0 2px 8px rgba(160, 179, 216, 0.3);' +
+      '}' +
+      '#conferenceModal input[type="button"]:disabled {' +
+      '  opacity: 0.5;' +
+      '  cursor: not-allowed;' +
+      '}' +
+      '#conferenceModal input[type="button"]:active:not(:disabled) {' +
+      '  transform: translateY(1px);' +
+      '}' +
+      '#conferenceModal #conference_start {' +
+      '  background: white;' +
+      '  border-radius: 8px;' +
+      '  padding: 20px;' +
+      '  box-shadow: 0 1px 4px rgba(0,0,0,0.05);' +
+      '  margin-bottom: 20px;' +
+      '}' +
+      '#conferenceModal #conference_member_list {' +
+      '  background: white;' +
+      '  border-radius: 8px;' +
+      '  padding: 20px;' +
+      '  box-shadow: 0 1px 4px rgba(0,0,0,0.05);' +
+      '}' +
+      '#conferenceModal #conference_member_list ul {' +
+      '  list-style: none;' +
+      '  padding: 0;' +
+      '  margin: 0;' +
+      '}' +
+      '#conferenceModal #conference_member_list li {' +
+      '  padding: 12px 0;' +
+      '  border-bottom: 1px solid #e8eff9;' +
+      '}' +
+      '#conferenceModal #conference_member_list li:last-child {' +
+      '  border-bottom: none;' +
+      '}' +
+      '#conferenceModal .conf_member_item_row {' +
+      '  background: #f6f9ff;' +
+      '  padding: 15px !important;' +
+      '  border-radius: 6px !important;' +
+      '  margin: 10px 0 !important;' +
+      '  border: none !important;' +
+      '}' +
+      '#conferenceModal .conf_member_item_row:hover {' +
+      '  background: #e8eff9;' +
+      '}' +
+      '#conferenceModal .conf_name, ' +
+      '#conferenceModal .conf_phone, ' +
+      '#conferenceModal .conf_status {' +
+      '  display: inline-block;' +
+      '  margin-right: 10px;' +
+      '  font-size: 14px;' +
+      '}' +
+      '#conferenceModal .conf_remove a, ' +
+      '#conferenceModal .conf_re_invite a {' +
+      '  color: #6b9aff;' +
+      '  text-decoration: none;' +
+      '  font-weight: 500;' +
+      '  padding: 5px 10px;' +
+      '  border-radius: 4px;' +
+      '  transition: all 0.2s ease;' +
+      '}' +
+      '#conferenceModal .conf_remove a:hover, ' +
+      '#conferenceModal .conf_re_invite a:hover {' +
+      '  background: rgba(107, 154, 255, 0.1);' +
+      '}' +
+      '</style>' +
+      '<div class="modal fade" id="conferenceModal" tabindex="-1">' +
       '<div class="modal-dialog modal-lg">' +
       '<div class="modal-content">' +
       '<div class="modal-header">' +
@@ -873,26 +1108,19 @@ function init () {
     var signinModalHtml = '<style>' +
       '#signinModal .modal-content {' +
       '  border: none;' +
-      '  border-radius: 16px;' +
-      '  box-shadow: 0 10px 40px rgba(0,0,0,0.15);' +
+      '  border-radius: 12px;' +
+      '  box-shadow: 0 4px 20px rgba(0,0,0,0.08);' +
       '  overflow: hidden;' +
       '}' +
       '#signinModal .modal-header {' +
-      '  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);' +
+      '  background: #6b9aff;' +
       '  color: white;' +
       '  border: none;' +
-      '  padding: 24px 30px;' +
+      '  padding: 20px 30px;' +
       '}' +
       '#signinModal .modal-title {' +
-      '  font-size: 20px;' +
+      '  font-size: 18px;' +
       '  font-weight: 600;' +
-      '  display: flex;' +
-      '  align-items: center;' +
-      '}' +
-      '#signinModal .modal-title:before {' +
-      
-      '  font-size: 24px;' +
-      '  margin-right: 12px;' +
       '}' +
       '#signinModal .btn-close {' +
       '  filter: brightness(0) invert(1);' +
@@ -903,78 +1131,72 @@ function init () {
       '}' +
       '#signinModal .modal-body {' +
       '  padding: 30px;' +
-      '  background: #f8f9fa;' +
+      '  background: #f6f9ff;' +
       '}' +
       '#signinModal .signin-form-group {' +
-      '  margin-bottom: 24px;' +
+      '  margin-bottom: 20px;' +
       '  position: relative;' +
       '}' +
       '#signinModal .signin-label {' +
       '  display: block;' +
       '  font-size: 14px;' +
-      '  font-weight: 600;' +
+      '  font-weight: 500;' +
       '  color: #495057;' +
       '  margin-bottom: 8px;' +
-      '  display: flex;' +
-      '  align-items: center;' +
-      '}' +
-      '#signinModal .signin-label .label-icon {' +
-      '  margin-right: 8px;' +
-      '  font-size: 16px;' +
       '}' +
       '#signinModal .signin-input {' +
       '  width: 100%;' +
-      '  padding: 12px 16px;' +
-      '  font-size: 15px;' +
-      '  border: 2px solid #e0e0e0;' +
-      '  border-radius: 10px;' +
+      '  padding: 10px 14px;' +
+      '  font-size: 14px;' +
+      '  border: 1px solid #d1dff7;' +
+      '  border-radius: 6px;' +
       '  transition: all 0.3s ease;' +
       '  background: white;' +
       '}' +
       '#signinModal .signin-input:focus {' +
       '  outline: none;' +
-      '  border-color: #667eea;' +
-      '  box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);' +
+      '  border-color: #6b9aff;' +
+      '  box-shadow: 0 0 0 3px rgba(107, 154, 255, 0.1);' +
       '}' +
       '#signinModal .signin-input::placeholder {' +
       '  color: #adb5bd;' +
       '}' +
       '#signinModal .modal-footer {' +
       '  border: none;' +
-      '  padding: 20px 30px 30px;' +
-      '  background: #f8f9fa;' +
+      '  padding: 20px 30px;' +
+      '  background: #f6f9ff;' +
       '  display: flex;' +
       '  gap: 12px;' +
       '}' +
       '#signinModal .signin-btn {' +
       '  flex: 1;' +
-      '  padding: 12px 24px;' +
-      '  font-size: 15px;' +
-      '  font-weight: 600;' +
+      '  padding: 10px 20px;' +
+      '  font-size: 14px;' +
+      '  font-weight: 500;' +
       '  border: none;' +
-      '  border-radius: 10px;' +
+      '  border-radius: 6px;' +
       '  cursor: pointer;' +
-      '  transition: all 0.3s ease;' +
+      '  transition: all 0.2s ease;' +
       '}' +
       '#signinModal .signin-btn-cancel {' +
       '  background: white;' +
       '  color: #6c757d;' +
-      '  border: 2px solid #e0e0e0;' +
+      '  border: 1px solid #d1dff7;' +
       '}' +
       '#signinModal .signin-btn-cancel:hover {' +
-      '  background: #f8f9fa;' +
-      '  border-color: #6c757d;' +
+      '  background: #f6f9ff;' +
+      '  border-color: #a0b3d8;' +
       '}' +
       '#signinModal .signin-btn-confirm {' +
-      '  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);' +
+      '  background: #6b9aff;' +
       '  color: white;' +
       '}' +
       '#signinModal .signin-btn-confirm:hover {' +
-      '  transform: translateY(-2px);' +
-      '  box-shadow: 0 6px 20px rgba(102, 126, 234, 0.4);' +
+      '  background: #5b8def;' +
+      '  box-shadow: 0 2px 8px rgba(107, 154, 255, 0.3);' +
       '}' +
       '#signinModal .signin-btn-confirm:active {' +
-      '  transform: translateY(0);' +
+      '  transform: translateY(1px);' +
       '}' +
       '</style>' +
       '<div class="modal fade" id="signinModal" tabindex="-1">' +
