@@ -1,0 +1,29 @@
+﻿<!DOCTYPE html>
+<html>
+
+<head>
+  <title>呼叫中心html客户端工具条</title>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+  <link rel="stylesheet" href="page.css" />
+  <script type="text/javascript" src="jquery-1.11.0.js"></script>
+  <link href="https://cdn.bootcdn.net/ajax/libs/twitter-bootstrap/5.3.1/css/bootstrap.min.css" rel="stylesheet">
+  <script src="https://cdn.bootcdn.net/ajax/libs/twitter-bootstrap/5.3.1/js/bootstrap.min.js"></script>
+  <script type="text/javascript" src="ccPhoneBarSocket.js"></script>
+  <script src="./1.js"></script>
+
+  <script>
+    window.onload = init
+
+
+    // 对方引入我的js文件，是否可以直接使用js中的on监听事件 var _phoneBar = new ccPhoneBarSocket();
+    // 如果on事件写了两个相同的，是否会冲突 电话接通事件、new_in
+  </script>
+</head>
+
+<body>
+  <div id="app"></div>
+</body>
+
+</html>
