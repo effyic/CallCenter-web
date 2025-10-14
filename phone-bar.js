@@ -353,6 +353,7 @@ function init () {
                 <li><a href="#" id="callBtn" class="wh_btn"></a><span>外呼</span></li>
                 <li id="holdBtnLi"><a href="#" id="holdBtn" class="bc_btn off"></a><span>保 持</span></li>
                 <li id="unHoldBtnLi"><a href="#" id="unHoldBtn" class="bc2_btn off"></a><span>取消保持</span></li>
+                <li><a href="#" id="unmuteBtn" class="unmute_btn off"></a><span>静音</span></li>
                 <li><a href="#" id="transferBtn" class="zjie_btn"></a><span>转接</span></li>
                 <li><a href="#" id="consultationBtn" class="zixun_btn"></a><span>咨询</span></li>
                 <li><a href="#" id="conferenceBtn" class="hy_btn off"></a><span>会议</span></li>
@@ -923,10 +924,12 @@ function init () {
   //通话静音; [客户无法听到自己的声音]
   jsSipUAInstance.on('muted', function (msg) {
       console.log(msg);
+      //$("#unmuteBtn").removeClass("on").addClass("off");
   });
   // 通话静音解除
   jsSipUAInstance.on('unmuted', function (msg) {
       console.log(msg);
+      //$("#unmuteBtn").removeClass("off").addClass("on");
   });
 
 
@@ -1441,6 +1444,17 @@ function transferBtnClickUI() {
         ModalUtil.hide('consultationModal');
     }
 }
+
+$(document).on('click', '#unmuteBtn', function(e) {
+  if ($(this).hasClass('off')) {
+    $("#unmuteBtn").removeClass("off").addClass("on");
+    jsSipUAInstance.mute();
+  } else {
+    $("#unmuteBtn").removeClass("on").addClass("off");
+    jsSipUAInstance.unmute();
+  }
+})
+
 
 // 接回客户
 function stopCallWaitBtnClickUI() {
