@@ -91,19 +91,7 @@ function ccPhoneBarSocket() {
 
 		 // 网关列表, 如果是注册模式： 网关地址参数则填写为网关名称;
 		 // 安全起见，生产环境，需要把该参数加密为base64格式;
-		'gatewayList' : [
-			{
-				"uuid": "1",
-				"updateTime": 1758862985998,
-				"gatewayAddr": "172.16.1.112:5060",
-				"callerNumber": "007",
-				"calleePrefix": "",
-				"priority": 1,
-				"concurrency": 2,
-				"register": false,
-				"audioCodec": "pcma"
-			}
-		],
+		'gatewayList' : [],
 
 	    'gatewayEncrypted' : false,
 
