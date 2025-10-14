@@ -744,7 +744,7 @@ qiangjie_btn,.qiangjie_btn.on{background:url(./images/phonebar/qiangjie.png) no-
 
 /* 来电弹窗样式 */
 #incomingCallModal .modal-content {
-    width: 400px;
+    width: 380px;
     max-width: 90vw;
 }
 
@@ -752,11 +752,13 @@ qiangjie_btn,.qiangjie_btn.on{background:url(./images/phonebar/qiangjie.png) no-
     background: linear-gradient(135deg, #6b9aff 0%, #4a7cfa 100%);
     color: white;
     border-radius: 12px 12px 0 0;
+    padding: 15px 20px;
 }
 
 #incomingCallModal .modal-header .modal-title {
     color: white;
-    font-size: 20px;
+    font-size: 18px;
+    margin: 0;
 }
 
 #incomingCallModal .modal-body {

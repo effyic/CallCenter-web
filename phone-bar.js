@@ -814,7 +814,17 @@ function init () {
       $("#answer_btn").removeClass("off").addClass("on");
       $("#hangUpBtn").removeClass("off").addClass("on");
       
-      // 显示来电弹窗
+      // 检查是否启用了自动接听
+      var isAutoAnswer = $('#autoAnswerToggle').is(':checked');
+      
+      if (isAutoAnswer) {
+        // 自动接听，不显示弹窗
+        console.log('自动接听已启用，直接接听来电');
+        jsSipUAInstance.answer();
+        return;
+      }
+      
+      // 未启用自动接听，显示来电弹窗
       var caller = msg.caller || '未知号码';
       var modalHtml =
         '<div class="modal-overlay" id="incomingCallModal-overlay"></div>' +
@@ -824,7 +834,7 @@ function init () {
         '<div class="modal-header">' +
         '<h5 class="modal-title">来电提醒</h5>' +
         '</div>' +
-        '<div class="modal-body" style="text-align: center; padding: 30px 20px;">' +
+        '<div class="modal-body" style="text-align: center; padding: 30px 20px;min-height: 100px;">' +
         '<div style="font-size: 18px; margin-bottom: 10px;">来电号码</div>' +
         '<div style="font-size: 24px; font-weight: bold; color: #4a90e2; margin-bottom: 30px;">' + caller + '</div>' +
         '</div>' +
