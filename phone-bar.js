@@ -801,12 +801,6 @@ function init () {
     onTransferToConferenceSuccess(msg);
   });
 
-  _phoneBar.on(ccPhoneBarSocket.eventList.new_inbound_call, function (msg) {
-      $("#answer_btn").removeClass("off").addClass("on");
-      console.log("分配的新来电: ", msg.object.uuid);
-    });
-
-
   // JsSIP 网页电话
   jsSipUAInstance.on('inbound_call', function (msg) {
       console.log('收到呼入来电，请弹窗确认框，以便确认是否接听...', msg);
