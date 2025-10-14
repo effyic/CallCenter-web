@@ -1073,6 +1073,7 @@ function init () {
     $('#consultationModal-overlay').click(function() {
       var transferContent = $('#consultationModalBody table').detach();
       $('#transfer_area > td').append(transferContent);
+      $('#transfer_area').hide();
       ModalUtil.hide('consultationModal');
     });
 
@@ -1085,6 +1086,7 @@ function init () {
     $(document).on('click', '.btn-close', function() {
       var transferContent = $('#consultationModalBody table').detach();
       $('#transfer_area > td').append(transferContent);
+      $('#transfer_area').hide();
     });
   });
 
@@ -1125,6 +1127,7 @@ function init () {
     $('#conferenceModal-overlay').click(function() {
       var conferenceContent = $('#conferenceModalBody > div').detach();
       $('#conference_area > td').append(conferenceContent);
+      $('#conference_area').hide();
       ModalUtil.hide('conferenceModal');
     });
 
@@ -1132,6 +1135,7 @@ function init () {
     $(document).on('click', '.btn-close', function() {
       var conferenceContent = $('#conferenceModalBody > div').detach();
       $('#conference_area > td').append(conferenceContent);
+      $('#conference_area').hide();
     });
   });
 
@@ -1320,7 +1324,11 @@ window.continueWithoutPermission = function() {
 function transferBtnClickUI() {
     if (typeof _phoneBar !== 'undefined') {
         _phoneBar.transferBtnClickUI();
-        ModalUtil.hide('consultationModal')
+        // 不关闭弹窗，保持打开状态
+        // var transferContent = $('#consultationModalBody table').detach();
+        // $('#transfer_area > td').append(transferContent);
+        // $('#transfer_area').hide();
+        // ModalUtil.hide('consultationModal');
     }
 }
 
@@ -1330,16 +1338,27 @@ function stopCallWaitBtnClickUI() {
         setTimeout(() => {
             jsSipUAInstance.answer();
         }, 2000);
-        ModalUtil.hide('consultationModal')
+        // 先移回内容再关闭
+        var transferContent = $('#consultationModalBody table').detach();
+        $('#transfer_area > td').append(transferContent);
+        $('#transfer_area').hide();
+        ModalUtil.hide('consultationModal');
     }
 }
 
+
 function consultationBtnClickUI() {
+  console.log('consultationBtnClickUI');
     if (typeof _phoneBar !== 'undefined') {
         _phoneBar.consultationBtnClickUI();
         setTimeout(() => {
             jsSipUAInstance.answer();
         }, 2000);
+        // 先移回内容再关闭
+        // var transferContent = $('#consultationModalBody table').detach();
+        // $('#transfer_area > td').append(transferContent);
+        // $('#transfer_area').hide();
+        // ModalUtil.hide('consultationModal');
     }
 }
 
@@ -1347,7 +1366,11 @@ function consultationBtnClickUI() {
 function transferCallWaitBtnClickUI() {
   if (typeof _phoneBar !== 'undefined') {
     _phoneBar.transferCallWaitBtnClickUI();
-    ModalUtil.hide('consultationModal')
+    // 先移回内容再关闭
+    var transferContent = $('#consultationModalBody table').detach();
+    $('#transfer_area > td').append(transferContent);
+    $('#transfer_area').hide();
+    ModalUtil.hide('consultationModal');
   }
 }
 
