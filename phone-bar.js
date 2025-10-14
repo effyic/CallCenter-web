@@ -512,7 +512,7 @@ function init () {
                 <br /> <br />
 
                 &nbsp;&nbsp; <input type="button" name="doTransferBtn" id="doTransferBtn"
-                  onclick="_phoneBar.transferBtnClickUI()" style="width: 70px;" value="转接电话" title="把当前电话转接给他/她处理。" />
+                  onclick="transferBtnClickUI()" style="width: 70px;" value="转接电话" title="把当前电话转接给他/她处理。" />
                 &nbsp;
 
                 &nbsp;&nbsp; <input type="button" name="stopCallWait" id="stopCallWait"
@@ -1323,6 +1323,13 @@ window.continueWithoutPermission = function() {
     console.warn('用户选择在没有录音权限的情况下继续使用');
 };
 
+function transferBtnClickUI() {
+    if (typeof _phoneBar !== 'undefined') {
+        _phoneBar.transferBtnClickUI();
+        ModalUtil.hide('consultationModal')
+    }
+}
+
 function stopCallWaitBtnClickUI() {
     if (typeof _phoneBar !== 'undefined') {
         _phoneBar.stopCallWaitBtnClickUI();
@@ -1339,14 +1346,15 @@ function consultationBtnClickUI() {
         setTimeout(() => {
             jsSipUAInstance.answer();
         }, 2000);
-        ModalUtil.hide('consultationModal')
     }
 }
 
 
 function transferCallWaitBtnClickUI() {
+  if (typeof _phoneBar !== 'undefined') {
     _phoneBar.transferCallWaitBtnClickUI();
     ModalUtil.hide('consultationModal')
+  }
 }
 
 function conferenceStartBtnUI() {
