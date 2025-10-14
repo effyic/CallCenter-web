@@ -351,7 +351,7 @@ function init () {
                 <li id="unHoldBtnLi"><a href="#" id="unHoldBtn" class="bc2_btn off"></a><span>取消保持</span></li>
                 <li><a href="#" id="transferBtn" class="zjie_btn"></a><span>转接</span></li>
                 <li><a href="#" id="consultationBtn" class="zixun_btn"></a><span>咨询</span></li>
-                <li><a href="#" id="conferenceBtn" class="hy_btn"></a><span>会议</span></li>
+                <li><a href="#" id="conferenceBtn" class="hy_btn off"></a><span>会议</span></li>
                 <li><a href="#" id="hangUpBtn" class="gj_btn"></a><span>挂机</span></li>
                 <li><a href="#" id="resetStatus" class="qz_btn"></a><span>强置</span></li>
                 <li><a href="#" id="onLineBtn" class="sx_btn on"></a><span>签入</span></li>
@@ -539,6 +539,9 @@ function init () {
  
 `)
 
+  $("#unHoldBtnLi").hide();
+  $("#conferenceBtn").removeClass("on").addClass("off");
+
  // <div id="chat-container">
   //   <div id="chat-messages" class="message-container"></div>
   // </div>
@@ -588,7 +591,7 @@ function init () {
     console.log(msg);
     _phoneBar.updatePhoneBar(msg, ccPhoneBarSocket.eventListWithTextInfo.ws_disconnected.code);
     $("#transfer_area").hide();
-
+    $("#conferenceBtn").removeClass("on").addClass("off");
     jsSipUAInstance.unregister();
   });
 
@@ -931,6 +934,25 @@ function init () {
       ModalUtil.hide('signinModal');
     });
 
+    if ($(this).hasClass('on')) {
+        if (_phoneBar.getIsConnected()) {
+            _phoneBar.disconnect();
+            jsSipUAInstance.unregister();
+            $("#conferenceBtn").removeClass("on").addClass("off");
+        } else {
+            // 在登录前再次检查录音权限
+            window.audioPermissionChecker.checkAudioPermission().then(hasPermission => {
+              if (hasPermission) {
+                  console.log('录音权限检查通过，可以正常使用电话功能');
+              } else {
+                  console.warn('录音权限检查失败，部分功能可能受限');
+              }
+            });
+        }
+    }else {
+        alert('当前不允许签出!');
+    }
+    
     // 确认签入按钮点击事件
     $(document).on('click', '#confirmSigninBtn', function() {
       var opnumValue = $('#signinOpnum').val();
@@ -1023,10 +1045,10 @@ function init () {
 
           jsSipUAInstance.register(_phoneConfig);
 
-
-
           // 建立 WebSocket 连接
           _phoneBar.connect();
+
+          $("#conferenceBtn").removeClass("off").addClass("on");
 
         } else if (checkCount >= maxCheckCount) {
           // 超时处理

@@ -1,0 +1,40 @@
+# Git相关文件
+.git
+.gitignore
+
+# 文档文件
+*.md
+README*
+
+# 开发工具文件
+.vscode
+.idea
+*.log
+
+# 临时文件
+*.tmp
+*.temp
+
+# 压缩文件
+*.zip
+*.tar.gz
+*.rar
+
+# 系统文件
+.DS_Store
+Thumbs.db
+
+# Node.js相关（如果有的话）
+node_modules
+npm-debug.log
+
+# Docker相关
+Dockerfile
+.dockerignore
+
+# 批处理文件
+*.bat
+
+# 备份文件
+*.bak
+*.backup

@@ -1,0 +1,17 @@
+version: '3.8'
+services:
+  phone-bar-web:
+    image: swr.cn-north-4.myhuaweicloud.com/registry-huawei/effyic/phone-bar-sdk:latest
+    container_name: phone-bar-sdk
+    ports:
+      - "8900:80"
+    restart: always
+    pull_policy: always
+    networks:
+      - phone-bar-sdk
+networks:
+  phone-bar-sdk:
+    driver: bridge
+    ipam:
+      config:
+        - subnet: 10.10.13.0/24
