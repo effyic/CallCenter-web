@@ -316,7 +316,7 @@ function init () {
           <b>状态：</b> <span id="agentStatus" title="" class="status4">空闲</span> &nbsp;&nbsp;
           <b>当前排队人数：</b><span id="queueStat" title="" class="status4">0</span> &nbsp;&nbsp;
           <label style="cursor: pointer;">
-            <input type="checkbox" id="autoAnswerToggle" checked style="cursor: pointer;" />
+            <input type="checkbox" id="autoAnswerToggle" style="cursor: pointer;" />
             <b>自动接听</b>
           </label>
 
@@ -1044,8 +1044,8 @@ function init () {
           //设置来电接听超时时间
           jsSipUAInstance.setCallAnswerTimeOut(20);
 
-          // 设置来电是否自动应答
-          jsSipUAInstance.setAutoAnswer(true);
+          // 设置来电是否自动应答（默认不自动接听）
+          jsSipUAInstance.setAutoAnswer(false);
 
           jsSipUAInstance.register(_phoneConfig);
 
