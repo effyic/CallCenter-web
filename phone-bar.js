@@ -361,9 +361,9 @@ function init () {
           <b>签入时间：</b> <span id="loginTime" title="" class="status4">00:00:00</span> &nbsp;&nbsp;
           <b>状态：</b> <span id="agentStatus" title="" class="status4">未签入</span> &nbsp;&nbsp;
           <b>当前排队人数：</b><span id="queueStat" title="" class="status4">0</span> &nbsp;&nbsp;
-          <label style="cursor: pointer;">
-            <input type="checkbox" id="autoAnswerToggle" style="cursor: pointer;" />
-            <b>自动接听</b>
+          <label style="cursor: pointer; vertical-align: middle;">
+            <input type="checkbox" id="autoAnswerToggle" style="cursor: pointer; vertical-align: middle; margin: 0; position: relative; top: 0px;" />
+            <b style="vertical-align: middle;">自动接听</b>
           </label>
 
         </td>
