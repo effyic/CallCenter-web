@@ -6,10 +6,10 @@
 #phone-bar{
     table,tr,td,div,ol,ul,li,dl,dt,dd,dir,h1,h2,h3,h4,h5,h6,p{text-align: left; margin: 0px;padding: 0px;border: 0px;list-style-type: none; font-size:12px; font-weight:normal;}
     div,select,textarea,table td,table td,table tr{font-family:myFirstFont;font-size:12px; color:#768595;}
-    * .main{ margin:0px 10px;} */
+}
 
 /***头部区***/
-.head_btn{ height:50px; margin-bottom:10px;}
+.head_btn{ height:50px; margin-bottom:20px;}
 
 #navigation {font: bold 12px/18px "微软雅黑", Helvetica, Arial, sans-serif; text-transform: uppercase; color:#768595; position:absolute; top:10px;}
 #navigation:after { clear: both;content: "."; display: block; height: 0;visibility: hidden;}
@@ -126,9 +126,10 @@
 .dial dd ul li.status5{ color:#adadad;}
 .dial dd b{ line-height:23px; padding-left:1px;}
 
-.dial_btn{ float:left;}
-.dial_btn li{ float:left; margin-left:25px;text-align:center;}
+.dial_btn{ display:flex;gap:18px;padding-left:30px !important;}
+.dial_btn li{  text-align:center;}
 .dial_btn li a{ display:block; border-radius:10px; border:none; width:48px; height:48px; margin:4px auto;}
+.dial_btn li span{ display:block; text-align:center; margin-top:5px;}
 
 
 .unmute_btn,.answer_btn,.wh_btn,.gj_btn,.zj_btn,.bc_btn,.zjie_btn,.myd_btn,.jt_btn,.qca_btn,.lj_btn,.qc_btn,.hy_btn,.sx_btn,.xx_btn,.wc_btn,.jy_btn,.xz_btn,.sm_btn,.qz_btn,.qiangjie_btn,.lanjie_btn{background:url(./images/dial_off.png) no-repeat;background-color:#FFF;}
@@ -806,4 +807,205 @@ qiangjie_btn,.qiangjie_btn.on{background:url(./images/phonebar/qiangjie.png) no-
     transform: translateY(-2px);
 }
 
+/* 弹窗基础样式 */
+.modal-overlay {
+    display: none;
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.5);
+    z-index: 9998;
+    animation: fadeIn 0.3s ease;
+}
+
+.modal-overlay.show {
+    display: block;
+}
+
+.modal {
+    display: none;
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    z-index: 9999;
+    animation: slideIn 0.3s ease;
+}
+
+.modal.show {
+    display: block;
+}
+
+.modal-dialog {
+    width: auto;
+}
+
+.modal-content {
+    background: white;
+    border-radius: 12px;
+    box-shadow: 0 10px 40px rgba(0, 0, 0, 0.2);
+    overflow: hidden;
+    min-width: 400px;
+}
+
+.modal-header {
+    background: linear-gradient(135deg, #6b9aff 0%, #4a7cfa 100%);
+    color: white;
+    padding: 20px 24px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    border-radius: 12px 12px 0 0;
+}
+
+.modal-title {
+    margin: 0;
+    font-size: 18px;
+    font-weight: 600;
+    color: white;
+}
+
+.btn-close {
+    background: transparent;
+    border: none;
+    color: white;
+    font-size: 24px;
+    cursor: pointer;
+    padding: 0;
+    width: 30px;
+    height: 30px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 50%;
+    transition: all 0.3s ease;
+}
+
+.btn-close:before {
+    content: "×";
+}
+
+.btn-close:hover {
+    background: rgba(255, 255, 255, 0.2);
+    transform: rotate(90deg);
+}
+
+.modal-body {
+    padding: 24px;
+    background: white;
+    min-height: 200px;
+}
+
+.modal-footer {
+    padding: 16px 24px;
+    background: #f6f9ff;
+    border-top: 1px solid #e8eff9;
+    display: flex;
+    justify-content: flex-end;
+    gap: 12px;
+    border-radius: 0 0 12px 12px;
+}
+
+.form-group {
+    margin-bottom: 20px;
+}
+
+.form-label {
+    display: block;
+    margin-bottom: 8px;
+    color: #333;
+    font-weight: 500;
+    font-size: 14px;
+}
+
+.form-input {
+    width: 100%;
+    padding: 10px 12px;
+    border: 1px solid #e8eff9;
+    border-radius: 8px;
+    font-size: 14px;
+    transition: all 0.3s ease;
+    box-sizing: border-box;
+}
+
+.form-input:focus {
+    outline: none;
+    border-color: #6b9aff;
+    box-shadow: 0 0 0 3px rgba(107, 154, 255, 0.1);
+}
+
+.btn {
+    padding: 10px 24px;
+    border: none;
+    border-radius: 8px;
+    font-size: 14px;
+    font-weight: 500;
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+.btn-primary {
+    background: #6b9aff;
+    color: white;
+    box-shadow: 0 4px 15px rgba(107, 154, 255, 0.3);
+}
+
+.btn-primary:hover {
+    background: #5a8aef;
+    transform: translateY(-2px);
+    box-shadow: 0 6px 20px rgba(107, 154, 255, 0.4);
+}
+
+.btn-secondary {
+    background: #f5f6fa;
+    color: #666;
+    border: 1px solid #e8eff9;
+}
+
+.btn-secondary:hover {
+    background: #e8eff9;
+    color: #333;
+}
+
+.btn-success {
+    background: #10b981;
+    color: white;
+}
+
+.btn-success:hover {
+    background: #059669;
+    transform: translateY(-2px);
+}
+
+.btn-danger {
+    background: #ef4444;
+    color: white;
+}
+
+.btn-danger:hover {
+    background: #dc2626;
+    transform: translateY(-2px);
+}
+
+/* 动画效果 */
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+    }
+    to {
+        opacity: 1;
+    }
+}
+
+@keyframes slideIn {
+    from {
+        transform: translate(-50%, -60%);
+        opacity: 0;
+    }
+    to {
+        transform: translate(-50%, -50%);
+        opacity: 1;
+    }
 }

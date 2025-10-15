@@ -356,7 +356,7 @@ function init () {
 
     <table width="1224">
       <tr>
-        <td width="70%" colspan="2" height="35" style="text-indent: 20px;">
+        <td width="70%" colspan="2" height="35" style="text-indent: 20px">
           <b>签入时间：</b> <span id="loginTime" title="" class="status4">00:00:00</span> &nbsp;&nbsp;
           <b>状态：</b> <span id="agentStatus" title="" class="status4">未签入</span> &nbsp;&nbsp;
           <b>当前排队人数：</b><span id="queueStat" title="" class="status4">0</span> &nbsp;&nbsp;
