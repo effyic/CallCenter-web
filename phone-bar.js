@@ -3,6 +3,19 @@ var _phoneBar = new ccPhoneBarSocket();
 var scriptServer = "172.16.1.111";
 var extnum = '1103'; //分机号
 var opnum = '1103'; //工号
+var gatewayList = [
+    {
+        "uuid": "1",
+        "updateTime": 1758862985998,
+        "gatewayAddr": "172.16.1.112:5060",
+        "callerNumber": "007",
+        "calleePrefix": "",
+        "priority": 1,
+        "concurrency": 2,
+        "register": false,
+        "audioCodec": "pcma"
+    }
+  ]
 
 var jsSipUAInstance = new jsSipUA();
 
@@ -986,7 +999,6 @@ function init () {
       //$("#unmuteBtn").removeClass("off").addClass("on");
   });
 
-
   // 电话工具条参数配置;
   _callConfig = {
     'useDefaultUi': true,
@@ -999,19 +1011,7 @@ function init () {
     // 网关列表， 默认需要加密后在在通过客户端向呼叫系统传递;
     // 注意在注册模式下，网关参数更改之后，必须重启语音服务 [docker restart freeswitch] 方可生效，不支持热更新;
     // 支持多个网关同时使用，按照优先级依次使用, 支持网关负载容错溢出 [第一条网关外呼出错后，自动使用第二条网关重试，直至外呼不出错] ;
-    'gatewayList': [
-      {
-        "uuid": "1",
-        "updateTime": 1758862985998,
-        "gatewayAddr": "172.16.1.112:5060",
-        "callerNumber": "007",
-        "calleePrefix": "",
-        "priority": 1,
-        "concurrency": 2,
-        "register": false,
-        "audioCodec": "pcma"
-      }
-    ],
+    'gatewayList': gatewayList,
 
     // 网关列表信息是否为加密模式;
     'gatewayEncrypted': false
