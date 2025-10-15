@@ -2,10 +2,11 @@
 /* CSS Document */
 /* body{ background:#eef3fa;} */
 
-html,body,table,tr,td,div,ol,ul,li,dl,dt,dd,dir,h1,h2,h3,h4,h5,h6,p{text-align: left; margin: 0px;padding: 0px;border: 0px;list-style-type: none; font-size:12px; font-weight:normal;}
-div,select,textarea,table td,table td,table tr{font-family:myFirstFont;font-size:12px; color:#768595;}
 
-/* .main{ margin:0px 10px;} */
+#phone-bar{
+    table,tr,td,div,ol,ul,li,dl,dt,dd,dir,h1,h2,h3,h4,h5,h6,p{text-align: left; margin: 0px;padding: 0px;border: 0px;list-style-type: none; font-size:12px; font-weight:normal;}
+    div,select,textarea,table td,table td,table tr{font-family:myFirstFont;font-size:12px; color:#768595;}
+    * .main{ margin:0px 10px;} */
 
 /***头部区***/
 .head_btn{ height:50px; margin-bottom:10px;}
@@ -126,8 +127,8 @@ div,select,textarea,table td,table td,table tr{font-family:myFirstFont;font-size
 .dial dd b{ line-height:23px; padding-left:1px;}
 
 .dial_btn{ float:left;}
-.dial_btn li{ float:left; margin-left:12px;text-align:center;}
-.dial_btn li a{ display:block; border-radius:10px; border:1px solid #dfe5e7; width:48px; height:48px; margin:4px auto;}
+.dial_btn li{ float:left; margin-left:25px;text-align:center;}
+.dial_btn li a{ display:block; border-radius:10px; border:none; width:48px; height:48px; margin:4px auto;}
 
 
 .unmute_btn,.answer_btn,.wh_btn,.gj_btn,.zj_btn,.bc_btn,.zjie_btn,.myd_btn,.jt_btn,.qca_btn,.lj_btn,.qc_btn,.hy_btn,.sx_btn,.xx_btn,.wc_btn,.jy_btn,.xz_btn,.sm_btn,.qz_btn,.qiangjie_btn,.lanjie_btn{background:url(./images/dial_off.png) no-repeat;background-color:#FFF;}
@@ -805,4 +806,4 @@ qiangjie_btn,.qiangjie_btn.on{background:url(./images/phonebar/qiangjie.png) no-
     transform: translateY(-2px);
 }
 
-/* 样式结束 */
+}

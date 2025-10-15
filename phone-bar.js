@@ -347,9 +347,8 @@ function init () {
       }
   });
 
-  console.log($('#app'));
 
-  $('#app').html(`
+  $('#phone-bar').html(`
   <div>
       <audio hidden="true" id="audioHandler" controls="controls" autoplay="autoplay"></audio>
   </div>
