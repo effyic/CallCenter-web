@@ -342,14 +342,7 @@ function init () {
 
               <ul class="dial_btn">
                 <li><a href="#" id="setFree" class="xz_btn off"></a><span>置闲</span></li>
-                <li><a href="#" id="setBusy" class="sm_btn off"></a>
-                  <select style="width: 50px;" id="setBusySubList">
-                    <option value="3">置忙</option>
-                    <option value="31">小休</option>
-                    <option value="32">会议</option>
-                    <option value="33">培训</option>
-                  </select>
-                </li>
+                <li><a href="#" id="setBusy" class="sm_btn off"></a><span>置忙</span></li>
                 <li><a href="#" id="callBtn" class="wh_btn"></a><span>外呼</span></li>
                 <li id="holdBtnLi"><a href="#" id="holdBtn" class="bc_btn off"></a><span>保 持</span></li>
                 <li id="unHoldBtnLi"><a href="#" id="unHoldBtn" class="bc2_btn off"></a><span>取消保持</span></li>
@@ -545,6 +538,10 @@ function init () {
 
   $("#unHoldBtnLi").hide();
   $("#conferenceBtn").removeClass("on").addClass("off");
+  
+  // 隐藏接听和会议按钮
+  $("#conferenceBtn").parent().hide();
+  $("#answer_btn").parent().hide();
 
  // <div id="chat-container">
   //   <div id="chat-messages" class="message-container"></div>
