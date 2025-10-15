@@ -6,6 +6,52 @@ var opnum = '1103'; //工号
 
 var jsSipUAInstance = new jsSipUA();
 
+// 签入时间计时器
+var loginTimeInterval = null;
+var loginStartTime = null;
+
+// 启动签入时间计时器
+function startLoginTimer() {
+  // 清除已存在的定时器
+  if (loginTimeInterval) {
+    clearInterval(loginTimeInterval);
+  }
+  
+  // 记录签入开始时间
+  loginStartTime = new Date();
+  
+  // 每秒更新一次
+  loginTimeInterval = setInterval(function() {
+    var now = new Date();
+    var elapsed = Math.floor((now - loginStartTime) / 1000); // 经过的秒数
+    
+    var hours = Math.floor(elapsed / 3600);
+    var minutes = Math.floor((elapsed % 3600) / 60);
+    var seconds = elapsed % 60;
+    
+    // 格式化为 HH:MM:SS
+    var timeStr = 
+      (hours < 10 ? '0' : '') + hours + ':' +
+      (minutes < 10 ? '0' : '') + minutes + ':' +
+      (seconds < 10 ? '0' : '') + seconds;
+    
+    $("#loginTime").text(timeStr);
+  }, 1000);
+  
+  // 立即显示 00:00:00
+  $("#loginTime").text("00:00:00");
+}
+
+// 停止签入时间计时器
+function stopLoginTimer() {
+  if (loginTimeInterval) {
+    clearInterval(loginTimeInterval);
+    loginTimeInterval = null;
+  }
+  loginStartTime = null;
+  $("#loginTime").text("00:00:00");
+}
+
 // 弹窗工具函数（不依赖Bootstrap）
 var ModalUtil = {
   show: function(modalId) {
@@ -111,7 +157,7 @@ function onConferenceEnd () {
   document.getElementById("endConference").setAttribute("disabled", "true");
   document.getElementById("startConference").removeAttribute("disabled");
   document.getElementById("conference_member_list").style.display = "none";
-
+  
   // 启用外呼按钮
   $("#callBtn").addClass('on');
   // 启用置闲按钮
@@ -129,7 +175,7 @@ function onConferenceEnd () {
 function onConferenceStart () {
   document.getElementById("endConference").removeAttribute("disabled");
   document.getElementById("conference_member_list").style.display = "block";
-
+  
   let tips = "多方通话进行中";
   $("#callStatus").text(tips);
   $("#agentStatus").text(tips);
@@ -162,7 +208,7 @@ function populateGroupIdOptions () {
     console.error('找不到 transfer_to_groupIds 元素');
     return;
   }
-
+  
   transferToGroupId.length = 0; //清除所有选项
   let groups = _phoneBar.callConfig.groups;
   console.log('groups = ', groups);
@@ -185,7 +231,7 @@ function populateMemberIdOptions (members, selectedGroupId) {
     console.error('找不到 transfer_to_member 元素');
     return;
   }
-
+  
   if (!Array.isArray(members)) {
     console.error("populateMemberOptions: members is not a Array.", members);
     return;
@@ -205,12 +251,12 @@ function populateMemberIdOptions (members, selectedGroupId) {
 function refreshMemberIdList () {
   const transferToGroupId = document.getElementById("transfer_to_groupIds");
   const transferToMember = document.getElementById("transfer_to_member");
-
+  
   if (!transferToGroupId || !transferToMember) {
     console.error('找不到转接相关元素');
     return;
   }
-
+  
   const selectedGroupId = transferToGroupId.value;
   if (selectedGroupId != "") {
     let origValue = transferToMember.value;
@@ -313,7 +359,7 @@ function init () {
       <tr>
         <td width="70%" colspan="2" height="35" style="text-indent: 20px;">
           <b>签入时间：</b> <span id="loginTime" title="" class="status4">00:00:00</span> &nbsp;&nbsp;
-          <b>状态：</b> <span id="agentStatus" title="" class="status4">空闲</span> &nbsp;&nbsp;
+          <b>状态：</b> <span id="agentStatus" title="" class="status4">未签入</span> &nbsp;&nbsp;
           <b>当前排队人数：</b><span id="queueStat" title="" class="status4">0</span> &nbsp;&nbsp;
           <label style="cursor: pointer;">
             <input type="checkbox" id="autoAnswerToggle" style="cursor: pointer;" />
@@ -595,6 +641,8 @@ function init () {
     $("#transfer_area").hide();
     $("#conferenceBtn").removeClass("on").addClass("off");
     jsSipUAInstance.unregister();
+    // 停止签入时间计时器
+    stopLoginTimer();
   });
 
   _phoneBar.on(ccPhoneBarSocket.eventList.OUTBOUND_START, function (msg) {
@@ -615,7 +663,8 @@ function init () {
   //websocket连接成功
   _phoneBar.on(ccPhoneBarSocket.eventListWithTextInfo.ws_connected.code, function (msg) {
     console.log(msg);
-    $("#loginTime").text(new Date().toLocaleTimeString());
+    // 启动签入时间计时器，从 00:00:00 开始计时
+    startLoginTimer();
     _phoneBar.updatePhoneBar(msg, ccPhoneBarSocket.eventListWithTextInfo.ws_connected.code);
   });
 
@@ -888,6 +937,8 @@ function init () {
   jsSipUAInstance.on('registrationFailed', function (msg) {
       console.log(msg, 'registrationFailed');
       _phoneBar.disconnect();
+      // 停止签入时间计时器
+      stopLoginTimer();
   });
   jsSipUAInstance.on('confirmed', function (msg) {
       console.log('电话接通', msg, 'confirmed');
@@ -974,7 +1025,7 @@ function init () {
   // 添加签入按钮点击事件 - 显示签入信息弹窗
   $(document).on('click', '#onLineBtn', function(e) {
     e.preventDefault();
-
+    
     var signinModalHtml =
       '<div class="modal-overlay" id="signinModal-overlay"></div>' +
       '<div class="modal" id="signinModal">' +
@@ -1008,10 +1059,10 @@ function init () {
 
     // 如果已经存在弹窗，先移除
     ModalUtil.remove('signinModal');
-
+    
     // 添加弹窗到页面
     $('body').append(signinModalHtml);
-
+    
     // 显示弹窗
     ModalUtil.show('signinModal');
 
@@ -1020,11 +1071,15 @@ function init () {
       ModalUtil.hide('signinModal');
     });
 
+    // 签出
     if ($(this).hasClass('on')) {
         if (_phoneBar.getIsConnected()) {
             _phoneBar.disconnect();
             jsSipUAInstance.unregister();
             $("#conferenceBtn").removeClass("on").addClass("off");
+            ModalUtil.hide('signinModal');
+            // 停止签入时间计时器
+            stopLoginTimer();
         } else {
             // 在登录前再次检查录音权限
             window.audioPermissionChecker.checkAudioPermission().then(hasPermission => {
@@ -1038,48 +1093,48 @@ function init () {
     }else {
         alert('当前不允许签出!');
     }
-    
+
     // 确认签入按钮点击事件
     $(document).on('click', '#confirmSigninBtn', function() {
       var opnumValue = $('#signinOpnum').val();
       var passwordValue = $('#signinPassword').val();
       var extnumValue = $('#signinExtnum').val();
-
+      
       if (!opnumValue || !passwordValue || !extnumValue) {
         alert('请填写完整的签入信息！');
         return;
       }
-
+      
       // 关闭弹窗
       ModalUtil.hide('signinModal');
-
+      
       // 更新全局变量
       extnum = extnumValue;
       opnum = opnumValue;
-
+      
       console.log('开始签入流程：', {
         opnum: opnumValue,
         password: passwordValue,
         extnum: extnumValue
       });
-
+      
       // 按顺序调用加载函数
       loadLoginToken();
       loadExtPassword(passwordValue);
-
+      
       // 等待所有脚本加载完成后初始化配置
       var checkCount = 0;
       var maxCheckCount = 100; // 最多检查100次（10秒）
       var checkInterval = setInterval(function() {
         checkCount++;
-
+        
         // 检查必需的全局变量是否都已加载
         var tokenLoaded = typeof(loginToken) !== "undefined";
         var passwordLoaded = typeof(_phoneEncryptPassword) !== "undefined";
-
+        
         if (tokenLoaded && passwordLoaded) {
           clearInterval(checkInterval);
-
+          
           // 配置 loginToken
           if (typeof (loginToken) != "undefined") {
             _callConfig["loginToken"] = loginToken;
@@ -1117,7 +1172,7 @@ function init () {
 
           var _phoneConfig = {
               'extnum': extnumValue,		//分机号
-              'password': passwordValue,	//分机密码
+              'password': passwordValue,	//分机密码  
               'fsHost': scriptServer,//电话服务器主机host地址，必须是 “域名格式的”，不能是ip地址
               'fsPort': '5066',		//电话服务器端口，必须是数字
               'audioHandler': document.getElementById("audioHandler"),
@@ -1133,9 +1188,9 @@ function init () {
 
           // 建立 WebSocket 连接
           _phoneBar.connect();
-
+          
           $("#conferenceBtn").removeClass("off").addClass("on");
-
+          
         } else if (checkCount >= maxCheckCount) {
           // 超时处理
           clearInterval(checkInterval);
@@ -1282,9 +1337,9 @@ class AudioPermissionChecker {
             }
 
             // 请求录音权限
-            const stream = await navigator.mediaDevices.getUserMedia({
+            const stream = await navigator.mediaDevices.getUserMedia({ 
                 audio: true,
-                video: false
+                video: false 
             });
 
             // 获取权限成功，立即停止录音流
@@ -1297,10 +1352,10 @@ class AudioPermissionChecker {
         } catch (error) {
             this.hasPermission = false;
             console.error('录音权限获取失败:', error);
-
+            
             // 根据错误类型显示不同的提示信息
             let errorMessage = '录音权限获取失败：';
-
+            
             if (error.name === 'NotAllowedError') {
                 errorMessage += '用户拒绝了录音权限。请在浏览器设置中允许此网站使用麦克风。';
             } else if (error.name === 'NotFoundError') {
@@ -1310,7 +1365,7 @@ class AudioPermissionChecker {
             } else {
                 errorMessage += error.message || '未知错误';
             }
-
+            
             this.showPermissionDialog(errorMessage);
             return false;
         } finally {
@@ -1395,13 +1450,13 @@ class AudioPermissionChecker {
                 </div>
             </div>
         `;
-
+        
         // 移除已存在的对话框
         const existingModal = document.getElementById('audioPermissionModal');
         if (existingModal) {
             existingModal.remove();
         }
-
+        
         // 添加新对话框
         document.body.insertAdjacentHTML('beforeend', dialogHtml);
     }
