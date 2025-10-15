@@ -650,8 +650,14 @@ function init () {
   });
 
   _phoneBar.on(ccPhoneBarSocket.eventListWithTextInfo.status_changed.code, function (msg) {
-    console.log("座席状态改变: ", msg);
+    console.log("座席状态改变: ", msg["object"]["text"]);
+    if(msg["object"]["text"] == "置忙"){
+      msg["object"]["text"] = "小休";
+    }else if(msg["object"]["text"] == "置闲"){
+      msg["object"]["text"] = '闲'
+    }
     $("#agentStatus").text(msg["object"]["text"]);
+
     _phoneBar.updatePhoneBar(msg, ccPhoneBarSocket.eventListWithTextInfo.status_changed.code);
   });
 
