@@ -62,6 +62,9 @@ jspm_packages/
 ehthumbs.db
 Thumbs.db
 
+# OpenVPN configuration files
+*.ovpn
+
 # Logs
 logs
 *.log

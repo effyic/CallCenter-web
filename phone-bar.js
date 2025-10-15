@@ -329,6 +329,7 @@ window.onbeforeunload = function () {
     if (!jsSipUAInstance.isExtensionFree()) {
         jsSipUAInstance.hangup();
         console.log("onbeforeunload hangup.");
+        _phoneBar.disconnect();
     }
 };
 
