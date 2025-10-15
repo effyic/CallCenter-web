@@ -198,6 +198,7 @@ function ccPhoneBarSocket() {
 
     // 初始化websocket连接参数
 	this.initConfig = function(config) {
+		console.log("🔧 执行 initConfig()");
 		//把config中的属性全部拷贝到callConfig中;
 		for(var element in config) {
 			this.callConfig[element] = config[element];
@@ -214,7 +215,7 @@ function ccPhoneBarSocket() {
 	    			'/call-center/websocketServer?' +
 			'&loginToken=' + this.callConfig.loginToken;
 			 
-	    console.log("ipccServer ws url: " + wsuri);
+	    console.log("🔧 构建的 wsuri:", wsuri);
 	    var ipccServerIpAddr = this.callConfig.ipccServer.split(":");
 	    if(this.callConfig.enableWss &&  this.checkIP(ipccServerIpAddr)){
 	    	var tipsError = "ERROR! 启用了wss之后，必须使用域名访问websocketServer! " + this.callConfig.ipccServer;
@@ -244,10 +245,19 @@ function ccPhoneBarSocket() {
 
 	//断开到呼叫控制服务器的连接 
 	this.disconnect = function(){
-		var cmdInfo = {};
-		cmdInfo.action="setAgentStatus";
-		cmdInfo.body = {"cmd" : "disconnect", "args" : { "msg" : "disconnection opt triggered by js client." } };
-		ws.send(JSON.stringify(cmdInfo));
+		console.log("执行 disconnect()");
+		// 发送断开命令
+		if (ws && ws.readyState === WebSocket.OPEN) {
+			var cmdInfo = {};
+			cmdInfo.action="setAgentStatus";
+			cmdInfo.body = {"cmd" : "disconnect", "args" : { "msg" : "disconnection opt triggered by js client." } };
+			ws.send(JSON.stringify(cmdInfo));
+			// 关闭 WebSocket 连接
+			ws.close();
+		}
+		// 清空 wsuri，避免下次使用旧的 loginToken
+		wsuri = null;
+		console.log("disconnect() 完成，wsuri 已清空:", wsuri);
 	};
 
 	/**
@@ -324,6 +334,14 @@ function ccPhoneBarSocket() {
 
 	//连接到呼叫控制服务器
 	this.connect = function() {
+		console.log("执行 connect()，当前 wsuri:", wsuri);
+		
+		// 检查 wsuri 是否已配置
+		if (!wsuri || wsuri === null) {
+			console.error("❌ 无法连接：wsuri 未配置！请先调用 initConfig()");
+			return;
+		}
+		
 		if ('WebSocket' in window)
 			ws = new WebSocket(wsuri);
 		else {
@@ -454,11 +472,10 @@ function ccPhoneBarSocket() {
 		};
 		//关闭连接时触发  
 		ws.onclose = function(evt) {
+			console.log("WebSocket onclose 事件触发 - 连接已关闭");
 			isConnected = false;
 			_cc.notifyAll(ccPhoneBarSocket.eventList.ws_disconnected, "ipccserver 连接断开.");
-			console.log("ipcc连接断开.", "disconnected");
-			console.log(evt);
-			ws.close();
+			// 注意：onclose 是连接关闭后的回调，此时连接已经关闭，不需要再调用 ws.close()
 		};
 		ws.onopen = function(evt) {
 			console.log("ipccserver websocket onopen...");

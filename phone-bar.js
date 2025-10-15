@@ -123,7 +123,6 @@ function loadLoginToken () {
   script.type = "text/javascript";
   script.src = destUrl;
   document.getElementsByTagName('head')[0].appendChild(script);
-  console.log('异步token正在加载')
 }
 
 // 修改4:可忽略
@@ -298,16 +297,7 @@ _phoneBar.on(ccPhoneBarSocket.eventList.asr_process_end_agent, function (msg) {
 const chatMessages = document.getElementById('chat-messages');
 $("#chat-container").hide();
 function handleAsrMessage (data) {
-  // $("#chat-container").show();
-  // const { status, object } = data;
-  // if (status === 619 && object) {
-  //   const { role, text, vadType } = object;
-  //   if (vadType == 1) {
-  //     addMessageToChat(role, text);
-  //   }
-  // } else if (status === 620 || status === 621) {
-  //   addSystemMessage("对话已结束。");
-  // }
+  
 }
 function addMessageToChat (role, text) {
   const messageDiv = document.createElement('div');
@@ -675,9 +665,6 @@ function init () {
 
   //websocket连接成功
   _phoneBar.on(ccPhoneBarSocket.eventListWithTextInfo.ws_connected.code, function (msg) {
-    console.log(msg);
-    // 启动签入时间计时器，从 00:00:00 开始计时
-    startLoginTimer();
     _phoneBar.updatePhoneBar(msg, ccPhoneBarSocket.eventListWithTextInfo.ws_connected.code);
   });
 
@@ -1026,6 +1013,47 @@ function init () {
   $(document).on('click', '#onLineBtn', function(e) {
     e.preventDefault();
     
+    // 先判断是签出还是签入
+    if ($(this).hasClass('on')) {
+        if (_phoneBar.getIsConnected()) {
+            // 执行签出
+            _phoneBar.disconnect();
+            jsSipUAInstance.unregister();
+            $("#conferenceBtn").removeClass("on").addClass("off");
+            // 停止签入时间计时器
+            stopLoginTimer();
+            // 清空表单字段（如果存在）
+            $('#signinOpnum').val('');
+            $('#signinPassword').val('');
+            $('#signinExtnum').val('');
+            _callConfig["loginToken"] = '';
+            _callConfig["extPassword"] = '';
+            // 清空全局变量
+            if (typeof loginToken !== 'undefined') {
+                loginToken = undefined;
+            }
+            if (typeof _phoneEncryptPassword !== 'undefined') {
+                _phoneEncryptPassword = undefined;
+            }
+            console.log('签出成功，已清空表单和配置');
+            return; // 签出后直接返回，不显示弹窗
+        } else {
+            // 未签入状态，显示签入弹窗
+            // 在登录前再次检查录音权限
+            window.audioPermissionChecker.checkAudioPermission().then(hasPermission => {
+              if (hasPermission) {
+                  console.log('录音权限检查通过，可以正常使用电话功能');
+              } else {
+                  console.warn('录音权限检查失败，部分功能可能受限');
+              }
+            });
+        }
+    } else {
+        alert('当前不允许签出!');
+        return;
+    }
+    
+    // 以下是签入弹窗的显示逻辑
     var signinModalHtml =
       '<div class="modal-overlay" id="signinModal-overlay"></div>' +
       '<div class="modal" id="signinModal">' +
@@ -1070,32 +1098,11 @@ function init () {
     $('#signinModal-overlay').click(function() {
       ModalUtil.hide('signinModal');
     });
-
-    // 签出
-    if ($(this).hasClass('on')) {
-        if (_phoneBar.getIsConnected()) {
-            _phoneBar.disconnect();
-            jsSipUAInstance.unregister();
-            $("#conferenceBtn").removeClass("on").addClass("off");
-            ModalUtil.hide('signinModal');
-            // 停止签入时间计时器
-            stopLoginTimer();
-        } else {
-            // 在登录前再次检查录音权限
-            window.audioPermissionChecker.checkAudioPermission().then(hasPermission => {
-              if (hasPermission) {
-                  console.log('录音权限检查通过，可以正常使用电话功能');
-              } else {
-                  console.warn('录音权限检查失败，部分功能可能受限');
-              }
-            });
-        }
-    }else {
-        alert('当前不允许签出!');
-    }
+  });
 
     // 确认签入按钮点击事件
     $(document).on('click', '#confirmSigninBtn', function() {
+      console.log('确认签入按钮！！！！');
       var opnumValue = $('#signinOpnum').val();
       var passwordValue = $('#signinPassword').val();
       var extnumValue = $('#signinExtnum').val();
@@ -1106,7 +1113,7 @@ function init () {
       }
       
       // 关闭弹窗
-      ModalUtil.hide('signinModal');
+    ModalUtil.hide('signinModal');
       
       // 更新全局变量
       extnum = extnumValue;
@@ -1164,7 +1171,7 @@ function init () {
               "register": false,
               "audioCodec": "pcma"
             }
-          ]
+        ];
 
           // 初始化电话工具条
           _phoneBar.initConfig(_callConfig);
@@ -1173,7 +1180,7 @@ function init () {
           var _phoneConfig = {
               'extnum': extnumValue,		//分机号
               'password': passwordValue,	//分机密码  
-              'fsHost': scriptServer,//电话服务器主机host地址，必须是 “域名格式的”，不能是ip地址
+            'fsHost': scriptServer,//电话服务器主机host地址，必须是 "域名格式的"，不能是ip地址
               'fsPort': '5066',		//电话服务器端口，必须是数字
               'audioHandler': document.getElementById("audioHandler"),
           };
@@ -1181,7 +1188,7 @@ function init () {
           //设置来电接听超时时间
           jsSipUAInstance.setCallAnswerTimeOut(20);
 
-          // 设置来电是否自动应答（默认不自动接听）
+        // 设置来电是否自动应答（默认不自动接听）
           jsSipUAInstance.setAutoAnswer(false);
 
           jsSipUAInstance.register(_phoneConfig);
@@ -1189,14 +1196,16 @@ function init () {
           // 建立 WebSocket 连接
           _phoneBar.connect();
           
-          $("#conferenceBtn").removeClass("off").addClass("on");
-          
+        // 启动签入时间计时器，从点击确认签入开始计时
+        startLoginTimer();
+        
+        $("#conferenceBtn").removeClass("off").addClass("on");
+        
         } else if (checkCount >= maxCheckCount) {
           // 超时处理
           clearInterval(checkInterval);
         }
       }, 100); // 每100ms检查一次
-    });
   });
 
   // 添加自动接听切换事件
