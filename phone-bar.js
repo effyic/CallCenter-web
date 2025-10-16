@@ -861,6 +861,10 @@ function init () {
     onTransferToConferenceSuccess(msg);
   });
 
+  _phoneBar.on(ccPhoneBarSocket.eventList.new_inbound_call, function (msg) {
+      console.log("新来电: ", msg.object.uuid);
+  });
+
   // JsSIP 网页电话
   jsSipUAInstance.on('inbound_call', function (msg) {
       console.log('收到呼入来电，请弹窗确认框，以便确认是否接听...', msg);
@@ -1530,11 +1534,15 @@ function stopCallWaitBtnClickUI() {
         $('#transfer_area > td').append(transferContent);
         $('#transfer_area').hide();
         ModalUtil.hide('consultationModal');
-
-        _phoneBar.stopCallWaitBtnClickUI();
-        setTimeout(() => {
-            jsSipUAInstance.answer();
-        }, 2000);
+        if (!jsSipUAInstance.getAutoAnswer()) {
+          jsSipUAInstance.setAutoAnswer(true);
+          _phoneBar.stopCallWaitBtnClickUI();
+          setTimeout(() => {
+              jsSipUAInstance.setAutoAnswer(false);
+          }, 3000);
+        }else{ 
+          _phoneBar.stopCallWaitBtnClickUI();
+        }
     }
 }
 
@@ -1542,10 +1550,15 @@ function stopCallWaitBtnClickUI() {
 function consultationBtnClickUI() {
   console.log('consultationBtnClickUI');
     if (typeof _phoneBar !== 'undefined') {
-        _phoneBar.consultationBtnClickUI();
-        setTimeout(() => {
-            jsSipUAInstance.answer();
-        }, 2000);
+        if (!jsSipUAInstance.getAutoAnswer()) {
+          jsSipUAInstance.setAutoAnswer(true);
+          _phoneBar.consultationBtnClickUI();
+          setTimeout(() => {
+              jsSipUAInstance.setAutoAnswer(false);
+          }, 3000);
+        }else{ 
+          _phoneBar.consultationBtnClickUI();
+        }
     }
 }
 
@@ -1565,10 +1578,16 @@ function transferCallWaitBtnClickUI() {
 
 function conferenceStartBtnUI() {
     if (typeof _phoneBar !== 'undefined') {
-        _phoneBar.conferenceStartBtnUI('');
-        setTimeout(() => {
-            jsSipUAInstance.answer();
-        }, 2000);
+        
+        if (!jsSipUAInstance.getAutoAnswer()) {
+          jsSipUAInstance.setAutoAnswer(true);
+          _phoneBar.conferenceStartBtnUI('');
+          setTimeout(() => {
+              jsSipUAInstance.setAutoAnswer(false);
+          }, 3000);
+        }else{ 
+          _phoneBar.conferenceStartBtnUI('');
+        }
     }
 }
 
