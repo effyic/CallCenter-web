@@ -128,7 +128,7 @@
 
 .dial_btn{ display:flex;gap:18px;padding-left:30px !important;}
 .dial_btn li{  text-align:center;}
-.dial_btn li a{ display:block; border-radius:10px; border:none; width:48px; height:48px; margin:4px auto;}
+.dial_btn li a{ display:block; border-radius:10px; border:none; width:48px; height:48px; margin:4px auto;background-size: 48px 48px !important;}
 .dial_btn li span{ display:block; text-align:center; margin-top:5px;}
 
 
@@ -157,8 +157,8 @@
 .answer_btn,.answer_btn.on{background:url(./images/phonebar/answer.png) no-repeat; -webkit-filter: grayscale(100%);-moz-filter: grayscale(100%);-ms-filter: grayscale(100%); -o-filter: grayscale(100%);filter: grayscale(100%);filter: gray;}/* 转接 */
 .answer_btn.on{background:url(./images/phonebar/answer.png) no-repeat; -webkit-filter: grayscale(1%);-moz-filter: grayscale(1%);-ms-filter: grayscale(1%); -o-filter: grayscale(1%);filter: grayscale(1%);filter: gray;}
 
-.unmute_btn,.unmute_btn.on{background:url(./images/phonebar/hold.png) no-repeat; -webkit-filter: grayscale(100%);-moz-filter: grayscale(100%);-ms-filter: grayscale(100%); -o-filter: grayscale(100%);filter: grayscale(100%);filter: gray;}/* 转接 */
-.unmute_btn.on{background:url(./images/phonebar/hold.png) no-repeat; -webkit-filter: grayscale(1%);-moz-filter: grayscale(1%);-ms-filter: grayscale(1%); -o-filter: grayscale(1%);filter: grayscale(1%);filter: gray;}
+.unmute_btn,.unmute_btn.on{background:url(./images/phonebar/unmute.png) no-repeat; -webkit-filter: grayscale(100%);-moz-filter: grayscale(100%);-ms-filter: grayscale(100%); -o-filter: grayscale(100%);filter: grayscale(100%);filter: gray;}/* 转接 */
+.unmute_btn.on{background:url(./images/phonebar/unmute.png) no-repeat; -webkit-filter: grayscale(1%);-moz-filter: grayscale(1%);-ms-filter: grayscale(1%); -o-filter: grayscale(1%);filter: grayscale(1%);filter: gray;}
 
 .myd_btn,.myd_btn.on{background-position:-151px -2px; }/* 满意度 */
 .myd_btn.on{ background-color:#f7ae2d; border:1px solid #f7ae2d;}
