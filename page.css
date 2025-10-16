@@ -606,7 +606,7 @@ qiangjie_btn,.qiangjie_btn.on{background:url(./images/phonebar/qiangjie.png) no-
 #conferenceModal #conference_member_list {
     background: transparent;
     border-radius: 8px;
-    padding: 20px 0;
+    /* padding: 20px 0; */
 }
 
 #conferenceModal #conference_member_list ul {
@@ -628,17 +628,23 @@ qiangjie_btn,.qiangjie_btn.on{background:url(./images/phonebar/qiangjie.png) no-
 }
 
 #conferenceModal #conference_header {
-    background: white;
+    /* background: #f6f9ff; */
     padding: 20px !important;
+    width: 100%;
+    padding-top:0px !important;
     border-radius: 8px !important;
-    border: 1px solid #e8eff9 !important;
+    border: none !important;
     margin-bottom: 15px;
-    box-shadow: 0 1px 3px rgba(107, 154, 255, 0.05);
+    box-shadow: 0 2px 8px rgba(107, 154, 255, 0.12);
     display: flex;
     align-items: center;
     justify-content: flex-start;
     gap: 12px;
     flex-wrap: nowrap;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    box-sizing: border-box;
 }
 
 #conferenceModal #conference_header > span {
@@ -709,37 +715,67 @@ qiangjie_btn,.qiangjie_btn.on{background:url(./images/phonebar/qiangjie.png) no-
 
 #conferenceModal .conf_member_item_row {
     background: white;
-    padding: 15px !important;
+    width: 100%;
+    padding: 10px !important;
     border-radius: 6px !important;
     margin: 8px 0 !important;
-    border: 1px solid #e8eff9 !important;
-    box-shadow: 0 1px 3px rgba(107, 154, 255, 0.05);
+    border: none !important;
+    box-shadow: 0 2px 8px rgba(107, 154, 255, 0.12);
     transition: all 0.2s ease;
+    display: flex !important;
+    align-items: center;
+    flex-wrap: nowrap;
+    gap: 12px;
 }
 
 #conferenceModal .conf_member_item_row:hover {
     background: #f6f9ff;
-    border-color: #d1dff7 !important;
-    box-shadow: 0 2px 6px rgba(107, 154, 255, 0.1);
-    transform: translateY(-1px);
+    box-shadow: 0 4px 12px rgba(107, 154, 255, 0.2);
+    transform: translateY(-2px);
 }
 
 #conferenceModal .conf_name,
 #conferenceModal .conf_phone,
 #conferenceModal .conf_status {
     display: inline-block;
-    margin-right: 10px;
+    margin-right: 0;
     font-size: 14px;
+    white-space: nowrap;
+}
+
+#conferenceModal .conf_name {
+    min-width: 80px;
+    flex-shrink: 0;
+}
+
+#conferenceModal .conf_phone {
+    min-width: 100px;
+    flex-shrink: 0;
+}
+
+#conferenceModal .conf_status {
+    min-width: 80px;
+    flex-shrink: 0;
+}
+
+#conferenceModal .conf_mute,
+#conferenceModal .conf_vmute,
+#conferenceModal .conf_remove,
+#conferenceModal .conf_re_invite {
+    flex-shrink: 0;
 }
 
 #conferenceModal .conf_remove a,
 #conferenceModal .conf_re_invite a {
     color: #6b9aff;
     text-decoration: none;
-    font-weight: 500;
+    /* font-weight: 500; */
     padding: 5px 10px;
     border-radius: 4px;
     transition: all 0.2s ease;
+    display: inline-block;
+    white-space: nowrap;
+    font-size: 14px;
 }
 
 #conferenceModal .conf_remove a:hover,
