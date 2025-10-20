@@ -603,40 +603,43 @@ function init () {
   // 	console.log(msg);
   // });
   //
-  // //工具条对象连接成功
-  // _phoneBar.on(ccPhoneBarSocket.eventList.ws_connected, function(msg){
-  //     console.log(msg);
-  // });
-  //
-  // _phoneBar.on(ccPhoneBarSocket.eventList.callee_ringing, function(msg){
-  // 	console.log(msg.content, "被叫振铃事件");
-  // });
-  // _phoneBar.on(ccPhoneBarSocket.eventList.caller_answered, function(msg){
-  // 	console.log(msg, "主叫接通" );
-  // });
-  // _phoneBar.on(ccPhoneBarSocket.eventList.caller_hangup, function(msg){
-  //     console.log(msg, "主叫挂断");
-  // });
-  //
-  // _phoneBar.on(ccPhoneBarSocket.eventList.callee_answered, function(msg){
-  // 	console.log(msg, "被叫接通");
-  // });
-  // _phoneBar.on(ccPhoneBarSocket.eventList.callee_hangup, function(msg){
-  // 	console.log(msg, "被叫挂断");
-  // });
-  //
-  // _phoneBar.on(ccPhoneBarSocket.eventList.status_changed, function(msg){
-  // 	console.log("座席状态改变: " ,msg);
-  // });
-  //
-  // // 一次外呼结束;
-  // _phoneBar.on(ccPhoneBarSocket.eventList.outbound_finished, function(msg){
-  // 	console.log('一次外呼结束', msg);
-  // });
+  //工具条对象连接成功
+  _phoneBar.on(ccPhoneBarSocket.eventList.ws_connected, function(msg){
+      console.log(msg,'工具条对象连接成功');
+  });
+  
+  _phoneBar.on(ccPhoneBarSocket.eventList.callee_ringing, function(msg){
+  	console.log(msg.content, "被叫振铃事件");
+  });
+  _phoneBar.on(ccPhoneBarSocket.eventList.caller_answered, function(msg){
+  	console.log(msg, "主叫接通" );
+  });
+  _phoneBar.on(ccPhoneBarSocket.eventList.caller_hangup, function(msg){
+      console.log(msg, "主叫挂断");
+  });
+  
+  _phoneBar.on(ccPhoneBarSocket.eventList.callee_answered, function(msg){
+  	console.log(msg, "被叫接通");
+  });
+  _phoneBar.on(ccPhoneBarSocket.eventList.callee_hangup, function(msg){
+  	console.log(msg, "被叫挂断");
+  });
+  
+  _phoneBar.on(ccPhoneBarSocket.eventList.status_changed, function(msg){
+  	console.log("座席状态改变: " ,msg);
+  });
+  
+  // 一次外呼结束;
+  _phoneBar.on(ccPhoneBarSocket.eventList.outbound_finished, function(msg){
+  	console.log('一次外呼结束', msg);
+  });
+
+
+
 
   // websocket通信对象断开事件;
   _phoneBar.on(ccPhoneBarSocket.eventListWithTextInfo.ws_disconnected.code, function (msg) {
-    console.log(msg);
+    console.log(msg,'websocket通信对象断开事件');
     _phoneBar.updatePhoneBar(msg, ccPhoneBarSocket.eventListWithTextInfo.ws_disconnected.code);
     $("#transfer_area").hide();
     $("#conferenceBtn").removeClass("on").addClass("off");
@@ -645,10 +648,12 @@ function init () {
     stopLoginTimer();
   });
 
-  _phoneBar.on(ccPhoneBarSocket.eventList.OUTBOUND_START, function (msg) {
-    console.log('outbound_start', msg);
-  });
 
+  // 监听外呼开始事件
+  _phoneBar.on(ccPhoneBarSocket.eventList.OUTBOUND_START, function (msg) {
+    console.log('监听外呼开始', msg);
+  });
+// 请求参数错误事件
   _phoneBar.on(ccPhoneBarSocket.eventListWithTextInfo.request_args_error.code, function (msg) {
     console.log(msg);
     _phoneBar.updatePhoneBar(msg, ccPhoneBarSocket.eventListWithTextInfo.request_args_error.code);
@@ -943,6 +948,7 @@ function init () {
   });
   jsSipUAInstance.on('confirmed', function (msg) {
       console.log('电话接通', msg, 'confirmed');
+      // 接通之后提示音
       jsSipUAInstance.playAnsweredSound();
       $("#answer_btn").removeClass("on").addClass("off");
       
@@ -1014,7 +1020,7 @@ function init () {
   $(document).on('click', '#onLineBtn', function(e) {
     e.preventDefault();
     
-    // 先判断是签出还是签入
+    // 先判断是签出还是签入：如果点击当前为签入
     if ($(this).hasClass('on')) {
         if (_phoneBar.getIsConnected()) {
             // 执行签出
@@ -1513,6 +1519,7 @@ function transferBtnClickUI() {
     }
 }
 
+// 设置静音
 $(document).on('click', '#unmuteBtn', function(e) {
   if ($(this).hasClass('off')) {
     $("#unmuteBtn").removeClass("off").addClass("on");
@@ -1543,7 +1550,7 @@ function stopCallWaitBtnClickUI() {
     }
 }
 
-
+// 咨询开启自动问答，避免弹窗展示
 function consultationBtnClickUI() {
   console.log('consultationBtnClickUI');
     if (typeof _phoneBar !== 'undefined') {
