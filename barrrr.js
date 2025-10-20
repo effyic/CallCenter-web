@@ -96,7 +96,7 @@ var groupId = 1; // 业务组id
 var pass = ''; // 密码
 var phone = ''; // 要外呼的号码
 
-// 自动从地址栏获取参数
+//  new1.自动从地址栏获取参数
 if (window.location.href.toString().indexOf("?") != -1) {
   console.log(ccPhoneBarSocket.utils);
   extnum = ccPhoneBarSocket.utils.getQueryParam("extnum") || ccPhoneBarSocket.utils.getQueryParam("extNum");
@@ -120,11 +120,7 @@ function resetExtNumAndOpNum (ext, op, groupId) {
 };
 
 
-// 修改1:这三个现在需要签入时候调用
-// 流程：需要修改的地方：
-// 1.签入按钮逻辑 ✓
-// 2.弹窗中填入签入信息包括密码，目前只有点击签入按钮才调用 （需要修改执行逻辑，等token都存入之后再）✓
-// 3.咨询时候，客服人员没有加载出来
+// new2
 function loadLoginToken () {
 
   // 目前已经把 projectId 和 groupId合并为同一个参数;
@@ -139,7 +135,7 @@ function loadLoginToken () {
   document.getElementsByTagName('head')[0].appendChild(script);
 }
 
-// 修改4:可忽略
+// new3
 function loadExtPassword (extPassword) {
   // extPassword 参数从弹窗中获取
   var url = "http://" + scriptServer + ":8880/call-center/create-ext-password?pass=" + extPassword;
@@ -343,11 +339,11 @@ function scrollToBottom () {
 
 //页面刷新或者关闭时，自动挂机; 避免导致投诉
 window.onbeforeunload = function () {
+    // 判断分机是否
     if (!jsSipUAInstance.isExtensionFree()) {
         jsSipUAInstance.hangup();
-        console.log("onbeforeunload hangup.");
-        _phoneBar.disconnect();
     }
+     _phoneBar.disconnect();
 };
 
 // 接听电话
@@ -1215,9 +1211,9 @@ function init () {
           _phoneBar.connect();
           
         // 启动签入时间计时器，从点击确认签入开始计时
-        startLoginTimer();
+        // startLoginTimer();
         
-        $("#conferenceBtn").removeClass("off").addClass("on");
+        // $("#conferenceBtn").removeClass("off").addClass("on");
         
         } else if (checkCount >= maxCheckCount) {
           // 超时处理

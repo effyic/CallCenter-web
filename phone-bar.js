@@ -165,6 +165,7 @@ function populateVideoLevelDropdown (objId) {
 
 var _callConfig = null;
 
+// 电话会议结束
 function onConferenceEnd () {
   document.getElementById("endConference").setAttribute("disabled", "true");
   document.getElementById("startConference").removeAttribute("disabled");
@@ -184,6 +185,7 @@ function onConferenceEnd () {
   $("#agentStatus").text(tips);
 }
 
+// 会议开始
 function onConferenceStart () {
   document.getElementById("endConference").removeAttribute("disabled");
   document.getElementById("conference_member_list").style.display = "block";
@@ -209,11 +211,7 @@ function onTransferToConferenceSuccess (msg) {
   _phoneBar.conferenceAddMemberFromExistCall(name, phone);
 }
 
-
-// 以下是通话转接操作界面的功能
-// 注意：不在这里获取元素，因为此时DOM还未创建
-
-// 填充 transfer_to_groupId 数据
+// 转接、咨询、会议人员
 function populateGroupIdOptions () {
   const transferToGroupId = document.getElementById("transfer_to_groupIds");
   if (!transferToGroupId) {
@@ -331,9 +329,8 @@ function scrollToBottom () {
 window.onbeforeunload = function () {
     if (!jsSipUAInstance.isExtensionFree()) {
         jsSipUAInstance.hangup();
-        console.log("onbeforeunload hangup.");
-        _phoneBar.disconnect();
     }
+     _phoneBar.disconnect();
 };
 
 // 接听电话
