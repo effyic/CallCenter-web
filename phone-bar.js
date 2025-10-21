@@ -93,13 +93,13 @@ var ModalUtil = {
 
 var skillLevel = 9; //技能等级
 var groupId = 1; // 业务组id
-if (window.location.href.toString().indexOf("?") != -1) {
-  console.log(ccPhoneBarSocket.utils);
-  extnum = ccPhoneBarSocket.utils.getQueryParam("extNum");
-  opnum = ccPhoneBarSocket.utils.getQueryParam("opNum");
-  groupId = ccPhoneBarSocket.utils.getQueryParam("groupId");
-  console.log("extNum=", extnum, "opNum=", opnum);
-}
+// if (window.location.href.toString().indexOf("?") != -1) {
+//   console.log(ccPhoneBarSocket.utils);
+//   extnum = ccPhoneBarSocket.utils.getQueryParam("extNum");
+//   opnum = ccPhoneBarSocket.utils.getQueryParam("opNum");
+//   groupId = ccPhoneBarSocket.utils.getQueryParam("groupId");
+//   console.log("extNum=", extnum, "opNum=", opnum);
+// }
 
 function resetExtNumAndOpNum (ext, op, groupId) {
   window.location.href = "?extNum=" + ext + "&opNum=" + op + "&groupId=" + groupId;
