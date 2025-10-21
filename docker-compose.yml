@@ -1,7 +1,7 @@
 version: '3.8'
 services:
   phone-bar-web:
-    image: swr.cn-north-4.myhuaweicloud.com/registry-huawei/effyic/phone-bar-sdk:latest
+    image: swr.cn-north-4.myhuaweicloud.com/registry-huawei/effyic/phone-bar-h5:latest
     container_name: phone-bar-sdk
     ports:
       - "8900:80"
