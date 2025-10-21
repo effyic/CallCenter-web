@@ -332,8 +332,8 @@ window.onbeforeunload = function () {
     if (!jsSipUAInstance.isExtensionFree()) {
         jsSipUAInstance.hangup();
         console.log("onbeforeunload hangup.");
-        _phoneBar.disconnect();
     }
+    _phoneBar.disconnect();
 };
 
 // 接听电话
