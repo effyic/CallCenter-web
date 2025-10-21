@@ -107,6 +107,7 @@
 .status-toggle-container {
   display: flex;
   gap: 0;
+  background-color: white;
   border: 1px solid #2FC77D;
   border-radius: 14px;
   overflow: hidden;
@@ -147,6 +148,7 @@
 .status-toggle-btn:not(.on) {
   background-color: #2FC77D;
   color: white;
+  border-radius:14px;
 }
 
 /* 未选中状态：有on类名的为未选中，保持默认样式 */
@@ -164,7 +166,7 @@
 
 .auto-answer-label {
   font-size: 12px;
-  color: #333;
+  color: #fff;
 }
 
 /* 开关容器 */
@@ -244,7 +246,6 @@ input:checked + .slider:before {
 
 /* 拨号区域样式 */
 .head_dial {
-    padding-left: 10px;
     display: flex;
     align-items: center;
     gap: 20px;
@@ -252,26 +253,18 @@ input:checked + .slider:before {
 
 /* 电话号码输入框样式 */
 .tel_txt {
-    background: rgba(255, 255, 255, 0.15);
-    border: 2px solid rgba(255, 255, 255, 0.3);
-    border-radius: 8px;
-    padding: 12px 16px;
+    background: rgba(255, 255, 255);
+    border-radius: 16px;
     color: white;
-    font-size: 16px;
-    width: 200px;
-    transition: all 0.3s ease;
+    font-size: 13px;
+    width: 240px;
+    height:32px;
+    padding: 0 12px;
 }
-
-.tel_txt::placeholder {
-    color: rgba(255, 255, 255, 0.7);
-}
-
 .tel_txt:focus {
     outline: none;
-    border-color: rgba(255, 255, 255, 0.6);
-    background: rgba(255, 255, 255, 0.2);
-    box-shadow: 0 0 0 3px rgba(255, 255, 255, 0.1);
 }
+
 
 /* 状态显示样式 */
 .call-status {
@@ -294,27 +287,6 @@ input:checked + .slider:before {
     flex-direction: column;
     align-items: center;
     gap: 6px;
-}
-
-/* 按钮基础样式 */
-.dial_btn a {
-    display: inline-block;
-    width: 48px;
-    height: 48px;
-    border-radius: 12px;
-    background: rgba(255, 255, 255, 0.15);
-    border: 2px solid rgba(255, 255, 255, 0.3);
-    transition: all 0.3s ease;
-    position: relative;
-    text-decoration: none;
-    backdrop-filter: blur(10px);
-}
-
-.dial_btn a:hover {
-    background: rgba(255, 255, 255, 0.25);
-    border-color: rgba(255, 255, 255, 0.5);
-    transform: translateY(-2px);
-    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
 }
 
 .dial_btn a.on {
@@ -348,8 +320,28 @@ input:checked + .slider:before {
 }
 
 .wh_btn { /* 外呼 */
-    background: rgba(33, 150, 243, 0.8);
-    border-color: #2196f3;
+    width: 72px;
+    height: 32px;
+    border-radius: 20px;
+    background-color: #2FC77D;
+    border: none;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 4px;
+    text-decoration: none;
+    color: white;
+    font-size: 13px;
+}
+
+.wh_btn img {
+    width: 16px;
+    height: 16px;
+}
+
+.wh_btn span {
+    color: white;
+    font-size: 13px;
 }
 
 .bc_btn.on { /* 保持 */

@@ -379,7 +379,7 @@ function init () {
                 </div>
               </div>
             </div>
-            <div class="status-info-item">
+            <div class="status-info-item noborder">
               <div class="auto-answer-switch">
                 <span class="auto-answer-label">自动接听</span>
                 <label class="switch">
@@ -411,7 +411,7 @@ function init () {
               </dl>
 
               <ul class="dial_btn">
-                <li><a href="#" id="callBtn" class="wh_btn"></a><span>外呼</span></li>
+                <li><a href="#" id="callBtn" class="wh_btn"><img src="./images/callBtn.png" alt="外呼图标"><span>外呼</span></a></li>
                 <li id="holdBtnLi"><a href="#" id="holdBtn" class="bc_btn off"></a><span>保 持</span></li>
                 <li id="unHoldBtnLi"><a href="#" id="unHoldBtn" class="bc2_btn off"></a><span>取消保持</span></li>
                 <li><a href="#" id="unmuteBtn" class="unmute_btn off"></a><span>静音</span></li>
