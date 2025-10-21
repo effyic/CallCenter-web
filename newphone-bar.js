@@ -411,16 +411,21 @@ function init () {
               </dl>
 
               <ul class="dial_btn">
-                <li><a href="#" id="callBtn" class="wh_btn"><img src="./images/callBtn.png" alt="外呼图标"><span>外呼</span></a></li>
-                <li id="holdBtnLi"><a href="#" id="holdBtn" class="bc_btn off"></a><span>保 持</span></li>
-                <li id="unHoldBtnLi"><a href="#" id="unHoldBtn" class="bc2_btn off"></a><span>取消保持</span></li>
-                <li><a href="#" id="unmuteBtn" class="unmute_btn off"></a><span>静音</span></li>
-                <li><a href="#" id="transferBtn" class="zjie_btn"></a><span>转接</span></li>
-                <li><a href="#" id="consultationBtn" class="zixun_btn"></a><span>咨询</span></li>
-                <li><a href="#" id="conferenceBtn" class="hy_btn off"></a><span>会议</span></li>
-                <li><a href="#" id="hangUpBtn" class="gj_btn"></a><span>挂机</span></li>
-                <li><a href="#" id="resetStatus" class="qz_btn"></a><span>强置</span></li>
-                <li><a href="#" id="onLineBtn" class="sx_btn on"></a><span>签入</span></li>
+               <div>
+                    <li><a href="#" id="callBtn" class="wh_btn"><img src="./images/callBtn.png" alt="外呼图标"><span>外呼</span></a></li>
+                    <li id="holdBtnLi"><a href="#" id="holdBtn" class="bc_btn off"><img src="./images/holdBtn.png" alt="保持图标"><span>保 持</span></a></li>
+                    <li id="unHoldBtnLi"><a href="#" id="unHoldBtn" class="bc2_btn off"><img src="./images/holdBtn.png" alt="取消保持图标"><span>取消保持</span></a></li>
+                    <li><a href="#" id="unmuteBtn" class="unmute_btn off"><img src="./images/unmuteBtn.png" alt="静音图标"><span>静音</span></a></li>
+                    <li><a href="#" id="transferBtn" class="zjie_btn"><img src="./images/transferBtn.png" alt="转接图标"><span>转接</span></a></li>
+                    <li><a href="#" id="consultationBtn" class="zixun_btn"><img src="./images/consultationBtn.png" alt="咨询图标"><span>咨询</span></a></li>
+                    <li><a href="#" id="conferenceBtn" class="hy_btn off"><span>会议</span></a></li>
+                    <li><a href="#" id="hangUpBtn" class="gj_btn"><img src="./images/hangUpBtn.png" alt="挂机图标"><span>挂机</span></a></li>
+               </div>
+               <div>
+                    <li><a href="#" id="resetStatus" class="qz_btn"><img src="./images/qz_btn.png" alt="强置图标"><span>强置</span></a></li>
+                    <li><a href="#" id="onLineBtn" class="sx_btn on"><img src="./images/sx_btn.png" alt="签入图标"><span>签入</span></a></li>
+               </div>
+                
                 <li><a href="#" id="answer_btn" onclick="answer()" class="answer_btn off"></a><span>接听</span></li>
               </ul>
             </div>

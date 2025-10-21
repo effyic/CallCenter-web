@@ -1,5 +1,5 @@
 /* 呼叫中心界面样式 - 现代化设计 */
-
+/* 下方按钮签入之后展示 off禁用、on默认现在UI  */
 /* 整体容器样式 */
 #phone-bar {
     background: #3E4863;
@@ -11,6 +11,9 @@
     margin: 10px;
     table{
         width:100%;
+    }
+    dl{
+       margin:0px;
     }
 }
 
@@ -249,6 +252,7 @@ input:checked + .slider:before {
     display: flex;
     align-items: center;
     gap: 20px;
+    margin-top:20px;
 }
 
 /* 电话号码输入框样式 */
@@ -260,6 +264,7 @@ input:checked + .slider:before {
     width: 240px;
     height:32px;
     padding: 0 12px;
+    border:none;
 }
 .tel_txt:focus {
     outline: none;
@@ -274,12 +279,17 @@ input:checked + .slider:before {
 
 /* 按钮容器样式 */
 .dial_btn {
+    width:100%;
     display: flex;
-    flex-wrap: wrap;
+    justify-content: space-between;
     gap: 12px;
     list-style: none;
     padding: 0;
     margin: 0;
+    div{
+        display: flex;
+        gap: 12px;
+    }
 }
 
 .dial_btn li {
@@ -289,23 +299,22 @@ input:checked + .slider:before {
     gap: 6px;
 }
 
-.dial_btn a.on {
-    background: rgba(76, 175, 80, 0.8);
+/* .dial_btn a.on {
     border-color: #4caf50;
     box-shadow: 0 0 20px rgba(76, 175, 80, 0.4);
-}
+} */
 
-.dial_btn a.off {
+/* .dial_btn a.off {
     background: rgba(255, 255, 255, 0.1);
     border-color: rgba(255, 255, 255, 0.2);
-}
+} */
 
 /* 按钮文字样式 */
 .dial_btn span {
     font-size: 12px;
     color: rgba(255, 255, 255, 0.9);
     text-align: center;
-    min-width: 48px;
+    /* min-width: 48px; */
 }
 
 /* 特定按钮样式 */
@@ -319,7 +328,22 @@ input:checked + .slider:before {
     border-color: #ffc107;
 }
 
-.wh_btn { /* 外呼 */
+.wh_btn, .wh_btn.off { /* 外呼 - 默认和off状态 */
+    width: 72px;
+    height: 32px;
+    border-radius: 20px;
+    background-color: #6BC79B;
+    border: none;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 4px;
+    text-decoration: none;
+    color: white;
+    font-size: 13px;
+}
+
+.wh_btn.on { /* 外呼 - on状态 */
     width: 72px;
     height: 32px;
     border-radius: 20px;
@@ -334,59 +358,324 @@ input:checked + .slider:before {
     font-size: 13px;
 }
 
-.wh_btn img {
+.wh_btn img, .wh_btn.on img, .wh_btn.off img {
     width: 16px;
     height: 16px;
 }
 
-.wh_btn span {
+.wh_btn span, .wh_btn.on span, .wh_btn.off span {
     color: white;
     font-size: 13px;
 }
 
-.bc_btn.on { /* 保持 */
-    background: rgba(255, 152, 0, 0.8);
-    border-color: #ff9800;
+.bc_btn, .bc_btn.off { /* 保持 - 默认和off状态 */
+    width: 72px;
+    height: 32px;
+    border-radius: 20px;
+    background-color: #B2B6C1;
+    border: none;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 4px;
+    text-decoration: none;
+    color: #122C4B;
+    font-size: 13px;
 }
 
-.bc2_btn { /* 取消保持 */
-    background: rgba(156, 39, 176, 0.8);
-    border-color: #9c27b0;
+.bc_btn.on { /* 保持 - on状态 */
+    width: 72px;
+    height: 32px;
+    border-radius: 20px;
+    background-color: #FFFFFF;
+    border: none;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 4px;
+    text-decoration: none;
+    color: #122C4B;
+    font-size: 13px;
 }
 
-.unmute_btn { /* 静音 */
+.bc_btn img, .bc_btn.on img, .bc_btn.off img {
+    width: 16px;
+    height: 16px;
+}
+
+.bc_btn span, .bc_btn.on span, .bc_btn.off span {
+    color: #122C4B;
+    font-size: 13px;
+}
+
+.bc2_btn, .bc2_btn.off { /* 取消保持 - 默认和off状态 */
+    width: 72px;
+    height: 32px;
+    border-radius: 20px;
+    background-color: #B2B6C1;
+    border: none;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 4px;
+    text-decoration: none;
+    color: #122C4B;
+    font-size: 13px;
+}
+
+.bc2_btn.on { /* 取消保持 - on状态 */
+    width: 72px;
+    height: 32px;
+    border-radius: 20px;
+    background-color: #FFFFFF;
+    border: none;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 4px;
+    text-decoration: none;
+    color: #122C4B;
+    font-size: 13px;
+}
+
+.bc2_btn img, .bc2_btn.on img, .bc2_btn.off img {
+    width: 16px;
+    height: 16px;
+}
+
+.bc2_btn span, .bc2_btn.on span, .bc2_btn.off span {
+    color: #122C4B;
+    font-size: 13px;
+}
+
+.unmute_btn, .unmute_btn.off { /* 静音 - 默认和off状态 */
+    width: 72px;
+    height: 32px;
+    border-radius: 20px;
+    background-color: #B2B6C1;
+    border: none;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 4px;
+    text-decoration: none;
+    color: #122C4B;
+    font-size: 13px;
+}
+
+.unmute_btn.on { /* 静音 - on状态 */
+    width: 72px;
+    height: 32px;
+    border-radius: 20px;
+    background-color: #FFFFFF;
+    border: none;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 4px;
+    text-decoration: none;
+    color: #122C4B;
+    font-size: 13px;
+}
+
+.unmute_btn img, .unmute_btn.on img, .unmute_btn.off img {
+    width: 16px;
+    height: 16px;
+}
+
+.unmute_btn span, .unmute_btn.on span, .unmute_btn.off span {
+    color: #122C4B;
+    font-size: 13px;
+}
+
+.zjie_btn, .zjie_btn.off { /* 转接 - 默认和off状态 */
+    width: 72px;
+    height: 32px;
+    border-radius: 20px;
+    background-color: #B2B6C1;
+    border: none;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 4px;
+    text-decoration: none;
+    color: #122C4B;
+    font-size: 13px;
+}
+
+.zjie_btn.on { /* 转接 - on状态 */
+    width: 72px;
+    height: 32px;
+    border-radius: 20px;
+    background-color: #FFFFFF;
+    border: none;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 4px;
+    text-decoration: none;
+    color: #122C4B;
+    font-size: 13px;
+}
+
+.zjie_btn img, .zjie_btn.on img, .zjie_btn.off img {
+    width: 16px;
+    height: 16px;
+}
+
+.zjie_btn span, .zjie_btn.on span, .zjie_btn.off span {
+    color: #122C4B;
+    font-size: 13px;
+}
+
+.zixun_btn, .zixun_btn.off { /* 咨询 - 默认和off状态 */
+    width: 72px;
+    height: 32px;
+    border-radius: 20px;
+    background-color: #B2B6C1;
+    border: none;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 4px;
+    text-decoration: none;
+    color: #122C4B;
+    font-size: 13px;
+}
+
+.zixun_btn.on { /* 咨询 - on状态 */
+    width: 72px;
+    height: 32px;
+    border-radius: 20px;
+    background-color: #FFFFFF;
+    border: none;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 4px;
+    text-decoration: none;
+    color: #122C4B;
+    font-size: 13px;
+}
+
+.zixun_btn img, .zixun_btn.on img, .zixun_btn.off img {
+    width: 16px;
+    height: 16px;
+}
+
+.zixun_btn span, .zixun_btn.on span, .zixun_btn.off span {
+    color: #122C4B;
+    font-size: 13px;
+}
+
+
+
+.gj_btn, .gj_btn.off { /* 挂机 - 默认和off状态 */
+    width: 72px;
+    height: 32px;
+    border-radius: 20px;
+    background-color: #E09592;
+    border: none;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 4px;
+    text-decoration: none;
+    color: #FFFFFF;
+    font-size: 13px;
+}
+
+.gj_btn.on { /* 挂机 - on状态 */
+    width: 72px;
+    height: 32px;
+    border-radius: 20px;
+    background-color: #E0544E;
+    border: none;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 4px;
+    text-decoration: none;
+    color: #FFFFFF;
+    font-size: 13px;
+}
+
+.gj_btn img, .gj_btn.on img, .gj_btn.off img {
+    width: 16px;
+    height: 16px;
+}
+
+.gj_btn span, .gj_btn.on span, .gj_btn.off span {
+    color: #FFFFFF;
+    font-size: 13px;
+}
+
+.hy_btn img, .hy_btn.on img, .hy_btn.off img {
+    width: 16px;
+    height: 16px;
+}
+
+.hy_btn span, .hy_btn.on span, .hy_btn.off span {
+    color: #122C4B;
+    font-size: 13px;
+}
+/* 
+.gj_btn {
     background: rgba(244, 67, 54, 0.8);
     border-color: #f44336;
-}
-
-.zjie_btn { /* 转接 */
-    background: rgba(0, 188, 212, 0.8);
-    border-color: #00bcd4;
-}
-
-.zixun_btn { /* 咨询 */
-    background: rgba(103, 58, 183, 0.8);
-    border-color: #673ab7;
-}
-
-.hy_btn { /* 会议 */
-    background: rgba(63, 81, 181, 0.8);
-    border-color: #3f51b5;
-}
-
-.gj_btn { /* 挂机 */
-    background: rgba(244, 67, 54, 0.8);
-    border-color: #f44336;
-}
+} */
 
 .qz_btn { /* 强置 */
-    background: rgba(96, 125, 139, 0.8);
-    border-color: #607d8b;
+    width: 72px;
+    height: 32px;
+    border-radius: 20px;
+    background-color: #5573FA;
+    border: none;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 4px;
+    text-decoration: none;
+    color: white;
+    font-size: 13px;
 }
 
-.sx_btn.on { /* 签入 */
-    background: rgba(76, 175, 80, 0.8);
-    border-color: #4caf50;
+.qz_btn img {
+    width: 16px;
+    height: 16px;
+    object-fit: cover;
+}
+
+.qz_btn span {
+    color: white;
+    font-size: 13px;
+}
+
+.sx_btn, .sx_btn.on { /* 签入 */
+    width: 72px;
+    height: 32px;
+    border-radius: 20px;
+    background-color: #5573FA;
+    border: none;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 4px;
+    text-decoration: none;
+    color: white;
+    font-size: 13px;
+}
+
+.sx_btn img, .sx_btn.on img {
+    width: 16px;
+    height: 16px;
+    display: block;
+    object-fit: cover;
+}
+
+.sx_btn span, .sx_btn.on span {
+    color: white;
+    font-size: 13px;
 }
 
 .answer_btn { /* 接听 */
@@ -643,7 +932,7 @@ input:checked + .slider:before {
     
     .dial_btn span {
         font-size: 11px;
-        min-width: 40px;
+        /* min-width: 40px; */
     }
 }
 
