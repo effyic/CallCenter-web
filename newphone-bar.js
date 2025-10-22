@@ -374,8 +374,8 @@ function init () {
               </div>
               <div class="status-info-item noborder setStatus">
                 <div class="status-toggle-container">
-                  <a href="#" id="setFree" class="status-toggle-btn status-free">置闲</a>
-                  <a href="#" id="setBusy" class="status-toggle-btn status-busy">置忙</a>
+                  <a href="#" id="setFree" class="status-toggle-btn status-free default-status-free">置闲</a>
+                  <a href="#" id="setBusy" class="status-toggle-btn status-busy default-status-busy">置忙</a>
                 </div>
               </div>
             </div>
@@ -555,46 +555,50 @@ function init () {
       <tr id="transfer_area" width="100%" class="hidden-section">
 
         <td colspan="2" width="100%" class="transfer-area">
+          <div class="transfer-header">
+            <h5 class="modal-title">转接/咨询操作</h5>
+            <button type="button" class="btn-close" onclick="document.getElementById('transfer_area').style.display='none';"></button>
+          </div>
           <table width="100%">
-            <tr>
-              <td width="90">业务组 </td>
-              <td width="90">坐席成员</td>
-              <td>&nbsp; </td>
-            </tr>
-            <tr>
-              <td>
-                <select size="10" id="transfer_to_groupIds" name="transfer_to_groupIds">
-                  <option value="">请选择</option>
-                </select>
-              </td>
-
-              <td>
-                <select size="10" id="transfer_to_member" name="transfer_to_member">
-                  <option value="">请选择</option>
-                </select>
-              </td>
-              <td valign="middle" class="transfer-controls">
-
-
-                &nbsp;&nbsp; <input type="text" name="externalPhoneNumber" id="externalPhoneNumber" placeholder="电话号码"
-                  title="可以把当前通话转接到外线号码上。 如果该文本框留空，则忽略处理。" />
-                <br /> <br />
-
-                &nbsp;&nbsp; <input type="button" name="doTransferBtn" id="doTransferBtn"
-                  onclick="transferBtnClickUI()" class="transfer-button" value="转接电话" title="把当前电话转接给他/她处理。" />
-                &nbsp;
-
-                &nbsp;&nbsp; <input type="button" name="stopCallWait" id="stopCallWait"
-                  onclick="stopCallWaitBtnClickUI()" class="transfer-button" value="接回客户"
-                  title="在咨询失败的情况下使用该按钮，接回处于等待中的电话。" /> &nbsp;
-
-                &nbsp;&nbsp; <input type="button" name="transferCallWait" id="transferCallWait"
-                  onclick="transferCallWaitBtnClickUI()" class="transfer-button" value="转接客户"
-                  title="在咨询成功的情况下使用该按钮，把电话转接给专家坐席。" /> &nbsp;
-
-                <input type="button" name="doConsultationBtn" id="doConsultationBtn"
-                  onclick="consultationBtnClickUI()" class="transfer-button" value="拨号咨询" title="" />
-
+            <tbody>
+              <tr class="transfer-titles">
+                <td width="90">业务组 </td>
+                <td width="90">坐席成员</td>
+              </tr>
+              <tr>
+                <td style="padding: 0 !important;">
+                  <select size="10" id="transfer_to_groupIds" name="transfer_to_groupIds">
+                    <option value="">请选择</option>
+                  </select>
+                </td>
+                <td style="padding: 0 !important;">
+                  <select size="10" id="transfer_to_member" name="transfer_to_member">
+                    <option value="">请选择</option>
+                  </select>
+                </td>
+              </tr>
+            </tbody>
+            <tr class="transfer-controls">
+              <td colspan="2" style="padding: 20px; text-align: center;">
+                <div style="margin-bottom: 15px;">
+                  <input type="text" name="externalPhoneNumber" id="externalPhoneNumber" placeholder="电话号码"
+                    title="可以把当前通话转接到外线号码上。 如果该文本框留空，则忽略处理。" />
+                </div>
+                <div style="display: flex; gap: 10px; justify-content: center; flex-wrap: wrap;">
+                  <input type="button" name="doTransferBtn" id="doTransferBtn"
+                    onclick="transferBtnClickUI()" class="transfer-button" value="转接电话" title="把当前电话转接给他/她处理。" />
+                  
+                  <input type="button" name="stopCallWait" id="stopCallWait"
+                    onclick="stopCallWaitBtnClickUI()" class="transfer-button" value="接回客户"
+                    title="在咨询失败的情况下使用该按钮，接回处于等待中的电话。" />
+                  
+                  <input type="button" name="transferCallWait" id="transferCallWait"
+                    onclick="transferCallWaitBtnClickUI()" class="transfer-button" value="转接客户"
+                    title="在咨询成功的情况下使用该按钮，把电话转接给专家坐席。" />
+                  
+                  <input type="button" name="doConsultationBtn" id="doConsultationBtn"
+                    onclick="consultationBtnClickUI()" class="transfer-button" value="拨号咨询" title="" />
+                </div>
               </td>
             </tr>
           </table>
@@ -668,6 +672,10 @@ function init () {
     jsSipUAInstance.unregister();
     // 停止签入时间计时器
     stopLoginTimer();
+    // 签出后重新添加default-status-free类名
+    $('#setFree').addClass('default-status-free');
+    // 签出后重新添加置忙按钮的默认类名
+    $('#setBusy').addClass('default-status-busy');
   });
 
   _phoneBar.on(ccPhoneBarSocket.eventList.OUTBOUND_START, function (msg) {
@@ -688,6 +696,10 @@ function init () {
   //websocket连接成功
   _phoneBar.on(ccPhoneBarSocket.eventListWithTextInfo.ws_connected.code, function (msg) {
     _phoneBar.updatePhoneBar(msg, ccPhoneBarSocket.eventListWithTextInfo.ws_connected.code);
+    // 签入成功后移除default-status-free类名
+    $('#setFree').removeClass('default-status-free');
+    // 签入成功后移除置忙按钮的默认类名
+    $('#setBusy').removeClass('default-status-busy');
   });
 
   _phoneBar.on(ccPhoneBarSocket.eventListWithTextInfo.callee_ringing.code, function (msg) {
@@ -1035,6 +1047,11 @@ function init () {
   // 以下代码设置加密的参数： loginToken、extPassword、gatewayList；   在本页面的demo演示中需要调用服务器端接口获取密文字符串;
   // 注意：此部分逻辑已移至签入确认按钮中执行
 
+  // 页面加载时为转接按钮添加默认样式
+  $(document).ready(function() {
+    $('.zjie_btn').addClass('default-zjie-btn');
+  });
+
   // 添加签入按钮点击事件 - 显示签入信息弹窗
   $(document).on('click', '#onLineBtn', function(e) {
     e.preventDefault();
@@ -1061,6 +1078,10 @@ function init () {
             if (typeof _phoneEncryptPassword !== 'undefined') {
                 _phoneEncryptPassword = undefined;
             }
+            // 添加转接按钮的默认样式
+            $('.zjie_btn').addClass('default-zjie-btn');
+            // 签出后重新添加置忙按钮的默认类名
+            $('#setBusy').addClass('default-status-busy');
             console.log('签出成功，已清空表单和配置');
             return; // 签出后直接返回，不显示弹窗
         } else {
@@ -1086,7 +1107,7 @@ function init () {
       '<div class="modal-dialog">' +
       '<div class="modal-content">' +
       '<div class="modal-header">' +
-      '<h5 class="modal-title">座席签入</h5>' +
+      '<p class="modal-title">座席签入</p>' +
       '<button type="button" class="btn-close" onclick="ModalUtil.hide(\'signinModal\')"></button>' +
       '</div>' +
       '<div class="modal-body">' +
@@ -1161,6 +1182,9 @@ function init () {
       var maxCheckCount = 100; // 最多检查100次（10秒）
       var checkInterval = setInterval(function() {
         checkCount++;
+        
+        // 移除转接按钮的默认样式
+        $('.zjie_btn').removeClass('default-zjie-btn');
         
         // 检查必需的全局变量是否都已加载
         var tokenLoaded = typeof(loginToken) !== "undefined";
@@ -1251,10 +1275,10 @@ function init () {
     var modalHtml =
       '<div class="modal-overlay" id="consultationModal-overlay"></div>' +
       '<div class="modal" id="consultationModal">' +
-      '<div class="modal-dialog modal-dialog-lg">' +
+      '<div class="modal-dialog modal-dialog-lg transfer-modal">' +
       '<div class="modal-content">' +
       '<div class="modal-header">' +
-      '<h5 class="modal-title">转接/咨询操作</h5>' +
+      '<p class="modal-title">转接/咨询操作</p>' +
       '<button type="button" class="btn-close" onclick="ModalUtil.hide(\'consultationModal\')"></button>' +
       '</div>' +
       '<div class="modal-body" id="consultationModalBody">' +

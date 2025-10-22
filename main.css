@@ -108,31 +108,42 @@
 }
 /* 状态切换容器 */
 .status-toggle-container {
+  width: 128px;
   display: flex;
   gap: 0;
   background-color: white;
-  border: 1px solid #2FC77D;
   border-radius: 14px;
   overflow: hidden;
+  position: relative;
+  isolation: isolate; /* 创建新的层叠上下文 */
+
+  padding: 3px;
+  box-sizing: border-box;
+  height: 28px;
 }
 
 /* 状态切换按钮基础样式 */
 .status-toggle-btn {
-  padding: 6px 16px;
+  /* padding: 6px 16px; */
   text-decoration: none;
-  font-size: 12px;
+  font-size: 13px;
   color: #2FC77D;
   background-color: white;
-  transition: all 0.3s ease;
+  transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
   border: none;
   cursor: pointer;
   border-radius: 0;
+  flex:1;
+  text-align: center;
+  transform: translateZ(0); /* 启用硬件加速 */
+  will-change: background-color, color, border-radius; /* 优化动画性能 */
+  line-height: 22px;
 }
 
 /* 置闲按钮样式 */
-.status-free {
+/* .status-free {
   border-right: 1px solid #2FC77D;
-}
+} */
 
 .status-free:hover {
   background-color: #f0f9ff;
@@ -145,21 +156,38 @@
 
 .status-busy:hover {
   background-color: #f0f9ff;
+  transform: translateY(-1px);
+}
+
+/* 置忙按钮默认状态样式 */
+.default-status-busy {
+  background-color: #6BC79B !important;
+  color: white !important;
+  line-height:22px;
 }
 
 /* 选中状态：仅有status-toggle-btn类名（没有on类名）为选中 */
 .status-toggle-btn:not(.on) {
   background-color: #2FC77D;
   color: white;
-  border-radius:14px;
+  border-radius: 14px;
+  transform: translateZ(0) scale(1.02);
+  box-shadow: 0 2px 4px rgba(47, 199, 125, 0.2);
 }
 
 /* 未选中状态：有on类名的为未选中，保持默认样式 */
 .status-toggle-btn.on {
   background-color: white;
   color: #2FC77D;
+  transform: translateZ(0) scale(1);
+  box-shadow: none;
 }
 
+.default-status-free{
+    background-color: #fff !important;
+    color:#2FC77D !important;
+    border:none;
+}
 /* 自动接听开关样式 */
 .auto-answer-switch {
   display: flex;
@@ -168,7 +196,7 @@
 }
 
 .auto-answer-label {
-  font-size: 12px;
+  font-size: 13px;
   color: #fff;
 }
 
@@ -488,7 +516,7 @@ input:checked + .slider:before {
     font-size: 13px;
 }
 
-.zjie_btn, .zjie_btn.off { /* 转接 - 默认和off状态 */
+.zjie_btn.off { /* 转接 - 默认和off状态 */
     width: 72px;
     height: 32px;
     border-radius: 20px;
@@ -503,7 +531,11 @@ input:checked + .slider:before {
     font-size: 13px;
 }
 
-.zjie_btn.on { /* 转接 - on状态 */
+.default-zjie-btn {
+    background-color: #B2B6C1 !important;
+}
+
+.zjie_btn,.zjie_btn.on { /* 转接 - on状态 */
     width: 72px;
     height: 32px;
     border-radius: 20px;
@@ -883,9 +915,13 @@ input:checked + .slider:before {
     color: white;
 }
 
-.transfer-controls {
+/* .transfer-controls {
+    background: #f8f9fc;
+    border-top: 1px solid #e9eefc;
+} */
+
+.transfer-controls td {
     vertical-align: middle;
-    padding-left: 20px;
 }
 
 .transfer-controls input[type="text"] {
@@ -955,4 +991,551 @@ input:checked + .slider:before {
         width: 100%;
         max-width: 300px;
     }
+}
+
+/* 弹窗基础样式 */
+.modal-overlay {
+    display: none;
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.5);
+    z-index: 9998;
+    animation: fadeIn 0.3s ease;
+}
+
+.modal-overlay.show {
+    display: block;
+}
+
+.modal {
+    display: none;
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    background: white;
+    border-radius: 12px;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.15);
+    z-index: 9999;
+    max-width: 90%;
+    max-height: 90vh;
+    overflow-y: auto;
+    animation: slideIn 0.3s ease;
+}
+
+.modal.show {
+    display: block;
+}
+
+.modal-dialog {
+    width: 100%;
+}
+
+.modal-dialog-lg {
+    width: auto;
+}
+
+.modal-content {
+    background: white;
+    border-radius: 12px;
+    overflow: hidden;
+}
+
+.modal-header {
+    padding: 20px 30px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.modal-title {
+    font-size: 20px;
+    color:#000000CC;
+    margin: 0;
+}
+
+.btn-close {
+    background: transparent;
+    border: none;
+    font-size: 24px;
+    cursor: pointer;
+    opacity: 0.8;
+    padding: 0;
+    width: 30px;
+    height: 30px;
+    line-height: 24px;
+}
+
+.btn-close:hover {
+    opacity: 1;
+}
+
+.modal-body {
+    padding: 30px;
+    background: white;
+}
+
+.modal-footer {
+    padding: 20px 30px;
+    background: white;
+    display: flex;
+    gap: 12px;
+    justify-content: flex-end;
+    border-top: 1px solid #f0f0f0;
+}
+
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+    }
+    to {
+        opacity: 1;
+    }
+}
+
+@keyframes slideIn {
+    from {
+        transform: translate(-50%, -55%);
+        opacity: 0;
+    }
+    to {
+        transform: translate(-50%, -50%);
+        opacity: 1;
+    }
+}
+
+/* 签入弹窗专用样式 */
+#signinModal .modal-content {
+    width: 500px;
+    /* height: 427px; */
+    max-width: 90vw;
+    max-height: 90vh;
+    display: flex;
+    flex-direction: column;
+}
+
+#signinModal .modal-header {
+    background: #E9EEFC;
+    color: #333;
+    padding: 20px 30px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-shrink: 0;
+}
+
+#signinModal .modal-title {
+    font-size: 20px;
+    margin: 0;
+    color: #000000CC;
+}
+
+#signinModal .btn-close {
+    background: transparent;
+    border: none;
+    color: #454545CC;
+    font-size: 24px;
+    cursor: pointer;
+    opacity: 0.8;
+    padding: 0;
+    width: 30px;
+    height: 30px;
+    line-height: 24px;
+}
+
+#signinModal .btn-close:before {
+    content: '×';
+}
+
+#signinModal .btn-close:hover {
+    opacity: 1;
+    color: #333;
+}
+
+#signinModal .modal-body {
+    padding: 30px;
+    background: white;
+    flex: 1;
+    overflow-y: auto;
+}
+
+#signinModal .form-group {
+  margin-bottom: 16px;
+  display: flex;
+  align-items: center;
+}
+
+#signinModal .form-group:last-child {
+  margin-bottom: 0;
+}
+
+#signinModal .form-label {
+    min-width: 70px;
+    margin-right: 12px;
+    font-size: 14px;
+    font-weight: normal;
+    color: #333;
+}
+
+#signinModal .form-input {
+    flex: 1;
+    height: 32px;
+    padding: 4px 8px;
+    font-size: 14px;
+    color: #333;
+    background: #F8F9FC;
+    border: 1px solid #E9EEFC;
+    border-radius: 6px;
+    transition: all 0.3s ease;
+}
+
+#signinModal .form-input:hover {
+    border-color: #5178FF;
+    background: white;
+}
+
+#signinModal .form-input:focus {
+    outline: none;
+    border-color: #5178FF;
+    background: white;
+    box-shadow: 0 0 0 3px rgba(81, 120, 255, 0.1);
+}
+
+#signinModal .form-input::placeholder {
+    color: #A3AED0;
+}
+
+#signinModal .modal-footer {
+    padding: 20px 30px;
+    background: white;
+    display: flex;
+    gap: 12px;
+    justify-content: flex-end;
+    flex-shrink: 0;
+    border-top: 1px solid #E9EEFC;
+}
+
+#signinModal .btn-secondary {
+    background: #F8F9FC;
+    color: #333;
+    padding: 10px 20px;
+    font-size: 14px;
+    border: 1px solid #E9EEFC;
+    border-radius: 4px;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    padding:4px 17px;
+    height: 32px;
+}
+
+#signinModal .btn-secondary:hover {
+    background: #E9EEFC;
+    border-color: #5178FF;
+}
+
+#signinModal .btn-primary {
+    background: #5178FF;
+    color: white;
+    font-size: 14px;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    padding:4px 17px;
+}
+
+#signinModal .btn-primary:hover {
+    background: #4169E1;
+    box-shadow: 0 2px 8px rgba(81, 120, 255, 0.3);
+}
+
+/* 咨询弹窗样式 - 与签入弹窗保持一致 */
+#consultationModal {
+    .modal-content {
+        width: 500px;
+        max-width: 90vw;
+        max-height: 90vh;
+        display: flex;
+        flex-direction: column;
+    }
+
+}
+#consultationModal .modal-header {
+    background: #E9EEFC;
+    color: #333;
+    padding: 20px 30px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-shrink: 0;
+}
+
+#consultationModal .modal-title {
+    font-size: 20px;
+    margin: 0;
+    color: #000000CC;
+}
+#doConsultationBtn{
+    width:90px !important;
+    height: 32px !important;
+    padding:0px;
+}
+#consultationModal .btn-close {
+    background: transparent;
+    border: none;
+    color: #666;
+    font-size: 24px;
+    cursor: pointer;
+    opacity: 0.8;
+    padding: 0;
+    width: 30px;
+    height: 30px;
+    line-height: 24px;
+}
+
+#consultationModal .btn-close:before {
+    content: '×';
+}
+
+#consultationModal .btn-close:hover {
+    opacity: 1;
+    color: #333;
+}
+/* .transfer-modal{
+    width:600px !important;
+} */
+#consultationModal .modal-body {
+    padding: 30px;
+    background: white;
+    flex: 1;
+    box-sizing: border-box;
+    /* overflow-y: auto; */
+}
+
+#consultationModal .form-group {
+    margin-bottom: 16px;
+    display: flex;
+    align-items: center;
+}
+
+#consultationModal .form-group:last-child {
+    margin-bottom: 0;
+}
+
+#consultationModal .form-label {
+    min-width: 70px;
+    margin-right: 12px;
+    font-size: 14px;
+    font-weight: normal;
+    color: #333;
+}
+
+#consultationModal .form-input {
+    flex: 1;
+    height: 32px;
+    padding: 4px 8px;
+    font-size: 14px;
+    color: #333;
+    background: #F8F9FC;
+    border: 1px solid #E9EEFC;
+    border-radius: 6px;
+    transition: all 0.3s ease;
+}
+
+#consultationModal .form-input:hover {
+    border-color: #5178FF;
+    background: white;
+}
+
+#consultationModal .form-input:focus {
+    outline: none;
+    border-color: #5178FF;
+    background: white;
+    box-shadow: 0 0 0 3px rgba(81, 120, 255, 0.1);
+}
+
+#consultationModal .form-input::placeholder {
+    color: #A3AED0;
+}
+
+#consultationModal .modal-footer {
+    padding: 20px 30px;
+    background: white;
+    display: flex;
+    gap: 12px;
+    justify-content: flex-end;
+    flex-shrink: 0;
+    border-top: 1px solid #E9EEFC;
+}
+
+#consultationModal .btn-secondary {
+    background: #F8F9FC;
+    color: #333;
+    padding: 10px 20px;
+    font-size: 14px;
+    border: 1px solid #E9EEFC;
+    border-radius: 6px;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    min-width: 80px;
+}
+
+#consultationModal .btn-secondary:hover {
+    background: #E9EEFC;
+    border-color: #5178FF;
+}
+
+#consultationModal .btn-primary {
+    background: #5178FF;
+    color: white;
+    padding: 10px 20px;
+    font-size: 14px;
+    border: none;
+    border-radius: 6px;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    min-width: 80px;
+}
+
+#consultationModal .btn-primary:hover {
+    background: #4169E1;
+    box-shadow: 0 2px 8px rgba(81, 120, 255, 0.3);
+}
+
+/* 覆盖page.css中的咨询弹窗样式 */
+.transfer-titles {
+    font-size: 14px !important;
+    color: #122C4B !important;
+    background: #F5F6F9;
+    font-weight: 500;
+}
+
+.transfer-titles td {
+    padding: 8px 12px !important;
+    border: none !important;
+    border-spacing: 0 !important;
+}
+
+#consultationModal select {
+    font-size: 13px !important;
+    color: #122C4B !important;
+    outline: none;
+    width:100%;
+    height: 160px;
+    overflow-y: auto;
+    option{
+        width: 100%;
+        height: 32px;
+        line-height: 32px;
+        display: flex;
+        align-items: center;
+        padding: 0 11px;
+    }
+    
+    option:checked,
+    option:hover {
+        background: #5178ff17 !important;
+        color: #5178FF !important;
+    }
+}
+
+#consultationModal select:hover {
+    border-color: #5178FF !important;
+    background: white !important;
+}
+
+#consultationModal select:focus {
+    outline: none !important;
+}
+
+#consultationModal input[type="text"] {
+    width:60%;
+    height: 32px !important;
+    padding: 4px 8px !important;
+    font-size: 14px !important;
+    color: #333 !important;
+    background: #fff !important;
+    border: 1px solid #E9EEFC !important;
+    border-radius: 6px !important;
+    transition: all 0.3s ease !important;
+}
+
+#consultationModal input[type="text"]:hover {
+    border-color: #5178FF !important;
+    background: white !important;
+}
+
+#consultationModal input[type="text"]:focus {
+    outline: none !important;
+    border-color: #5178FF !important;
+    background: white !important;
+    box-shadow: 0 0 0 3px rgba(81, 120, 255, 0.1) !important;
+}
+#transfer_to_groupIds,#transfer_to_member{
+    border:transparent !important;
+}
+#consultationModal input[type="text"]::placeholder {
+    color: #A3AED0 !important;
+}
+
+#consultationModal input[type="button"] {
+    background: #5178FF !important;
+    color: white !important;
+    font-size: 14px !important;
+    border: none !important;
+    border-radius: 4px !important;
+    cursor: pointer !important;
+    transition: all 0.2s ease !important;
+    margin: 5px !important;
+}
+
+#consultationModal input[type="button"]:hover {
+    background: #4169E1 !important;
+    box-shadow: 0 2px 8px rgba(81, 120, 255, 0.3) !important;
+}
+
+#consultationModal input[type="button"]:active {
+    transform: translateY(1px) !important;
+}
+#confirmSigninBtn{
+    height: 32px !important;
+}
+#consultationModal table {
+    background: white !important;
+    border-radius: 8px !important;
+    padding: 0 !important;
+    box-shadow: none !important;
+    width: 100% !important;
+    box-sizing: border-box !important;
+    border-collapse: collapse !important;
+}
+
+#consultationModal td {
+    padding: 12px 15px !important;
+    vertical-align: middle !important;
+}
+
+/* 会议弹窗关闭按钮样式 */
+#conferenceModal .btn-close {
+    background: transparent;
+    border: none;
+    color: #666;
+    font-size: 24px;
+    cursor: pointer;
+    opacity: 0.8;
+    padding: 0;
+    width: 30px;
+    height: 30px;
+    line-height: 24px;
+}
+
+#conferenceModal .btn-close:before {
+    content: '×';
+}
+
+#conferenceModal .btn-close:hover {
+    opacity: 1;
+    color: #333;
 }

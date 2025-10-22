@@ -1238,7 +1238,12 @@ function ccPhoneBarSocket() {
 		var enabled_btn = status_info.enabled_btn;
 		if (btn_text) {
 			$.each(btn_text, function (i, d) {
-				$(d.id).next().text(d.name);
+				// 先尝试查找子元素中的span，如果没有则查找兄弟元素
+				var $target = $(d.id).find('span');
+				if ($target.length === 0) {
+					$target = $(d.id).next();
+				}
+				$target.text(d.name);
 			});
 		}
 
