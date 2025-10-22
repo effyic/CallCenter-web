@@ -1318,7 +1318,9 @@ function ccPhoneBarSocket() {
 		});
 
 		$('#hangUpBtn').on('click', function () {
+			alert('点击挂机')
 			if ($(this).hasClass('on')) {
+				alert('点击挂机--挂断')
 				_cc.hangup();
 			}
 		});
@@ -1396,8 +1398,29 @@ function ccPhoneBarSocket() {
 		});
 
 		$('#resetStatus').on('click', function () {
-			window.onbeforeunload = null;
-			location.reload();
+			console.log('强置按钮被点击，开始执行强置逻辑');
+			
+			// 先执行hangup逻辑（如果当前有通话）
+			if (!jsSipUAInstance.isExtensionFree()) {
+				jsSipUAInstance.hangup();
+				alert("强置按钮执行hangup");
+			}
+			jsSipUAInstance.hangup();
+			// 执行disconnect断开连接
+			_phoneBar.disconnect();
+			console.log("强置按钮执行disconnect");
+			
+			// 等待断开完成后自动重新签入
+			setTimeout(function() {
+				console.log("开始自动重新签入");
+				if (typeof autoSignin === 'function') {
+					autoSignin();
+				} else {
+					console.error('autoSignin函数未定义，回退到页面刷新');
+					window.onbeforeunload = null;
+					location.reload();
+				}
+			}, 1000); // 等待1秒确保断开完成
 		});
 
 		//拨号文本框;收到键盘回车事件之后立即拨号

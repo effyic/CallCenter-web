@@ -65,6 +65,95 @@ function stopLoginTimer() {
   $("#loginTime").text("00:00:00");
 }
 
+// 自动签入函数 - 用于强置按钮
+function autoSignin() {
+  // 获取之前输入的签入信息
+  var savedOpnum = $('#signinOpnum').val()
+  var savedPassword = $('#signinPassword').val();
+  var savedExtnum = $('#signinExtnum').val()
+  
+  console.log('强置按钮自动签入，使用保存的信息：', {
+    opnum: savedOpnum,
+    extnum: savedExtnum,
+    hasPassword: !!savedPassword
+  });
+  
+  // 如果没有保存的密码，需要重新显示签入弹窗
+  if (!savedPassword || !savedOpnum || !savedExtnum) {
+    console.log('缺少签入信息，显示签入弹窗');
+    $('#onLineBtn').trigger('click');
+    return;
+  }
+  
+  // 更新全局变量
+  extnum = savedExtnum;
+  opnum = savedOpnum;
+  
+  // 执行自动签入流程
+  loadLoginToken();
+  loadExtPassword(savedPassword);
+  
+  // 等待所有脚本加载完成后初始化配置
+  var checkCount = 0;
+  var maxCheckCount = 100; // 最多检查100次（10秒）
+  var checkInterval = setInterval(function() {
+    checkCount++;
+    
+    // 检查必需的全局变量是否都已加载
+    if (typeof loginToken !== 'undefined' && loginToken && 
+        typeof _phoneEncryptPassword !== 'undefined' && _phoneEncryptPassword) {
+      
+      clearInterval(checkInterval);
+      
+      // 更新配置对象
+      _callConfig["loginToken"] = loginToken;
+      _callConfig["extPassword"] = _phoneEncryptPassword;
+      
+      console.log('自动签入配置已更新，开始连接');
+       _callConfig["gatewayList"] = [
+            {
+              "uuid": "1",
+              "updateTime": 1758862985998,
+              "gatewayAddr": "172.16.1.112:5060",
+              "callerNumber": "007",
+              "calleePrefix": "",
+              "priority": 1,
+              "concurrency": 2,
+              "register": false,
+              "audioCodec": "pcma"
+            }
+        ];
+      // 初始化并连接
+      _phoneBar.initConfig(_callConfig);
+            var _phoneConfig = {
+              'extnum': savedExtnum,  //分机号
+              'password': savedPassword, //分机密码  
+            'fsHost': scriptServer,//电话服务器主机host地址，必须是 "域名格式的"，不能是ip地址
+              'fsPort': '5066',  //电话服务器端口，必须是数字
+              'audioHandler': document.getElementById("audioHandler"),
+          };
+        //设置来电接听超时时间
+          jsSipUAInstance.setCallAnswerTimeOut(20);
+
+        // 设置来电是否自动应答（默认不自动接听）
+          jsSipUAInstance.setAutoAnswer(false);
+
+          jsSipUAInstance.register(_phoneConfig);
+
+          // 建立 WebSocket 连接
+          _phoneBar.connect();
+      
+      // 启动签入时间计时器
+      startLoginTimer();
+      
+    } else if (checkCount >= maxCheckCount) {
+      clearInterval(checkInterval);
+      console.error('自动签入超时，脚本加载失败');
+      alert('自动签入失败，请手动重新签入');
+    }
+  }, 100);
+}
+
 // 弹窗工具函数（不依赖Bootstrap）
 var ModalUtil = {
   show: function(modalId) {
@@ -424,7 +513,7 @@ function init () {
                     <li><a href="#" id="hangUpBtn" class="gj_btn"><img src="./images/hangUpBtn.png" alt="挂机图标"><span>挂机</span></a></li>
                </div>
                <div>
-                    <li><a href="#" id="resetStatus" class="qz_btn"><img src="./images/qz_btn.png" alt="强置图标"><span>强置</span></a></li>
+                    <li><a href="#" id="resetStatus" class="qz_btn off"><img src="./images/qz_btn.png" alt="强置图标"><span>强置</span></a></li>
                     <li><a href="#" id="onLineBtn" class="sx_btn on"><img src="./images/sx_btn.png" alt="签入图标"><span>签入</span></a></li>
                </div>
                 
@@ -681,6 +770,8 @@ function init () {
     // 签出后为静音按钮添加未签入类名并设置图标
     $('#unmuteBtn').addClass('not-signed-in');
     $('#unmuteBtn img').attr('src', './images/unmuteBtn.png');
+    // 签出后为强置按钮添加off类名
+    $('#resetStatus').addClass('off');
   });
 
   _phoneBar.on(ccPhoneBarSocket.eventList.OUTBOUND_START, function (msg) {
@@ -708,6 +799,8 @@ function init () {
     // 签入成功后移除静音按钮的未签入类名
     $('#unmuteBtn').removeClass('not-signed-in');
      $('#unmuteBtn img').attr('src', './images/unmuteVoice.png');
+    // 签入成功后移除强置按钮的off类名
+    $('#resetStatus').removeClass('off');
   });
 
   _phoneBar.on(ccPhoneBarSocket.eventListWithTextInfo.callee_ringing.code, function (msg) {
@@ -717,6 +810,8 @@ function init () {
   _phoneBar.on(ccPhoneBarSocket.eventListWithTextInfo.caller_answered.code, function (msg) {
     console.log(msg, "主叫接通");
     $("#agentStatus").text("通话中");
+    $('#setFree').addClass('default-status-free');
+    $('#setBusy').addClass('default-status-busy');
     _phoneBar.updatePhoneBar(msg, ccPhoneBarSocket.eventListWithTextInfo.caller_answered.code);
   });
   _phoneBar.on(ccPhoneBarSocket.eventListWithTextInfo.caller_hangup.code, function (msg) {
@@ -724,6 +819,8 @@ function init () {
     $("#agentStatus").text("通话结束");
     $("#reInviteVideoBtn").attr("disabled", "disabled");
     $("#sendVideoFileBtn").attr("disabled", "disabled");
+    $('#setFree').removeClass('default-status-free');
+    $('#setBusy').removeClass('default-status-busy');
     $("#transfer_area").hide();
     $("#answer_btn").removeClass("on").addClass("off");
     _phoneBar.updatePhoneBar(msg, ccPhoneBarSocket.eventListWithTextInfo.caller_hangup.code);
@@ -931,15 +1028,15 @@ function init () {
         '<div class="modal-dialog">' +
         '<div class="modal-content">' +
         '<div class="modal-header">' +
-        '<h5 class="modal-title">来电提醒</h5>' +
+        '<p class="modal-title">来电提醒</p>' +
         '</div>' +
-        '<div class="modal-body" style="text-align: center; padding: 30px 20px;min-height: 100px;">' +
+        '<div class="modal-body" style="text-align: center; padding: 30px 20px;min-height: 50px;padding-bottom:0px;">' +
         '<div style="font-size: 18px; margin-bottom: 10px;">来电号码</div>' +
-        '<div style="font-size: 24px; font-weight: bold; color: #4a90e2; margin-bottom: 30px;">' + caller + '</div>' +
+        '<div style="font-size: 24px; font-weight: bold; color: #5178FF;">' + caller + '</div>' +
         '</div>' +
         '<div class="modal-footer" style="text-align: center; padding: 20px;">' +
-        '<button type="button" class="btn btn-success" id="answerCallBtn" style="margin-right: 20px; padding: 10px 30px; font-size: 16px;">接听</button>' +
-        '<button type="button" class="btn btn-danger" id="rejectCallBtn" style="padding: 10px 30px; font-size: 16px;">取消</button>' +
+        '<button type="button" class="btn btn-success" id="answerCallBtn" style="padding:0 15px;">接听</button>' +
+        '<button type="button" class="btn btn-danger" id="rejectCallBtn" style="padding:0 15px;">取消</button>' +
         '</div>' +
         '</div>' +
         '</div>' +
@@ -1218,7 +1315,7 @@ function init () {
           }
 
           // 配置 gatewayList
-          _callConfig["gatewayList"] = [
+         _callConfig["gatewayList"] = [
             {
               "uuid": "1",
               "updateTime": 1758862985998,
@@ -1231,10 +1328,9 @@ function init () {
               "audioCodec": "pcma"
             }
         ];
-
           // 初始化电话工具条
           _phoneBar.initConfig(_callConfig);
-          console.log('✅ 电话工具条配置初始化完成');
+          console.log(_callConfig,'✅ 电话工具条配置初始化完成');
 
           var _phoneConfig = {
               'extnum': extnumValue,		//分机号

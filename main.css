@@ -452,7 +452,7 @@ input:checked + .slider:before {
 }
 
 .bc2_btn.on { /* 取消保持 - on状态 */
-    width: 72px;
+    width: 95px;
     height: 32px;
     border-radius: 20px;
     background-color: #FFFFFF;
@@ -695,13 +695,28 @@ input:checked + .slider:before {
     font-size: 13px;
 }
 
-.qz_btn img {
+.qz_btn.off { /* 强置 - off状态（未签入） */
+    width: 72px;
+    height: 32px;
+    border-radius: 20px;
+    background-color: #A0B0FA;
+    border: none;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 4px;
+    text-decoration: none;
+    color: white;
+    font-size: 13px;
+}
+
+.qz_btn img, .qz_btn.off img {
     width: 16px;
     height: 16px;
     object-fit: cover;
 }
 
-.qz_btn span {
+.qz_btn span, .qz_btn.off span {
     color: white;
     font-size: 13px;
 }
@@ -1578,4 +1593,78 @@ input:checked + .slider:before {
     display: inline-block !important;
     vertical-align: middle !important;
     align-self: center !important;
+}
+
+/* 来电提醒弹窗样式 - 与签入弹窗保持一致 */
+#incomingCallModal .modal-content {
+    width: 500px;
+    max-width: 90vw;
+    max-height: 90vh;
+    display: flex;
+    flex-direction: column;
+}
+
+#incomingCallModal .modal-header {
+    background: #E9EEFC;
+    color: #000000;
+    padding: 20px 30px;
+    font-size:20px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-shrink: 0;
+}
+
+#incomingCallModal .modal-header .modal-title {
+    font-size: 20px;
+    margin: 0;
+    color: #000000CC;
+}
+
+#incomingCallModal .modal-body {
+    padding: 30px;
+    background: white;
+    flex: 1;
+    overflow-y: auto;
+}
+
+#incomingCallModal .modal-footer {
+    padding: 20px 30px;
+    background: white;
+    display: flex;
+    gap: 12px;
+    justify-content: flex-end;
+    flex-shrink: 0;
+    border-top: 1px solid #E9EEFC;
+}
+
+#incomingCallModal .btn-success {
+    background: #5178FF;
+    color: white;
+    font-size: 14px;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    height: 32px;
+    transition: all 0.2s ease;
+    padding: 0px 20px;
+    font-size: 14px;
+    height: 32px;
+}
+
+#incomingCallModal .btn-danger {
+    background: #F8F9FC;
+    color: #333;
+    padding: 0px 20px;
+    font-size: 14px;
+    border: 1px solid #E9EEFC;
+    border-radius: 4px;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    height: 32px;
+}
+
+#incomingCallModal .btn-danger:hover {
+    background: #E9EEFC;
+    border-color: #5178FF;
 }
