@@ -413,11 +413,13 @@ function init () {
               <ul class="dial_btn">
                <div>
                     <li><a href="#" id="callBtn" class="wh_btn"><img src="./images/callBtn.png" alt="外呼图标"><span>外呼</span></a></li>
+                    <li class="separator-line"></li>
                     <li id="holdBtnLi"><a href="#" id="holdBtn" class="bc_btn off"><img src="./images/holdBtn.png" alt="保持图标"><span>保 持</span></a></li>
                     <li id="unHoldBtnLi"><a href="#" id="unHoldBtn" class="bc2_btn off"><img src="./images/holdBtn.png" alt="取消保持图标"><span>取消保持</span></a></li>
-                    <li><a href="#" id="unmuteBtn" class="unmute_btn off"><img src="./images/unmuteBtn.png" alt="静音图标"><span>静音</span></a></li>
+                    <li><a href="#" id="unmuteBtn" class="unmute_btn off not-signed-in"><img src="./images/unmuteBtn.png" alt="静音图标"><span>静音</span></a></li>
                     <li><a href="#" id="transferBtn" class="zjie_btn"><img src="./images/transferBtn.png" alt="转接图标"><span>转接</span></a></li>
                     <li><a href="#" id="consultationBtn" class="zixun_btn"><img src="./images/consultationBtn.png" alt="咨询图标"><span>咨询</span></a></li>
+                    <li class="separator-line"></li>
                     <li><a href="#" id="conferenceBtn" class="hy_btn off"><span>会议</span></a></li>
                     <li><a href="#" id="hangUpBtn" class="gj_btn"><img src="./images/hangUpBtn.png" alt="挂机图标"><span>挂机</span></a></li>
                </div>
@@ -560,7 +562,7 @@ function init () {
             <button type="button" class="btn-close" onclick="document.getElementById('transfer_area').style.display='none';"></button>
           </div>
           <table width="100%">
-            <tbody>
+            <tbody style="border:1px solid #E2E5E9;">
               <tr class="transfer-titles">
                 <td width="90">业务组 </td>
                 <td width="90">坐席成员</td>
@@ -676,6 +678,9 @@ function init () {
     $('#setFree').addClass('default-status-free');
     // 签出后重新添加置忙按钮的默认类名
     $('#setBusy').addClass('default-status-busy');
+    // 签出后为静音按钮添加未签入类名并设置图标
+    $('#unmuteBtn').addClass('not-signed-in');
+    $('#unmuteBtn img').attr('src', './images/unmuteBtn.png');
   });
 
   _phoneBar.on(ccPhoneBarSocket.eventList.OUTBOUND_START, function (msg) {
@@ -700,6 +705,9 @@ function init () {
     $('#setFree').removeClass('default-status-free');
     // 签入成功后移除置忙按钮的默认类名
     $('#setBusy').removeClass('default-status-busy');
+    // 签入成功后移除静音按钮的未签入类名
+    $('#unmuteBtn').removeClass('not-signed-in');
+     $('#unmuteBtn img').attr('src', './images/unmuteVoice.png');
   });
 
   _phoneBar.on(ccPhoneBarSocket.eventListWithTextInfo.callee_ringing.code, function (msg) {
@@ -1566,9 +1574,11 @@ function transferBtnClickUI() {
 $(document).on('click', '#unmuteBtn', function(e) {
   if ($(this).hasClass('off')) {
     $("#unmuteBtn").removeClass("off").addClass("on");
+    $("#unmuteBtn img").attr("src", "./images/unmuteBtn.png");
     jsSipUAInstance.mute();
   } else {
     $("#unmuteBtn").removeClass("on").addClass("off");
+    $("#unmuteBtn img").attr("src", "./images/unmuteVoice.png");
     jsSipUAInstance.unmute();
   }
 })
