@@ -1293,7 +1293,9 @@ function ccPhoneBarSocket() {
         });
 
 		$('#callBtn').on('click', function () {
+			alert('外呼')
 			if ($(this).hasClass('on')) {
+				alert('开始拨号')
 				var destPhone = $.trim($("#ccphoneNumber").val());
 				var videoLevel = document.getElementById("videoLevelSelect").value;
 				var callType = document.forms[0].callType.value;

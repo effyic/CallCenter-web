@@ -78,12 +78,28 @@ function autoSignin() {
     hasPassword: !!savedPassword
   });
   
+  // 重要：在重新初始化前解绑所有事件，防止重复绑定
+  console.log('解绑所有按钮事件，防止重复绑定');
+  $('#callBtn').off('click');
+  $('#setFree').off('click');
+  $('#setBusy').off('click');
+  $('#setBusySubList').off('click');
+  $('#hangUpBtn').off('click');
+  $('#holdBtn').off('click');
+  $('#unHoldBtn').off('click');
+  $('#transferBtn').off('click');
+  $('#consultationBtn').off('click');
+  $('#onLineBtn').off('click');
+  $('#resetStatus').off('click');
+  $('#ccphoneNumber').off('keydown');
+  $(document).off('keyup');
+  
   // 如果没有保存的密码，需要重新显示签入弹窗
-  if (!savedPassword || !savedOpnum || !savedExtnum) {
-    console.log('缺少签入信息，显示签入弹窗');
-    $('#onLineBtn').trigger('click');
-    return;
-  }
+//   if (!savedPassword || !savedOpnum || !savedExtnum) {
+//     console.log('缺少签入信息，显示签入弹窗');
+//     $('#onLineBtn').trigger('click');
+//     return;
+//   }
   
   // 更新全局变量
   extnum = savedExtnum;
