@@ -1625,26 +1625,16 @@ function autoCallInit() {
 
         <div style="display: flex; justify-content: center; align-items: center; margin: 40px 0;">
           <div style="position: relative;">
-            <a href="#" id="hangUpBtn" class="gj_btn" style="
-              width: 80px; 
-              height: 80px; 
-              border-radius: 50%;
-              background: #ff4757;
-              display: flex;
-              align-items: center;
-              justify-content: center;
-              box-shadow: 0 6px 15px rgba(255,71,87,0.3);
-              transition: all 0.3s ease;
-            "></a>
-            <div style="
-              position: absolute;
-              bottom: -30px;
-              left: 50%;
-              transform: translateX(-50%);
-              font-size: 16px;
-              color: #666;
-              white-space: nowrap;
-            ">挂机</div>
+            <a href="#" id="hangUpBtn" class="gj_btn">
+              <img src="images/hangup.png" alt="挂机" style="
+                width: 80px; 
+                height: 80px; 
+                border-radius: 50%;
+                box-shadow: 0 6px 15px rgba(255,71,87,0.3);
+                transition: all 0.3s ease;
+                cursor: pointer;
+              ">
+            </a>
           </div>
         </div>
 
