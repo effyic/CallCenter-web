@@ -1318,9 +1318,7 @@ function ccPhoneBarSocket() {
 		});
 
 		$('#hangUpBtn').on('click', function () {
-			alert('点击挂机')
 			if ($(this).hasClass('on')) {
-				alert('点击挂机--挂断')
 				_cc.hangup();
 			}
 		});
