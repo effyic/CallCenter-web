@@ -468,14 +468,14 @@ function init () {
         <td width="70%" colspan="2" height="35" class="status-bar">
           <div class="status-info-container">
             <div class="status-main-group">
-              <div class="status-info-item">
-                <b>签入时间：</b> <span id="loginTime" title="" class="status4">00:00:00</span>
+              <div class="status-info-item login-time">
+                <span>签入时间：</span> <span id="loginTime" title="" class="status4">00:00:00</span>
               </div>
-              <div class="status-info-item">
-                <b>状态：</b> <span id="agentStatus" title="" class="status4">未签入</span>
+              <div class="status-info-item calling-status">
+                <span>状态：</span> <span id="agentStatus" title="" class="status4">未签入</span>
               </div>
               <div class="status-info-item normalColor">
-                <b>当前排队人数：</b><span id="queueStat" title="" class="status4">0</span>
+                <span>当前排队人数：</span><span id="queueStat" title="" class="status4">0</span>
               </div>
               <div class="status-info-item noborder setStatus">
                 <div class="status-toggle-container">
@@ -687,7 +687,7 @@ function init () {
             </tbody>
             <tr class="transfer-controls">
               <td colspan="2" style="padding: 20px; text-align: center;">
-                <div style="margin-bottom: 15px;">
+                <div style="margin-bottom: 15px;margin-top:10px;">
                   <input type="text" name="externalPhoneNumber" id="externalPhoneNumber" placeholder="电话号码"
                     title="可以把当前通话转接到外线号码上。 如果该文本框留空，则忽略处理。" />
                 </div>
@@ -1046,7 +1046,7 @@ function init () {
         '<div class="modal-header">' +
         '<p class="modal-title">来电提醒</p>' +
         '</div>' +
-        '<div class="modal-body" style="text-align: center; padding: 30px 20px;min-height: 50px;padding-bottom:0px;">' +
+        '<div class="modal-body" style="text-align: center; padding: 30px 20px;min-height: 50px;">' +
         '<div style="font-size: 18px; margin-bottom: 10px;">来电号码</div>' +
         '<div style="font-size: 24px; font-weight: bold; color: #5178FF;">' + caller + '</div>' +
         '</div>' +

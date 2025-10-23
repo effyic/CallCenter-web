@@ -1293,9 +1293,7 @@ function ccPhoneBarSocket() {
         });
 
 		$('#callBtn').on('click', function () {
-			alert('外呼')
 			if ($(this).hasClass('on')) {
-				alert('开始拨号')
 				var destPhone = $.trim($("#ccphoneNumber").val());
 				var videoLevel = document.getElementById("videoLevelSelect").value;
 				var callType = document.forms[0].callType.value;
@@ -1401,17 +1399,13 @@ function ccPhoneBarSocket() {
 
 		$('#resetStatus').on('click', function () {
 			console.log('强置按钮被点击，开始执行强置逻辑');
-			
 			// 先执行hangup逻辑（如果当前有通话）
 			if (!jsSipUAInstance.isExtensionFree()) {
 				jsSipUAInstance.hangup();
-				alert("强置按钮执行hangup");
+				// alert("强置按钮执行hangup");
 			}
-			jsSipUAInstance.hangup();
-			// 执行disconnect断开连接
 			_phoneBar.disconnect();
 			console.log("强置按钮执行disconnect");
-			
 			// 等待断开完成后自动重新签入
 			setTimeout(function() {
 				console.log("开始自动重新签入");
