@@ -11,15 +11,7 @@ RUN rm -rf /usr/share/nginx/html/*
 COPY . /usr/share/nginx/html/
 
 # 创建nginx配置文件
-RUN echo 'server {' > /etc/nginx/conf.d/default.conf && \
-    echo '    listen 80;' >> /etc/nginx/conf.d/default.conf && \
-    echo '    server_name localhost;' >> /etc/nginx/conf.d/default.conf && \
-    echo '    root /usr/share/nginx/html;' >> /etc/nginx/conf.d/default.conf && \
-    echo '    index phone-bar-ex.html index.html;' >> /etc/nginx/conf.d/default.conf && \
-    echo '    location / {' >> /etc/nginx/conf.d/default.conf && \
-    echo '        try_files $uri $uri/ /phone-bar-ex.html;' >> /etc/nginx/conf.d/default.conf && \
-    echo '    }' >> /etc/nginx/conf.d/default.conf && \
-    echo '}' >> /etc/nginx/conf.d/default.conf
+COPY default.conf /etc/nginx/conf.d/default.conf
 
 # 暴露80端口
 EXPOSE 80
@@ -33,5 +25,5 @@ HEALTHCHECK --interval=30s --timeout=3s --start-period=5s --retries=3 \
 
 # 设置标签
 LABEL maintainer="Phone Bar SDK" \
-      description="电话工具条SDK Web服务" \
+      description="通话记录 Web服务" \
       version="1.0"
