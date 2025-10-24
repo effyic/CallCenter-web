@@ -690,13 +690,19 @@ function init () {
   _phoneBar.on(ccPhoneBarSocket.eventListWithTextInfo.caller_hangup.code, function (msg) {
     console.log(msg, "主叫挂断");
     $("#agentStatus").text("通话结束");
+   
     $("#reInviteVideoBtn").attr("disabled", "disabled");
     $("#sendVideoFileBtn").attr("disabled", "disabled");
     $("#transfer_area").hide();
     $("#answer_btn").removeClass("on").addClass("off");
     _phoneBar.updatePhoneBar(msg, ccPhoneBarSocket.eventListWithTextInfo.caller_hangup.code);
   });
-
+    // 非通话状态显示灰色挂机按钮
+  function updateAgentStatus() {
+    const hangupImg = $("#hangUpBtn img");
+    hangupImg.attr("src", "images/grayHangup.png");
+    hangupImg.css("box-shadow", "0 0 10px rgba(128, 128, 128, 0.3)");
+  }
   _phoneBar.on(ccPhoneBarSocket.eventListWithTextInfo.callee_answered.code, function (msg) {
     console.log(msg, "被叫接通");
     _phoneBar.updatePhoneBar(msg, ccPhoneBarSocket.eventListWithTextInfo.callee_answered.code);
@@ -969,7 +975,7 @@ function init () {
   });
   jsSipUAInstance.on('hungup', function (msg) {
       console.log('通话结束', 'hungup');
-      
+      updateAgentStatus()
       // 挂断后关闭来电弹窗（如果还存在）
       if ($('#incomingCallModal').length > 0) {
         ModalUtil.hide('incomingCallModal');
@@ -1797,6 +1803,8 @@ function autoCallInit() {
     $("#callStatus").text("通话中")
       .css('background', 'rgba(45,152,218,0.1)')
       .css('color', '#2d98da');
+    $("#autoCallStatus").text("通话中...")
+      .css('color', '#2d98da');
     console.log(msg, "被叫接通");
     _phoneBar.updatePhoneBar(msg, ccPhoneBarSocket.eventListWithTextInfo.callee_answered.code);
   });
@@ -1807,6 +1815,8 @@ function autoCallInit() {
     $("#callStatus").text("通话结束")
       .css('background', 'rgba(255,71,87,0.1)')
       .css('color', '#ff4757');
+    $("#autoCallStatus").text("")
+      .css('color', '#ff4757');
     _phoneBar.updatePhoneBar(msg, ccPhoneBarSocket.eventListWithTextInfo.caller_hangup.code);
   });
 
@@ -1815,6 +1825,8 @@ function autoCallInit() {
     console.log(msg, "被叫挂断");
     $("#callStatus").text("通话结束")
       .css('background', 'rgba(255,71,87,0.1)')
+      .css('color', '#ff4757');
+    $("#autoCallStatus").text("")
       .css('color', '#ff4757');
     _phoneBar.updatePhoneBar(msg, ccPhoneBarSocket.eventListWithTextInfo.callee_hangup.code);
   });
