@@ -1620,9 +1620,17 @@ function autoCallInit() {
   
   // 简化UI，只显示必要的状态信息
   $('#phone-bar').html(`
-    <div style="max-width: 100%; min-height: 100vh; background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%); padding: 20px; box-sizing: border-box;">
-      <div style="background: white; border-radius: 20px; box-shadow: 0 8px 20px rgba(0,0,0,0.1); padding: 30px; max-width: 500px; margin: 0 auto;">
-        <div><audio hidden="true" id="audioHandler" controls="controls" autoplay="autoplay"></audio></div>
+    <div style="max-width: 100%; min-height: 100vh; background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%); padding: 0; box-sizing: border-box;">
+      <!-- 导航栏 -->
+      <div class="phone-bar-nav">
+        <button id="backBtn" class="back-btn">← 返回</button>
+        <h1 class="nav-title">呼叫中心html客户端工具条</h1>
+        <div style="width: 60px;"></div> <!-- 占位元素，保持标题居中 -->
+      </div>
+      
+      <div style="padding: 20px;">
+        <div style="background: white; border-radius: 20px; box-shadow: 0 8px 20px rgba(0,0,0,0.1); padding: 30px; max-width: 500px; margin: 0 auto;">
+          <div><audio hidden="true" id="audioHandler" controls="controls" autoplay="autoplay"></audio></div>
         
         <div style="text-align: center; margin-bottom: 30px;">
           <div style="font-size: 24px; color: #333; font-weight: bold; margin-bottom: 10px;">智能客服系统</div>
@@ -1665,6 +1673,7 @@ function autoCallInit() {
             border-radius: 8px;
             background: rgba(128,128,128,0.1);
           ">准备连接...</div>
+        </div>
         </div>
       </div>
     </div>
@@ -1831,4 +1840,15 @@ function autoCallInit() {
     _phoneBar.updatePhoneBar(msg, ccPhoneBarSocket.eventListWithTextInfo.callee_hangup.code);
   });
 }
+
+// 返回按钮点击事件
+$(document).on('click', '#backBtn', function(e) {
+  e.preventDefault();
+  if (window.history.length > 1) {
+    window.history.back();
+  } else {
+    // 如果没有历史记录，可以跳转到默认页面或关闭窗口
+    window.close();
+  }
+});
 
