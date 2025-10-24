@@ -357,6 +357,22 @@ function init () {
 
     <table width="1224">
       <tr>
+        <td colspan="2" height="50" style="padding: 0; background-color: #f5f5f5; border-bottom: 1px solid #ddd;">
+          <div style="display: flex; align-items: center; height: 100%; padding: 0 15px;">
+            <button id="backBtn" style="background: none; border: none; cursor: pointer; padding: 8px; border-radius: 4px; display: flex; align-items: center; color: #666; font-size: 14px;">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <path d="m15 18-6-6 6-6"/>
+              </svg>
+              <span style="margin-left: 4px;">返回</span>
+            </button>
+            <div style="flex: 1; text-align: center; font-weight: bold; font-size: 16px; color: #333;">
+              呼叫中心html客户端工具条
+            </div>
+            <div style="width: 60px;"></div> <!-- 占位元素，保持标题居中 -->
+          </div>
+        </td>
+      </tr>
+      <tr>
         <td width="70%" colspan="2" height="35" style="text-indent: 20px">
           <b>签入时间：</b> <span id="loginTime" title="" class="status4">00:00:00</span> &nbsp;&nbsp;
           <b>状态：</b> <span id="agentStatus" title="" class="status4">未签入</span> &nbsp;&nbsp;
@@ -1594,4 +1610,15 @@ function conferenceStartBtnUI() {
         }
     }
 }
+
+// 返回按钮点击事件
+$(document).on('click', '#backBtn', function(e) {
+  e.preventDefault();
+  if (window.history.length > 1) {
+    window.history.back();
+  } else {
+    // 如果没有历史记录，可以跳转到默认页面或关闭窗口
+    window.close();
+  }
+});
 
