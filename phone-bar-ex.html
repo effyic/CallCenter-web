@@ -6,10 +6,7 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 
-  
   <script type="text/javascript" src="jquery-1.11.0.js"></script>
-  <!-- <link href="https://cdn.bootcdn.net/ ajax/libs/twitter-bootstrap/5.3.1/css/bootstrap.min.css" rel="stylesheet">
-  <script src="https://cdn.bootcdn.net/ajax/libs/twitter-bootstrap/5.3.1/js/bootstrap.min.js"></script> -->
   <script type="text/javascript" src="ccPhoneBarSocket.js"></script>
 
   <script type="text/javascript" src="callcenter/jsSipMediaFile.js"></script>
@@ -18,21 +15,27 @@
 
   <!-- <link rel="stylesheet" href="page.css" />
   <script src="./phone-bar.js"></script> -->
-  <script src="./newphone-bar.js"></script> 
+  <script src="./phone-bar.js"></script> 
   <link rel="stylesheet" href="main.css" />
 
   <script>
     window.onload = init
 
     _phoneBar.on(ccPhoneBarSocket.eventList.new_inbound_call, function (msg) {
-      console.log("分配的新来电: ", msg.object.uuid);
+      console.log("新来电-手机号: ", msg.object.caller);
+      console.log("新来电-uuid: ", msg.object.uuid);
     });
 
     // phoneNumber: 呼叫号码
     //_phoneBar.call(phoneNumber);
 
-    // 对方引入我的js文件，是否可以直接使用js中的on监听事件 var _phoneBar = new ccPhoneBarSocket();
-    // 如果on事件写了两个相同的，是否会冲突 电话接通事件、new_in
+    // 状态变更为话后整理
+    //_phoneBar.setStatus(ccPhoneBarSocket.agentStatusEnum.fill_form) 
+    // 状态变更为空闲
+    //_phoneBar.setStatus(ccPhoneBarSocket.agentStatusEnum.free) 
+    // 状态变更为忙碌
+    //_phoneBar.setStatus(ccPhoneBarSocket.agentStatusEnum.busy) 
+
   </script>
 </head>
 

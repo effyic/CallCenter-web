@@ -65,6 +65,111 @@ function stopLoginTimer() {
   $("#loginTime").text("00:00:00");
 }
 
+// 自动签入函数 - 用于强置按钮
+function autoSignin() {
+  // 获取之前输入的签入信息
+  var savedOpnum = $('#signinOpnum').val()
+  var savedPassword = $('#signinPassword').val();
+  var savedExtnum = $('#signinExtnum').val()
+  
+  console.log('强置按钮自动签入，使用保存的信息：', {
+    opnum: savedOpnum,
+    extnum: savedExtnum,
+    hasPassword: !!savedPassword
+  });
+  
+  // 重要：在重新初始化前解绑所有事件，防止重复绑定
+  console.log('解绑所有按钮事件，防止重复绑定');
+  $('#callBtn').off('click');
+  $('#setFree').off('click');
+  $('#setBusy').off('click');
+  $('#setBusySubList').off('click');
+  $('#hangUpBtn').off('click');
+  $('#holdBtn').off('click');
+  $('#unHoldBtn').off('click');
+  $('#transferBtn').off('click');
+  $('#consultationBtn').off('click');
+  $('#onLineBtn').off('click');
+  $('#resetStatus').off('click');
+  $('#ccphoneNumber').off('keydown');
+  $(document).off('keyup');
+  
+  // 如果没有保存的密码，需要重新显示签入弹窗
+//   if (!savedPassword || !savedOpnum || !savedExtnum) {
+//     console.log('缺少签入信息，显示签入弹窗');
+//     $('#onLineBtn').trigger('click');
+//     return;
+//   }
+  
+  // 更新全局变量
+  extnum = savedExtnum;
+  opnum = savedOpnum;
+  
+  // 执行自动签入流程
+  loadLoginToken();
+  loadExtPassword(savedPassword);
+  
+  // 等待所有脚本加载完成后初始化配置
+  var checkCount = 0;
+  var maxCheckCount = 100; // 最多检查100次（10秒）
+  var checkInterval = setInterval(function() {
+    checkCount++;
+    
+    // 检查必需的全局变量是否都已加载
+    if (typeof loginToken !== 'undefined' && loginToken && 
+        typeof _phoneEncryptPassword !== 'undefined' && _phoneEncryptPassword) {
+      
+      clearInterval(checkInterval);
+      
+      // 更新配置对象
+      _callConfig["loginToken"] = loginToken;
+      _callConfig["extPassword"] = _phoneEncryptPassword;
+      
+      console.log('自动签入配置已更新，开始连接');
+       _callConfig["gatewayList"] = [
+            {
+              "uuid": "1",
+              "updateTime": 1758862985998,
+              "gatewayAddr": "172.16.1.112:5060",
+              "callerNumber": "007",
+              "calleePrefix": "",
+              "priority": 1,
+              "concurrency": 2,
+              "register": false,
+              "audioCodec": "pcma"
+            }
+        ];
+      // 初始化并连接
+      _phoneBar.initConfig(_callConfig);
+            var _phoneConfig = {
+              'extnum': savedExtnum,  //分机号
+              'password': savedPassword, //分机密码  
+            'fsHost': scriptServer,//电话服务器主机host地址，必须是 "域名格式的"，不能是ip地址
+              'fsPort': '5066',  //电话服务器端口，必须是数字
+              'audioHandler': document.getElementById("audioHandler"),
+          };
+        //设置来电接听超时时间
+          jsSipUAInstance.setCallAnswerTimeOut(20);
+
+        // 设置来电是否自动应答（默认不自动接听）
+          jsSipUAInstance.setAutoAnswer(false);
+
+          jsSipUAInstance.register(_phoneConfig);
+
+          // 建立 WebSocket 连接
+          _phoneBar.connect();
+      
+      // 启动签入时间计时器
+      startLoginTimer();
+      
+    } else if (checkCount >= maxCheckCount) {
+      clearInterval(checkInterval);
+      console.error('自动签入超时，脚本加载失败');
+      alert('自动签入失败，请手动重新签入');
+    }
+  }, 100);
+}
+
 // 弹窗工具函数（不依赖Bootstrap）
 var ModalUtil = {
   show: function(modalId) {
@@ -360,21 +465,42 @@ function init () {
 
     <table width="1224">
       <tr>
-        <td width="70%" colspan="2" height="35" style="text-indent: 20px">
-          <b>签入时间：</b> <span id="loginTime" title="" class="status4">00:00:00</span> &nbsp;&nbsp;
-          <b>状态：</b> <span id="agentStatus" title="" class="status4">未签入</span> &nbsp;&nbsp;
-          <b>当前排队人数：</b><span id="queueStat" title="" class="status4">0</span> &nbsp;&nbsp;
-          <label style="cursor: pointer; vertical-align: middle;">
-            <input type="checkbox" id="autoAnswerToggle" style="cursor: pointer; vertical-align: middle; margin: 0; position: relative; top: 0px;" />
-            <b style="vertical-align: middle;">自动接听</b>
-          </label>
+        <td width="70%" colspan="2" height="35" class="status-bar">
+          <div class="status-info-container">
+            <div class="status-main-group">
+              <div class="status-info-item login-time">
+                <span>签入时间：</span> <span id="loginTime" title="" class="status4">00:00:00</span>
+              </div>
+              <div class="status-info-item calling-status">
+                <span>状态：</span> <span id="agentStatus" title="" class="status4">未签入</span>
+              </div>
+              <div class="status-info-item normalColor">
+                <span>当前排队人数：</span><span id="queueStat" title="" class="status4">0</span>
+              </div>
+              <div class="status-info-item noborder setStatus">
+                <div class="status-toggle-container">
+                  <a href="#" id="setFree" class="status-toggle-btn status-free default-status-free">置闲</a>
+                  <a href="#" id="setBusy" class="status-toggle-btn status-busy default-status-busy">置忙</a>
+                </div>
+              </div>
+            </div>
+            <div class="status-info-item noborder">
+              <div class="auto-answer-switch">
+                <span class="auto-answer-label">自动接听</span>
+                <label class="switch">
+                  <input type="checkbox" id="autoAnswerToggle" class="auto-answer-checkbox" />
+                  <span class="slider"></span>
+                </label>
+              </div>
+            </div>
+          </div>
 
         </td>
       </tr>
       <tr>
         <td width="70%">
           <div>
-            <div class="head_dial" style="padding-left: 10px; ">
+            <div class="head_dial">
 
               <dl class="dial">
                 <dt>
@@ -383,33 +509,38 @@ function init () {
                 </dt>
                 <dd>
                   <ul>
-                    <li id="callStatus" title="" class="status4">没有连接</li>
+                    <li id="callStatus" title="" class="call-status status4">没有连接</li>
                   </ul>
-                  <span id="showCallLen" style="display:none"><b>00:00</b></span>
+                  <span id="showCallLen" class="call-status"><b>00:00</b></span>
                 </dd>
               </dl>
 
               <ul class="dial_btn">
-                <li><a href="#" id="setFree" class="xz_btn off"></a><span>置闲</span></li>
-                <li><a href="#" id="setBusy" class="sm_btn off"></a><span>置忙</span></li>
-                <li><a href="#" id="callBtn" class="wh_btn"></a><span>外呼</span></li>
-                <li id="holdBtnLi"><a href="#" id="holdBtn" class="bc_btn off"></a><span>保 持</span></li>
-                <li id="unHoldBtnLi"><a href="#" id="unHoldBtn" class="bc2_btn off"></a><span>取消保持</span></li>
-                <li><a href="#" id="unmuteBtn" class="unmute_btn off"></a><span>静音</span></li>
-                <li><a href="#" id="transferBtn" class="zjie_btn"></a><span>转接</span></li>
-                <li><a href="#" id="consultationBtn" class="zixun_btn"></a><span>咨询</span></li>
-                <li><a href="#" id="conferenceBtn" class="hy_btn off"></a><span>会议</span></li>
-                <li><a href="#" id="hangUpBtn" class="gj_btn"></a><span>挂机</span></li>
-                <li><a href="#" id="resetStatus" class="qz_btn"></a><span>强置</span></li>
-                <li><a href="#" id="onLineBtn" class="sx_btn on"></a><span>签入</span></li>
+               <div>
+                    <li><a href="#" id="callBtn" class="wh_btn"><img src="./images/callBtn.png" alt="外呼图标"><span>外呼</span></a></li>
+                    <li class="separator-line"></li>
+                    <li id="holdBtnLi"><a href="#" id="holdBtn" class="bc_btn off"><img src="./images/holdBtn.png" alt="保持图标"><span>保 持</span></a></li>
+                    <li id="unHoldBtnLi"><a href="#" id="unHoldBtn" class="bc2_btn off"><img src="./images/holdBtn.png" alt="取消保持图标"><span>取消保持</span></a></li>
+                    <li><a href="#" id="unmuteBtn" class="unmute_btn off not-signed-in"><img src="./images/unmuteBtn.png" alt="静音图标"><span>静音</span></a></li>
+                    <li><a href="#" id="transferBtn" class="zjie_btn"><img src="./images/transferBtn.png" alt="转接图标"><span>转接</span></a></li>
+                    <li><a href="#" id="consultationBtn" class="zixun_btn"><img src="./images/consultationBtn.png" alt="咨询图标"><span>咨询</span></a></li>
+                    <li class="separator-line"></li>
+                    <li><a href="#" id="conferenceBtn" class="hy_btn off"><span>会议</span></a></li>
+                    <li><a href="#" id="hangUpBtn" class="gj_btn"><img src="./images/hangUpBtn.png" alt="挂机图标"><span>挂机</span></a></li>
+               </div>
+               <div>
+                    <li><a href="#" id="resetStatus" class="qz_btn off"><img src="./images/qz_btn.png" alt="强置图标"><span>强置</span></a></li>
+                    <li><a href="#" id="onLineBtn" class="sx_btn on"><img src="./images/sx_btn.png" alt="签入图标"><span>签入</span></a></li>
+               </div>
+                
                 <li><a href="#" id="answer_btn" onclick="answer()" class="answer_btn off"></a><span>接听</span></li>
               </ul>
             </div>
           </div>
         </td>
-        <td width="30%" style="display: none;">
+        <td width="30%" class="hidden-section">
           <div>
-            <div style="padding-left: 10px; ">
+            <div class="outbound-settings">
               &nbsp; &nbsp; 外呼设置：
               <label for="videoCallBtn"> <input type="radio" value="video" name="callType"
                   id="videoCallBtn" />视频外呼</label> &nbsp;&nbsp;
@@ -440,21 +571,21 @@ function init () {
         </td>
       </tr>
 
-      <tr id="conference_area" style="display: none">
+      <tr id="conference_area" class="hidden-section">
 
-        <td colspan="2" style="padding-left: 130px; padding-top: 30px;">
+        <td colspan="2" class="conference-area">
           <div>
             <div>
-              <div id="conference_start" style="display: block">
+              <div id="conference_start" class="conference-controls">
                 <!-- 会议布局: &nbsp; -->
-                <select id="conf_layout" name="conf_layout" style="display: none">
+                <select id="conf_layout" name="conf_layout" class="hidden-section">
                   <option value="2x2">2x2</option>
                   <option value="3x3">3x3</option>
                   <option value="1up_top_left+3">一主三从</option>
                 </select>
                 &nbsp;
                 <!-- 画布尺寸: -->
-                <select id="conf_template" name="conf_template" style="display: none">
+                <select id="conf_template" name="conf_template" class="hidden-section">
                   <option value="480p" selected="selected">480x640</option>
                   <option value="720p">720x1080</option>
                   <option value="default">default</option>
@@ -468,46 +599,44 @@ function init () {
                 <input type="hidden" value="audio" id="conf_call_type" name="conf_call_type" />
                 &nbsp;
                 <input type="button" name="startConference" id="startConference"
-                  onclick="conferenceStartBtnUI('')" style="width: 70px;" value="启动会议">
+                  onclick="conferenceStartBtnUI('')" class="conference-button" value="启动会议">
                 &nbsp;
                 <input type="button" name="endConference" id="endConference" onclick="_phoneBar.conferenceEnd()"
-                  disabled="disabled" style="width: 70px;" value="结束会议">
+                  disabled="disabled" class="conference-button" value="结束会议">
               </div>
 
-              <div style="width: 100%;"> &nbsp; </div>
+              <div class="conference-spacer"> &nbsp; </div>
 
-              <div id="conference_member_list" style="display: none">
+              <div id="conference_member_list" class="conference-member-list hidden-section">
                 <ul>
                   <li id="conference_header">
-                    <span class="conf_name"> <input id="member_name" name="member_name" placeholder="姓名"
-                        style="width: 60px;" /> </span> &nbsp;
-                    <span class="conf_phone"> <input id="member_phone" name="member_phone" placeholder="手机号"
-                        style="width: 110px;" /> </span> &nbsp;
+                    <span class="conf_name"> <input id="member_name" name="member_name" placeholder="姓名" /> </span> &nbsp;
+                    <span class="conf_phone"> <input id="member_phone" name="member_phone" placeholder="手机号" /> </span> &nbsp;
                     <span class="conf_call_type">
-                      <select id="member_call_type" name="member_call_type" style="display: none">
+                      <select id="member_call_type" name="member_call_type" class="hidden-section">
                         <option value="video">视频</option>
                         <option value="audio" selected>音频</option>
                       </select>
                     </span>
-                    <span class="conf_video_level" style="display: none">
+                    <span class="conf_video_level hidden-section">
                       <select id="member_video_level" name="member_video_level">
                       </select>
                     </span>
 
                     <span class="conf_name">
                       <input type="button" name="addConfMember" id="addConfMember"
-                        onclick="_phoneBar.conferenceAddMemberBtnUI(0)" style="width: 70px;" value="加入会议">
+                        onclick="_phoneBar.conferenceAddMemberBtnUI(0)" class="conference-button" value="加入会议">
                     </span>
                   </li>
 
                   <!-- 会议成员展示模版html  -->
-                  <li id="conf_member_template" style="display: none;">
+                  <li id="conf_member_template" class="hidden-section">
                     <span class="conf_name">{member_name}</span>
                     <span class="conf_phone">{member_phone}</span>
                     <span class="conf_mute"><a href="javascript:void(0)"
                         onclick="_phoneBar.conferenceMuteMember('{member_phone}')"><img alt="禁言该成员。"
                           src="images/mute.jpg" width="15" height="17" /> </a> </span>
-                    <span class="conf_vmute" style="display: none"><a href="javascript:void(0)"
+                    <span class="conf_vmute hidden-section"><a href="javascript:void(0)"
                         onclick="_phoneBar.conferenceVMuteMember('{member_phone}')"><img alt="关闭该成员的视频。"
                           src="images/video.jpg" /> </a></span>
                     <span class="conf_remove"><a href="javascript:void(0)"
@@ -530,49 +659,53 @@ function init () {
 
       </tr>
 
-      <tr id="transfer_area" width="100%" style="display: none">
+      <tr id="transfer_area" width="100%" class="hidden-section">
 
-        <td colspan="2" width="100%" style="padding-left: 140px; padding-top: 30px;">
+        <td colspan="2" width="100%" class="transfer-area">
+          <div class="transfer-header">
+            <h5 class="modal-title">转接/咨询操作</h5>
+            <button type="button" class="btn-close" onclick="document.getElementById('transfer_area').style.display='none';"></button>
+          </div>
           <table width="100%">
-            <tr>
-              <td width="90">业务组 </td>
-              <td width="90">坐席成员</td>
-              <td>&nbsp; </td>
-            </tr>
-            <tr>
-              <td>
-                <select size="10" id="transfer_to_groupIds" name="transfer_to_groupIds">
-                  <option value="">请选择</option>
-                </select>
-              </td>
-
-              <td>
-                <select size="10" id="transfer_to_member" name="transfer_to_member">
-                  <option value="">请选择</option>
-                </select>
-              </td>
-              <td valign="middle">
-
-
-                &nbsp;&nbsp; <input type="text" name="externalPhoneNumber" id="externalPhoneNumber" placeholder="电话号码"
-                  title="可以把当前通话转接到外线号码上。 如果该文本框留空，则忽略处理。" class="tel_txt" />
-                <br /> <br />
-
-                &nbsp;&nbsp; <input type="button" name="doTransferBtn" id="doTransferBtn"
-                  onclick="transferBtnClickUI()" style="width: 70px;" value="转接电话" title="把当前电话转接给他/她处理。" />
-                &nbsp;
-
-                &nbsp;&nbsp; <input type="button" name="stopCallWait" id="stopCallWait"
-                  onclick="stopCallWaitBtnClickUI()" style="width: 70px;" value="接回客户"
-                  title="在咨询失败的情况下使用该按钮，接回处于等待中的电话。" /> &nbsp;
-
-                &nbsp;&nbsp; <input type="button" name="transferCallWait" id="transferCallWait"
-                  onclick="transferCallWaitBtnClickUI()" style="width: 70px;" value="转接客户"
-                  title="在咨询成功的情况下使用该按钮，把电话转接给专家坐席。" /> &nbsp;
-
-                <input type="button" name="doConsultationBtn" id="doConsultationBtn"
-                  onclick="consultationBtnClickUI()" style="width: 70px;" value="拨号咨询" title="" />
-
+            <tbody style="border:1px solid #E2E5E9;">
+              <tr class="transfer-titles">
+                <td width="90">业务组 </td>
+                <td width="90">坐席成员</td>
+              </tr>
+              <tr>
+                <td style="padding: 0 !important;">
+                  <select size="10" id="transfer_to_groupIds" name="transfer_to_groupIds">
+                    <option value="">请选择</option>
+                  </select>
+                </td>
+                <td style="padding: 0 !important;">
+                  <select size="10" id="transfer_to_member" name="transfer_to_member">
+                    <option value="">请选择</option>
+                  </select>
+                </td>
+              </tr>
+            </tbody>
+            <tr class="transfer-controls">
+              <td colspan="2" style="padding: 20px; text-align: center;">
+                <div style="margin-bottom: 15px;margin-top:10px;">
+                  <input type="text" name="externalPhoneNumber" id="externalPhoneNumber" placeholder="电话号码"
+                    title="可以把当前通话转接到外线号码上。 如果该文本框留空，则忽略处理。" />
+                </div>
+                <div style="display: flex; gap: 10px; justify-content: center; flex-wrap: wrap;">
+                  <input type="button" name="doTransferBtn" id="doTransferBtn"
+                    onclick="transferBtnClickUI()" class="transfer-button" value="转接电话" title="把当前电话转接给他/她处理。" />
+                  
+                  <input type="button" name="stopCallWait" id="stopCallWait"
+                    onclick="stopCallWaitBtnClickUI()" class="transfer-button" value="接回客户"
+                    title="在咨询失败的情况下使用该按钮，接回处于等待中的电话。" />
+                  
+                  <input type="button" name="transferCallWait" id="transferCallWait"
+                    onclick="transferCallWaitBtnClickUI()" class="transfer-button" value="转接客户"
+                    title="在咨询成功的情况下使用该按钮，把电话转接给专家坐席。" />
+                  
+                  <input type="button" name="doConsultationBtn" id="doConsultationBtn"
+                    onclick="consultationBtnClickUI()" class="transfer-button" value="拨号咨询" title="" />
+                </div>
               </td>
             </tr>
           </table>
@@ -646,6 +779,15 @@ function init () {
     jsSipUAInstance.unregister();
     // 停止签入时间计时器
     stopLoginTimer();
+    // 签出后重新添加default-status-free类名
+    $('#setFree').addClass('default-status-free');
+    // 签出后重新添加置忙按钮的默认类名
+    $('#setBusy').addClass('default-status-busy');
+    // 签出后为静音按钮添加未签入类名并设置图标
+    $('#unmuteBtn').addClass('not-signed-in');
+    $('#unmuteBtn img').attr('src', './images/unmuteBtn.png');
+    // 签出后为强置按钮添加off类名
+    $('#resetStatus').addClass('off');
   });
 
   _phoneBar.on(ccPhoneBarSocket.eventList.OUTBOUND_START, function (msg) {
@@ -666,6 +808,15 @@ function init () {
   //websocket连接成功
   _phoneBar.on(ccPhoneBarSocket.eventListWithTextInfo.ws_connected.code, function (msg) {
     _phoneBar.updatePhoneBar(msg, ccPhoneBarSocket.eventListWithTextInfo.ws_connected.code);
+    // 签入成功后移除default-status-free类名
+    $('#setFree').removeClass('default-status-free');
+    // 签入成功后移除置忙按钮的默认类名
+    $('#setBusy').removeClass('default-status-busy');
+    // 签入成功后移除静音按钮的未签入类名
+    $('#unmuteBtn').removeClass('not-signed-in');
+     $('#unmuteBtn img').attr('src', './images/unmuteVoice.png');
+    // 签入成功后移除强置按钮的off类名
+    $('#resetStatus').removeClass('off');
   });
 
   _phoneBar.on(ccPhoneBarSocket.eventListWithTextInfo.callee_ringing.code, function (msg) {
@@ -675,6 +826,8 @@ function init () {
   _phoneBar.on(ccPhoneBarSocket.eventListWithTextInfo.caller_answered.code, function (msg) {
     console.log(msg, "主叫接通");
     $("#agentStatus").text("通话中");
+    $('#setFree').addClass('default-status-free');
+    $('#setBusy').addClass('default-status-busy');
     _phoneBar.updatePhoneBar(msg, ccPhoneBarSocket.eventListWithTextInfo.caller_answered.code);
   });
   _phoneBar.on(ccPhoneBarSocket.eventListWithTextInfo.caller_hangup.code, function (msg) {
@@ -682,6 +835,8 @@ function init () {
     $("#agentStatus").text("通话结束");
     $("#reInviteVideoBtn").attr("disabled", "disabled");
     $("#sendVideoFileBtn").attr("disabled", "disabled");
+    $('#setFree').removeClass('default-status-free');
+    $('#setBusy').removeClass('default-status-busy');
     $("#transfer_area").hide();
     $("#answer_btn").removeClass("on").addClass("off");
     _phoneBar.updatePhoneBar(msg, ccPhoneBarSocket.eventListWithTextInfo.caller_hangup.code);
@@ -889,15 +1044,15 @@ function init () {
         '<div class="modal-dialog">' +
         '<div class="modal-content">' +
         '<div class="modal-header">' +
-        '<h5 class="modal-title">来电提醒</h5>' +
+        '<p class="modal-title">来电提醒</p>' +
         '</div>' +
-        '<div class="modal-body" style="text-align: center; padding: 30px 20px;min-height: 100px;">' +
+        '<div class="modal-body" style="text-align: center; padding: 30px 20px;min-height: 50px;">' +
         '<div style="font-size: 18px; margin-bottom: 10px;">来电号码</div>' +
-        '<div style="font-size: 24px; font-weight: bold; color: #4a90e2; margin-bottom: 30px;">' + caller + '</div>' +
+        '<div style="font-size: 24px; font-weight: bold; color: #5178FF;">' + caller + '</div>' +
         '</div>' +
         '<div class="modal-footer" style="text-align: center; padding: 20px;">' +
-        '<button type="button" class="btn btn-success" id="answerCallBtn" style="margin-right: 20px; padding: 10px 30px; font-size: 16px;">接听</button>' +
-        '<button type="button" class="btn btn-danger" id="rejectCallBtn" style="padding: 10px 30px; font-size: 16px;">取消</button>' +
+        '<button type="button" class="btn btn-success" id="answerCallBtn" style="padding:0 15px;">接听</button>' +
+        '<button type="button" class="btn btn-danger" id="rejectCallBtn" style="padding:0 15px;">取消</button>' +
         '</div>' +
         '</div>' +
         '</div>' +
@@ -1013,6 +1168,11 @@ function init () {
   // 以下代码设置加密的参数： loginToken、extPassword、gatewayList；   在本页面的demo演示中需要调用服务器端接口获取密文字符串;
   // 注意：此部分逻辑已移至签入确认按钮中执行
 
+  // 页面加载时为转接按钮添加默认样式
+  $(document).ready(function() {
+    $('.zjie_btn').addClass('default-zjie-btn');
+  });
+
   // 添加签入按钮点击事件 - 显示签入信息弹窗
   $(document).on('click', '#onLineBtn', function(e) {
     e.preventDefault();
@@ -1039,6 +1199,10 @@ function init () {
             if (typeof _phoneEncryptPassword !== 'undefined') {
                 _phoneEncryptPassword = undefined;
             }
+            // 添加转接按钮的默认样式
+            $('.zjie_btn').addClass('default-zjie-btn');
+            // 签出后重新添加置忙按钮的默认类名
+            $('#setBusy').addClass('default-status-busy');
             console.log('签出成功，已清空表单和配置');
             return; // 签出后直接返回，不显示弹窗
         } else {
@@ -1064,7 +1228,7 @@ function init () {
       '<div class="modal-dialog">' +
       '<div class="modal-content">' +
       '<div class="modal-header">' +
-      '<h5 class="modal-title">座席签入</h5>' +
+      '<p class="modal-title">座席签入</p>' +
       '<button type="button" class="btn-close" onclick="ModalUtil.hide(\'signinModal\')"></button>' +
       '</div>' +
       '<div class="modal-body">' +
@@ -1084,6 +1248,7 @@ function init () {
       '<div class="modal-footer">' +
       '<button type="button" class="btn btn-secondary" onclick="ModalUtil.hide(\'signinModal\')">取消</button>' +
       '<button type="button" class="btn btn-primary" id="confirmSigninBtn">确认签入</button>' +
+      '</div>' +
       '</div>' +
       '</div>' +
       '</div>' +
@@ -1139,6 +1304,9 @@ function init () {
       var checkInterval = setInterval(function() {
         checkCount++;
         
+        // 移除转接按钮的默认样式
+        $('.zjie_btn').removeClass('default-zjie-btn');
+        
         // 检查必需的全局变量是否都已加载
         var tokenLoaded = typeof(loginToken) !== "undefined";
         var passwordLoaded = typeof(_phoneEncryptPassword) !== "undefined";
@@ -1163,7 +1331,7 @@ function init () {
           }
 
           // 配置 gatewayList
-          _callConfig["gatewayList"] = [
+         _callConfig["gatewayList"] = [
             {
               "uuid": "1",
               "updateTime": 1758862985998,
@@ -1176,10 +1344,9 @@ function init () {
               "audioCodec": "pcma"
             }
         ];
-
           // 初始化电话工具条
           _phoneBar.initConfig(_callConfig);
-          console.log('✅ 电话工具条配置初始化完成');
+          console.log(_callConfig,'✅ 电话工具条配置初始化完成');
 
           var _phoneConfig = {
               'extnum': extnumValue,		//分机号
@@ -1228,10 +1395,10 @@ function init () {
     var modalHtml =
       '<div class="modal-overlay" id="consultationModal-overlay"></div>' +
       '<div class="modal" id="consultationModal">' +
-      '<div class="modal-dialog modal-dialog-lg">' +
+      '<div class="modal-dialog modal-dialog-lg transfer-modal">' +
       '<div class="modal-content">' +
       '<div class="modal-header">' +
-      '<h5 class="modal-title">转接/咨询操作</h5>' +
+      '<p class="modal-title">转接/咨询操作</p>' +
       '<button type="button" class="btn-close" onclick="ModalUtil.hide(\'consultationModal\')"></button>' +
       '</div>' +
       '<div class="modal-body" id="consultationModalBody">' +
@@ -1519,9 +1686,11 @@ function transferBtnClickUI() {
 $(document).on('click', '#unmuteBtn', function(e) {
   if ($(this).hasClass('off')) {
     $("#unmuteBtn").removeClass("off").addClass("on");
+    $("#unmuteBtn img").attr("src", "./images/unmuteBtn.png");
     jsSipUAInstance.mute();
   } else {
     $("#unmuteBtn").removeClass("on").addClass("off");
+    $("#unmuteBtn img").attr("src", "./images/unmuteVoice.png");
     jsSipUAInstance.unmute();
   }
 })
