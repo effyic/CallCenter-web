@@ -307,7 +307,7 @@ function jsSipUA() {
             return false;
         }
 
-        websocketUrl = 'ws://' + phoneConfig["fsHost"]  
+        websocketUrl = 'wss://' + phoneConfig["fsHost"]  
                      + ':' + phoneConfig["fsPort"] ;
         host = phoneConfig["fsHost"] ;
         user = phoneConfig["extnum"];

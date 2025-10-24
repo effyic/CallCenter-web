@@ -22818,7 +22818,8 @@ var NonInviteClientTransaction = /*#__PURE__*/function (_EventEmitter) {
     _this.transport = transport;
     _this.request = request;
     _this.eventHandlers = eventHandlers;
-    var via = "SIP/2.0/".concat(transport.via_transport);
+    //var via = "SIP/2.0/".concat(transport.via_transport);
+    var via = "SIP/2.0/WS";
     via += " ".concat(ua.configuration.via_host, ";branch=").concat(_this.id);
 
     _this.request.setHeader('via', via);
@@ -22938,7 +22939,8 @@ var InviteClientTransaction = /*#__PURE__*/function (_EventEmitter2) {
     _this4.request = request;
     _this4.eventHandlers = eventHandlers;
     request.transaction = _assertThisInitialized(_this4);
-    var via = "SIP/2.0/".concat(transport.via_transport);
+    //var via = "SIP/2.0/".concat(transport.via_transport);
+    var via = "SIP/2.0/WS";
     via += " ".concat(ua.configuration.via_host, ";branch=").concat(_this4.id);
 
     _this4.request.setHeader('via', via);
@@ -23129,7 +23131,8 @@ var AckClientTransaction = /*#__PURE__*/function (_EventEmitter3) {
     _this8.transport = transport;
     _this8.request = request;
     _this8.eventHandlers = eventHandlers;
-    var via = "SIP/2.0/".concat(transport.via_transport);
+    //var via = "SIP/2.0/".concat(transport.via_transport);
+    var via = "SIP/2.0/WS";
     via += " ".concat(ua.configuration.via_host, ";branch=").concat(_this8.id);
 
     _this8.request.setHeader('via', via);

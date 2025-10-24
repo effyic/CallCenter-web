@@ -211,7 +211,7 @@ function ccPhoneBarSocket() {
 		} 
  
 	    console.log("callConfig:", this.callConfig);
-	    wsuri = 'ws://' + this.callConfig.ipccServer +
+	    wsuri = 'wss://' + this.callConfig.ipccServer +
 	    			'/call-center/websocketServer?' +
 			'&loginToken=' + this.callConfig.loginToken;
 			 

@@ -11,15 +11,9 @@ RUN rm -rf /usr/share/nginx/html/*
 COPY . /usr/share/nginx/html/
 
 # 创建nginx配置文件
-RUN echo 'server {' > /etc/nginx/conf.d/default.conf && \
-    echo '    listen 80;' >> /etc/nginx/conf.d/default.conf && \
-    echo '    server_name localhost;' >> /etc/nginx/conf.d/default.conf && \
-    echo '    root /usr/share/nginx/html;' >> /etc/nginx/conf.d/default.conf && \
-    echo '    index phone-bar-ex.html index.html;' >> /etc/nginx/conf.d/default.conf && \
-    echo '    location / {' >> /etc/nginx/conf.d/default.conf && \
-    echo '        try_files $uri $uri/ /phone-bar-ex.html;' >> /etc/nginx/conf.d/default.conf && \
-    echo '    }' >> /etc/nginx/conf.d/default.conf && \
-    echo '}' >> /etc/nginx/conf.d/default.conf
+COPY default.conf /etc/nginx/conf.d/default.conf
+COPY server.crt /etc/nginx/ssl/server.crt
+COPY server.key /etc/nginx/ssl/server.key
 
 # 暴露80端口
 EXPOSE 80

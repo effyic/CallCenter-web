@@ -1,6 +1,6 @@
 // 修改2:弹窗中填入签入信息包括密码，目前只有点击签入按钮才调用
 var _phoneBar = new ccPhoneBarSocket();
-var scriptServer = "172.16.1.111";
+var scriptServer = "outbound.skiffchat.com";
 var extnum = ''; //分机号
 var opnum = ''; //工号
 var gatewayList = [
@@ -124,7 +124,7 @@ function resetExtNumAndOpNum (ext, op, groupId) {
 function loadLoginToken () {
 
   // 目前已经把 projectId 和 groupId合并为同一个参数;
-  var getTokenUrl = "http://" + scriptServer + ":8880/call-center/create-token";
+  var getTokenUrl = "https://" + scriptServer + "/call-center/create-token";
   var destUrl = getTokenUrl + "?extnum=" + extnum + "&opnum=" + opnum
     + "&groupId=" + groupId + "&skillLevel=" + skillLevel
     ;
@@ -138,7 +138,7 @@ function loadLoginToken () {
 // new3
 function loadExtPassword (extPassword) {
   // extPassword 参数从弹窗中获取
-  var url = "http://" + scriptServer + ":8880/call-center/create-ext-password?pass=" + extPassword;
+  var url = "https://" + scriptServer + "/call-center/create-ext-password?pass=" + extPassword;
   var script = document.createElement("script");
   script.type = "text/javascript";
   script.src = url;
@@ -148,7 +148,7 @@ function loadExtPassword (extPassword) {
 
 // 修改5:可忽略 接口返回错误
 function loadGatewayList () {
-  var url = "http://" + scriptServer + ":8880/call-center/create-gateway-list";
+  var url = "https://" + scriptServer + "/call-center/create-gateway-list";
   var script = document.createElement("script");
   script.type = "text/javascript";
   script.src = url;
@@ -1007,7 +1007,7 @@ function init () {
     'loginToken': '',
 
     // 电话工具条服务器端的地址; 端口默认是1081
-    'ipccServer': scriptServer + ':1081',
+    'ipccServer': scriptServer + ':38701',
 
     // 网关列表， 默认需要加密后在在通过客户端向呼叫系统传递;
     // 注意在注册模式下，网关参数更改之后，必须重启语音服务 [docker restart freeswitch] 方可生效，不支持热更新;
@@ -1195,7 +1195,7 @@ function init () {
               'extnum': extnumValue,		//分机号
               'password': passwordValue,	//分机密码  
             'fsHost': scriptServer,//电话服务器主机host地址，必须是 "域名格式的"，不能是ip地址
-              'fsPort': '5066',		//电话服务器端口，必须是数字
+              'fsPort': '38700',		//电话服务器端口，必须是数字
               'audioHandler': document.getElementById("audioHandler"),
           };
 
@@ -1690,7 +1690,7 @@ function autoCallInit() {
       _callConfig = {
         'useDefaultUi': false,
         'loginToken': loginToken,
-        'ipccServer': scriptServer + ':1081',
+        'ipccServer': scriptServer + ':38701',
         'gatewayList': gatewayList,
         'gatewayEncrypted': false,
         'extPassword': _phoneEncryptPassword
@@ -1710,7 +1710,7 @@ function autoCallInit() {
         extnum,
         password: pass,
         fsHost: scriptServer,
-        fsPort: '5066',
+        fsPort: '38700',
         audioHandler: document.getElementById("audioHandler")
       });
       
