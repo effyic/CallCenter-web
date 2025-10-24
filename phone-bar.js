@@ -1096,6 +1096,7 @@ function init () {
   jsSipUAInstance.on('registrationFailed', function (msg) {
       console.log(msg, 'registrationFailed');
       _phoneBar.disconnect();
+      $("#agentStatus").html("未签入");
       // 停止签入时间计时器
       stopLoginTimer();
   });
