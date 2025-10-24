@@ -1,0 +1,488 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>H5录音播放器</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Arial', sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
+        }
+
+        .recorder-container {
+            background: rgba(255, 255, 255, 0.95);
+            border-radius: 20px;
+            padding: 40px;
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.1);
+            text-align: center;
+            max-width: 500px;
+            width: 100%;
+            backdrop-filter: blur(10px);
+        }
+
+        .title {
+            color: #333;
+            font-size: 28px;
+            margin-bottom: 30px;
+            font-weight: 600;
+        }
+
+        .status {
+            font-size: 18px;
+            margin-bottom: 30px;
+            padding: 15px;
+            border-radius: 10px;
+            font-weight: 500;
+            transition: all 0.3s ease;
+        }
+
+        .status.ready {
+            background: #e8f5e8;
+            color: #2e7d32;
+        }
+
+        .status.recording {
+            background: #ffebee;
+            color: #c62828;
+            animation: pulse 1.5s infinite;
+        }
+
+        .status.stopped {
+            background: #e3f2fd;
+            color: #1565c0;
+        }
+
+        @keyframes pulse {
+            0% { opacity: 1; }
+            50% { opacity: 0.7; }
+            100% { opacity: 1; }
+        }
+
+        .controls {
+            display: flex;
+            gap: 20px;
+            justify-content: center;
+            margin-bottom: 30px;
+            flex-wrap: wrap;
+        }
+
+        .btn {
+            padding: 15px 30px;
+            border: none;
+            border-radius: 50px;
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            min-width: 120px;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .btn:before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255,255,255,0.3), transparent);
+            transition: left 0.5s;
+        }
+
+        .btn:hover:before {
+            left: 100%;
+        }
+
+        .btn-record {
+            background: linear-gradient(45deg, #ff4757, #ff3742);
+            color: white;
+        }
+
+        .btn-record:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 20px rgba(255, 71, 87, 0.3);
+        }
+
+        .btn-record:disabled {
+            background: #ccc;
+            cursor: not-allowed;
+            transform: none;
+            box-shadow: none;
+        }
+
+        .btn-stop {
+            background: linear-gradient(45deg, #ffa502, #ff9500);
+            color: white;
+        }
+
+        .btn-stop:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 20px rgba(255, 165, 2, 0.3);
+        }
+
+        .btn-stop:disabled {
+            background: #ccc;
+            cursor: not-allowed;
+            transform: none;
+            box-shadow: none;
+        }
+
+        .btn-play {
+            background: linear-gradient(45deg, #2ed573, #1dd1a1);
+            color: white;
+        }
+
+        .btn-play:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 20px rgba(46, 213, 115, 0.3);
+        }
+
+        .btn-play:disabled {
+            background: #ccc;
+            cursor: not-allowed;
+            transform: none;
+            box-shadow: none;
+        }
+
+        .audio-info {
+            background: #f8f9fa;
+            border-radius: 10px;
+            padding: 20px;
+            margin-top: 20px;
+        }
+
+        .duration {
+            font-size: 16px;
+            color: #666;
+            margin-bottom: 10px;
+        }
+
+        .waveform {
+            height: 60px;
+            background: #e9ecef;
+            border-radius: 30px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 15px 0;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .wave-bar {
+            width: 3px;
+            background: #667eea;
+            margin: 0 1px;
+            border-radius: 2px;
+            transition: height 0.1s ease;
+        }
+
+        .error-message {
+            background: #ffebee;
+            color: #c62828;
+            padding: 15px;
+            border-radius: 10px;
+            margin-top: 20px;
+            display: none;
+        }
+
+        .permission-info {
+            background: #fff3e0;
+            color: #ef6c00;
+            padding: 15px;
+            border-radius: 10px;
+            margin-bottom: 20px;
+            font-size: 14px;
+        }
+
+        @media (max-width: 600px) {
+            .recorder-container {
+                padding: 20px;
+            }
+            
+            .controls {
+                flex-direction: column;
+                align-items: center;
+            }
+            
+            .btn {
+                width: 100%;
+                max-width: 200px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="recorder-container">
+        <h1 class="title">🎙️ H5录音播放器</h1>
+        
+        <div class="permission-info">
+            <strong>提示：</strong>首次使用需要允许浏览器访问麦克风权限
+        </div>
+
+        <div id="status" class="status ready">
+            准备就绪，点击开始录音
+        </div>
+
+        <div class="controls">
+            <button id="recordBtn" class="btn btn-record">🔴 开始录音</button>
+            <button id="stopBtn" class="btn btn-stop" disabled>⏹️ 停止录音</button>
+            <button id="playBtn" class="btn btn-play" disabled>▶️ 播放录音</button>
+        </div>
+
+        <div class="audio-info" id="audioInfo" style="display: none;">
+            <div class="duration" id="duration">录音时长: 00:00</div>
+            <div class="waveform" id="waveform">
+                <span style="color: #999;">录音波形显示区域</span>
+            </div>
+        </div>
+
+        <div class="error-message" id="errorMessage"></div>
+
+        <audio id="audioPlayer" style="display: none;" controls></audio>
+    </div>
+
+    <script>
+        class AudioRecorder {
+            constructor() {
+                this.mediaRecorder = null;
+                this.audioChunks = [];
+                this.audioBlob = null;
+                this.audioUrl = null;
+                this.stream = null;
+                this.isRecording = false;
+                this.startTime = null;
+                this.timerInterval = null;
+                
+                this.initElements();
+                this.bindEvents();
+                this.checkBrowserSupport();
+            }
+
+            initElements() {
+                this.recordBtn = document.getElementById('recordBtn');
+                this.stopBtn = document.getElementById('stopBtn');
+                this.playBtn = document.getElementById('playBtn');
+                this.status = document.getElementById('status');
+                this.audioInfo = document.getElementById('audioInfo');
+                this.duration = document.getElementById('duration');
+                this.waveform = document.getElementById('waveform');
+                this.errorMessage = document.getElementById('errorMessage');
+                this.audioPlayer = document.getElementById('audioPlayer');
+            }
+
+            bindEvents() {
+                this.recordBtn.addEventListener('click', () => this.startRecording());
+                this.stopBtn.addEventListener('click', () => this.stopRecording());
+                this.playBtn.addEventListener('click', () => this.playRecording());
+            }
+
+            checkBrowserSupport() {
+                if (!navigator.mediaDevices || !navigator.mediaDevices.getUserMedia) {
+                    this.showError('您的浏览器不支持录音功能，请使用现代浏览器（Chrome、Firefox、Safari等）');
+                    return false;
+                }
+
+                if (!window.MediaRecorder) {
+                    this.showError('您的浏览器不支持MediaRecorder API');
+                    return false;
+                }
+
+                return true;
+            }
+
+            async startRecording() {
+                try {
+                    this.hideError();
+                    
+                    // 请求麦克风权限
+                    this.stream = await navigator.mediaDevices.getUserMedia({ 
+                        audio: {
+                            echoCancellation: true,
+                            noiseSuppression: true,
+                            sampleRate: 44100
+                        } 
+                    });
+
+                    // 创建MediaRecorder实例
+                    this.mediaRecorder = new MediaRecorder(this.stream, {
+                        mimeType: 'audio/webm;codecs=opus'
+                    });
+
+                    this.audioChunks = [];
+                    
+                    // 监听数据可用事件
+                    this.mediaRecorder.ondataavailable = (event) => {
+                        if (event.data.size > 0) {
+                            this.audioChunks.push(event.data);
+                        }
+                    };
+
+                    // 监听录音停止事件
+                    this.mediaRecorder.onstop = () => {
+                        this.createAudioBlob();
+                    };
+
+                    // 开始录音
+                    this.mediaRecorder.start(100); // 每100ms收集一次数据
+                    this.isRecording = true;
+                    this.startTime = Date.now();
+                    
+                    this.updateUI('recording');
+                    this.startTimer();
+                    this.startWaveform();
+
+                } catch (error) {
+                    console.error('录音启动失败:', error);
+                    if (error.name === 'NotAllowedError') {
+                        this.showError('麦克风权限被拒绝，请在浏览器设置中允许访问麦克风');
+                    } else if (error.name === 'NotFoundError') {
+                        this.showError('未找到麦克风设备，请检查设备连接');
+                    } else {
+                        this.showError('录音启动失败: ' + error.message);
+                    }
+                }
+            }
+
+            stopRecording() {
+                if (this.mediaRecorder && this.isRecording) {
+                    this.mediaRecorder.stop();
+                    this.isRecording = false;
+                    
+                    // 停止音频流
+                    if (this.stream) {
+                        this.stream.getTracks().forEach(track => track.stop());
+                    }
+                    
+                    this.stopTimer();
+                    this.stopWaveform();
+                    this.updateUI('stopped');
+                }
+            }
+
+            createAudioBlob() {
+                this.audioBlob = new Blob(this.audioChunks, { type: 'audio/webm' });
+                this.audioUrl = URL.createObjectURL(this.audioBlob);
+                
+                // 设置音频播放器
+                this.audioPlayer.src = this.audioUrl;
+                
+                // 显示录音信息
+                this.audioInfo.style.display = 'block';
+                this.playBtn.disabled = false;
+                
+                console.log('录音完成，大小:', (this.audioBlob.size / 1024).toFixed(2) + 'KB');
+            }
+
+            playRecording() {
+                if (this.audioUrl) {
+                    this.audioPlayer.play();
+                    this.status.textContent = '正在播放录音...';
+                    this.status.className = 'status ready';
+                    
+                    this.audioPlayer.onended = () => {
+                        this.status.textContent = '播放完成';
+                    };
+                }
+            }
+
+            updateUI(state) {
+                switch (state) {
+                    case 'recording':
+                        this.recordBtn.disabled = true;
+                        this.stopBtn.disabled = false;
+                        this.playBtn.disabled = true;
+                        this.status.textContent = '正在录音中... 🔴';
+                        this.status.className = 'status recording';
+                        break;
+                    case 'stopped':
+                        this.recordBtn.disabled = false;
+                        this.stopBtn.disabled = true;
+                        this.status.textContent = '录音已停止，可以播放';
+                        this.status.className = 'status stopped';
+                        break;
+                    default:
+                        this.recordBtn.disabled = false;
+                        this.stopBtn.disabled = true;
+                        this.playBtn.disabled = true;
+                        this.status.textContent = '准备就绪，点击开始录音';
+                        this.status.className = 'status ready';
+                }
+            }
+
+            startTimer() {
+                this.timerInterval = setInterval(() => {
+                    if (this.startTime) {
+                        const elapsed = Date.now() - this.startTime;
+                        const seconds = Math.floor(elapsed / 1000);
+                        const minutes = Math.floor(seconds / 60);
+                        const remainingSeconds = seconds % 60;
+                        
+                        this.duration.textContent = `录音时长: ${minutes.toString().padStart(2, '0')}:${remainingSeconds.toString().padStart(2, '0')}`;
+                    }
+                }, 1000);
+            }
+
+            stopTimer() {
+                if (this.timerInterval) {
+                    clearInterval(this.timerInterval);
+                    this.timerInterval = null;
+                }
+            }
+
+            startWaveform() {
+                // 创建简单的波形动画
+                this.waveform.innerHTML = '';
+                for (let i = 0; i < 20; i++) {
+                    const bar = document.createElement('div');
+                    bar.className = 'wave-bar';
+                    bar.style.height = '10px';
+                    this.waveform.appendChild(bar);
+                }
+
+                this.waveformInterval = setInterval(() => {
+                    const bars = this.waveform.querySelectorAll('.wave-bar');
+                    bars.forEach(bar => {
+                        const height = Math.random() * 40 + 10;
+                        bar.style.height = height + 'px';
+                    });
+                }, 100);
+            }
+
+            stopWaveform() {
+                if (this.waveformInterval) {
+                    clearInterval(this.waveformInterval);
+                    this.waveformInterval = null;
+                }
+            }
+
+            showError(message) {
+                this.errorMessage.textContent = message;
+                this.errorMessage.style.display = 'block';
+            }
+
+            hideError() {
+                this.errorMessage.style.display = 'none';
+            }
+        }
+
+        // 初始化录音器
+        document.addEventListener('DOMContentLoaded', () => {
+            new AudioRecorder();
+        });
+    </script>
+</body>
+</html>
