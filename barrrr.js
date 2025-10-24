@@ -1624,7 +1624,7 @@ function autoCallInit() {
       <!-- 导航栏 -->
       <div class="phone-bar-nav">
         <button id="backBtn" class="back-btn">← 返回</button>
-        <h1 class="nav-title">呼叫中心html客户端工具条</h1>
+        <div class="nav-title">呼叫中心html客户端工具条</div>
         <div style="width: 60px;"></div> <!-- 占位元素，保持标题居中 -->
       </div>
       
