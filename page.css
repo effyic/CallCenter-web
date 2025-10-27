@@ -547,7 +547,7 @@ input:checked + .slider:before {
     font-size: 13px;
 }
 
-.zjie_btn.off { /* 转接 - 默认和off状态 */
+.zjie_btn,.zjie_btn.off { /* 转接 - 默认和off状态 */
     width: 72px;
     height: 32px;
     border-radius: 20px;
@@ -566,7 +566,7 @@ input:checked + .slider:before {
     background-color: #B2B6C1 !important;
 }
 
-.zjie_btn,.zjie_btn.on { /* 转接 - on状态 */
+.zjie_btn.on { /* 转接 - on状态 */
     width: 72px;
     height: 32px;
     border-radius: 20px;
