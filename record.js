@@ -224,8 +224,14 @@ function getUuidFromUrl() {
     return urlParams.get('uuid'); 
 }
 
+// 获取当前地址
+function getCurrentHost() {
+    return `${window.location.protocol}//${window.location.host}`;
+}
+
 async function getCallType(uuid) {
-        const response = await fetch(`http://172.16.1.17:8902/aicall/api/calltype/uuid?uuid=${uuid}`, {
+        const currentHost = getCurrentHost();
+        const response = await fetch(`${currentHost}/aicall/api/calltype/uuid?uuid=${uuid}`, {
             method: 'GET',
             headers: {
                 'Accept': 'application/json'
@@ -250,7 +256,8 @@ async function queryRecords() {
         const callType = await getCallType(uuid);
         
         // 调用接口
-        const response = await fetch(`http://172.16.1.17:8902/aicall/api/records/list`, {
+        const currentHost = getCurrentHost();
+        const response = await fetch(`${currentHost}/aicall/api/records/list`, {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
@@ -291,7 +298,7 @@ async function queryRecords() {
 
 // 显示通话记录的函数
 function displayRecords(data, container) {
-    const ip = 'http://172.16.1.17:8902';
+    const ip = getCurrentHost();
     const records = data.rows;
     
     let audioHTML = '';
@@ -424,6 +431,7 @@ if (typeof module !== 'undefined' && module.exports) {
         formatDateTime,
         getCallStatusText,
         getUuidFromUrl,
+        getCurrentHost,
         getCallType,
         initRecordPage
     };
