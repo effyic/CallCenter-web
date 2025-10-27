@@ -547,7 +547,7 @@ input:checked + .slider:before {
     font-size: 13px;
 }
 
-.zjie_btn,.zjie_btn.off { /* 转接 - 默认和off状态 */
+.zjie_btn { /* 转接 - 默认状态 */
     width: 72px;
     height: 32px;
     border-radius: 20px;
@@ -560,6 +560,25 @@ input:checked + .slider:before {
     text-decoration: none;
     color: #122C4B;
     font-size: 13px;
+    pointer-events: none; /* 禁止点击 */
+    cursor: not-allowed; /* 显示禁用光标 */
+}
+
+.zjie_btn.off { /* 转接 - off状态 */
+    width: 72px;
+    height: 32px;
+    border-radius: 20px;
+    background-color: #B2B6C1;
+    border: none;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 4px;
+    text-decoration: none;
+    color: #122C4B;
+    font-size: 13px;
+    pointer-events: none; /* 禁止点击 */
+    cursor: not-allowed; /* 显示禁用光标 */
 }
 
 .default-zjie-btn {
@@ -579,6 +598,8 @@ input:checked + .slider:before {
     text-decoration: none;
     color: #122C4B;
     font-size: 13px;
+    pointer-events: auto; /* 允许点击 */
+    cursor: pointer; /* 显示可点击光标 */
 }
 
 .zjie_btn img, .zjie_btn.on img, .zjie_btn.off img {
