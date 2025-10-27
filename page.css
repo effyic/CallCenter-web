@@ -295,7 +295,7 @@ input:checked + .slider:before {
 .tel_txt {
     background: rgba(255, 255, 255);
     border-radius: 16px;
-    color: white;
+    color: #000;
     font-size: 13px;
     width: 240px;
     height:32px;
