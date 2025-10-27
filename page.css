@@ -851,10 +851,10 @@ input:checked + .slider:before {
 
 .conference-controls select {
     background: rgba(255, 255, 255, 0.15);
-    border: 1px solid rgba(255, 255, 255, 0.3);
+    border: 1px solid rgba(0, 0, 0, 0.3);
     border-radius: 6px;
     padding: 8px 12px;
-    color: white;
+    color: #000;
     margin-right: 10px;
 }
 
@@ -1141,7 +1141,7 @@ input:checked + .slider:before {
 
 .modal-body {
     padding: 30px;
-    background: white;
+    background: #666666;
 }
 
 .modal-footer {
