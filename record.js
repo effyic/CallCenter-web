@@ -219,13 +219,11 @@ function createRecordHTML() {
     return html;
 }
 
-// 从地址栏获取UUID参数
 function getUuidFromUrl() {
     const urlParams = new URLSearchParams(window.location.search);
-    return urlParams.get('uuid'); // 默认值
+    return urlParams.get('uuid'); 
 }
 
-// 获取callType
 async function getCallType(uuid) {
         const response = await fetch(`http://172.16.1.17:8902/aicall/api/calltype/uuid?uuid=${uuid}`, {
             method: 'GET',
@@ -245,10 +243,7 @@ async function getCallType(uuid) {
 // 查询通话记录的函数
 async function queryRecords() {
     const message = document.getElementById('message');
-    const results = document.getElementById('results');
     const recordsContainer = document.getElementById('recordsContainer');
-    
-    // 获取UUID
     const uuid = getUuidFromUrl();
     
     try {
@@ -273,16 +268,9 @@ async function queryRecords() {
         
         const data = await response.json();
         const record = data.rows && data.rows[0]?.dialogue;
-        console.log(record,'接口返回数据');
-
-        
-        // 显示结果
         displayRecords(data, recordsContainer);
-        
-        // 显示AI对话记录
         const dialogueContent = document.getElementById('dialogueContent');
         if (record && dialogueContent) {
-            // 如果record是字符串，尝试解析为JSON
             let dialogueData = record;
             if (typeof record === 'string') {
                 try {
@@ -303,7 +291,6 @@ async function queryRecords() {
 
 // 显示通话记录的函数
 function displayRecords(data, container) {
-    console.log(data,'通话记录函数')
     const ip = 'http://172.16.1.17:8902';
     const records = data.rows;
     
