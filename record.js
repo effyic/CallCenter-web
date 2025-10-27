@@ -14,7 +14,8 @@ function createRecordHTML() {
                 background-color: #f5f5f5;
             }
             .container {
-                max-width: 1200px;
+                // max-width: 1200px;
+                width:600px;
                 margin: 0 auto;
                 background-color: white;
                 padding: 20px;
@@ -141,7 +142,7 @@ function createRecordHTML() {
                 margin-bottom:12px;
             }
             .message.assistant .message-content {
-                max-width: 70%;
+                max-width: 500px;
                 padding:10px 14px;
                 box-sizing:border-box;
                 color: #333;
