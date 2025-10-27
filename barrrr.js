@@ -95,6 +95,8 @@ var skillLevel = 9; //技能等级
 var groupId = 1; // 业务组id
 var pass = ''; // 密码
 var phone = ''; // 要外呼的号码
+var tokenId = ''; // 签入token
+var workTicketId = ''; // 工单id
 
 //  new1.自动从地址栏获取参数
 if (window.location.href.toString().indexOf("?") != -1) {
@@ -104,7 +106,10 @@ if (window.location.href.toString().indexOf("?") != -1) {
   pass = ccPhoneBarSocket.utils.getQueryParam("pass");
   phone = ccPhoneBarSocket.utils.getQueryParam("phone");
   groupId = ccPhoneBarSocket.utils.getQueryParam("groupId") || 1;
-  console.log("extnum=", extnum, "opnum=", opnum, "pass=", pass, "phone=", phone);
+  tokenId = ccPhoneBarSocket.utils.getQueryParam("tokenId");
+  workTicketId = ccPhoneBarSocket.utils.getQueryParam("workTicketId");
+  
+  console.log("extnum=", extnum, "opnum=", opnum, "pass=", pass, "phone=", phone, "groupId=", groupId, "tokenId=", tokenId, "workTicketId=", workTicketId);
   
   // 如果获取到所有必要参数，自动启动外呼流程
   if (extnum && opnum && pass && phone) {
