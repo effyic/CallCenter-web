@@ -105,24 +105,12 @@ function createRecordHTML() {
             }
             /* AI对话样式 */ 
             .dialogue-container {
-                background: linear-gradient(135deg, #e3f2fd 0%, #bbdefb 100%);
                 border-radius: 12px;
                 padding: 20px;
-                margin: 20px 0;
                 max-height: 500px;
                 overflow-y: auto;
             }
-            .dialogue-title {
-                text-align: center;
-                font-size: 18px;
-                font-weight: bold;
-                color: #1976d2;
-                margin-bottom: 20px;
-                padding-bottom: 10px;
-                border-bottom: 2px solid #1976d2;
-            }
             .message {
-                margin: 15px 0;
                 display: flex;
                 align-items: flex-start;
             }
@@ -133,24 +121,38 @@ function createRecordHTML() {
                 justify-content: flex-start;
             }
             .message-content {
-                max-width: 70%;
                 padding: 12px 16px;
                 border-radius: 18px;
                 word-wrap: break-word;
                 line-height: 1.4;
                 position: relative;
+                background:linear-gradient(135deg,#e3f2fd 0%,#bbdefb 100%);
             }
             .message.user .message-content {
-                background: #2196f3;
+                max-width: 500px;
                 color: white;
-                border-bottom-right-radius: 4px;
+                background: linear-gradient(135deg,#e3f2fd 0%,#bbdefb 100%) !important;
+                word-break: break-word;
+                line-height: 1.6;
+                color: #263238;
+                font-size: 14px;
+                 padding:10px 14px;
+                box-sizing:border-box;
+                margin-bottom:12px;
             }
             .message.assistant .message-content {
-                background: white;
+                max-width: 70%;
+                padding:10px 14px;
+                box-sizing:border-box;
                 color: #333;
                 border: 1px solid #e0e0e0;
-                border-bottom-left-radius: 4px;
                 box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+                background: linear-gradient(135deg,#e3f2fd 0%,#bbdefb 100%) !important;
+                word-break: break-word;
+                line-height: 1.6;
+                color: #263238;
+                font-size: 14px;
+                 margin-bottom:12px;
             }
             .message-role {
                 font-size: 12px;
@@ -199,7 +201,6 @@ function createRecordHTML() {
                 <!-- AI对话展示容器 -->
                 <div id="dialogueContainer" style="display: none;">
                     <div class="dialogue-container">
-                        <div class="dialogue-title">AI对话记录</div>
                         <div id="dialogueContent"></div>
                     </div>
                 </div>
@@ -237,7 +238,7 @@ async function queryRecords() {
             },
             body: JSON.stringify({
                 uuid: uuid,
-                callType: '02'
+                callType: '01'
             })
         });
         
@@ -317,7 +318,6 @@ function displayDialogue(dialogueData, container) {
             dialogueHTML += `
                 <div class="message ${roleClass}">
                     <div>
-                        <div class="message-role">${roleText}</div>
                         <div class="message-content">${message.content}</div>
                     </div>
                 </div>
