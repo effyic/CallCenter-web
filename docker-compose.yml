@@ -1,10 +1,10 @@
 version: '3.8'
 services:
-  phone-bar-web:
-    image: swr.cn-north-4.myhuaweicloud.com/registry-huawei/effyic/phone-bar-sdk:latest
-    container_name: phone-bar-sdk
+  phone-bar-record:
+    image: swr.cn-north-4.myhuaweicloud.com/registry-huawei/effyic/phone-record:latest
+    container_name: phone-record
     ports:
-      - "8900:80"
+      - "8902:80"
     restart: always
     pull_policy: always
     networks:
