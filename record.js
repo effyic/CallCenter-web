@@ -14,8 +14,6 @@ function createRecordHTML() {
                 background-color: #f5f5f5;
             }
             .container {
-                // max-width: 1200px;
-                width:600px;
                 margin: 0 auto;
                 background-color: white;
                 padding: 20px;
