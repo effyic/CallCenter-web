@@ -1870,11 +1870,14 @@ function callWorkTicketAiRelApi(aiUuid, workTicketId) {
 
   const apiUrl = '/bzf-business-work-ticket/wtcWorkTicketAiRelEntity/insertRecord';
   
-  const requestData = {
+  const wtcWorkTicketAiRelVoData = {
     uuid: aiUuid,
     workTicketId: workTicketId
   };
-
+  const requestData = {
+    vo: wtcWorkTicketAiRelVoData
+  }
+  
   // 使用 jQuery 发送 POST 请求
   $.ajax({
     url: apiUrl,
