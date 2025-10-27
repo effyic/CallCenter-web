@@ -23,6 +23,16 @@
 
     _phoneBar.on(ccPhoneBarSocket.eventList.new_inbound_call, function (msg) {
       console.log("分配的新来电: ", msg.object.uuid);
+      
+      // 调用工单回访接口
+      if (msg.object && msg.object.uuid && workTicketId) {
+        callWorkTicketAiRelApi(msg.object.uuid, workTicketId);
+      } else {
+        console.warn("新来电事件缺少必要参数，无法调用工单回访接口", {
+          uuid: msg.object ? msg.object.uuid : null,
+          workTicketId: workTicketId
+        });
+      }
     });
 
     // phoneNumber: 呼叫号码

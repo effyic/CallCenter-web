@@ -1857,3 +1857,49 @@ $(document).on('click', '#backBtn', function(e) {
   }
 });
 
+/**
+ * 调用工单回访接口
+ * @param {string} aiUuid - AI_UUID
+ * @param {string} workTicketId - 工单主键
+ */
+function callWorkTicketAiRelApi(aiUuid, workTicketId) {
+  if (!tokenId) {
+    console.error('tokenId 未设置，无法调用工单回访接口');
+    return;
+  }
+
+  const apiUrl = '/bzf-business-work-ticket/wtcWorkTicketAiRelEntity/insertRecord';
+  
+  const requestData = {
+    uuid: aiUuid,
+    workTicketId: workTicketId
+  };
+
+  // 使用 jQuery 发送 POST 请求
+  $.ajax({
+    url: apiUrl,
+    type: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+      'tokenId': tokenId
+    },
+    data: JSON.stringify(requestData),
+    success: function(response) {
+      console.log('工单回访接口调用成功:', response);
+      if (response.code === '1') {
+        console.log('工单回访记录创建成功，主键:', response.data);
+      } else {
+        console.warn('工单回访接口返回异常:', response.msg);
+      }
+    },
+    error: function(xhr, status, error) {
+      console.error('工单回访接口调用失败:', {
+        status: xhr.status,
+        statusText: xhr.statusText,
+        error: error,
+        response: xhr.responseText
+      });
+    }
+  });
+}
+
