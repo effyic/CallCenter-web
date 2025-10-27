@@ -158,6 +158,11 @@ function createRecordHTML() {
             .message-role {
                 font-size: 12px;
                 color: #666;
+            }
+            .role-prefix {
+                color: #676a6c !important;
+                font-size:13px;
+            }
                 margin: 0 10px 5px;
                 font-weight: bold;
             }
@@ -314,12 +319,12 @@ function displayDialogue(dialogueData, container) {
     dialogueData.forEach((message, index) => {
         if (message.role && message.content) {
             const roleClass = message.role === 'user' ? 'user' : 'assistant';
-            const roleText = message.role === 'user' ? '用户' : 'AI助手';
+            const rolePrefix = message.role === 'user' ? '客户：' : 'AI：';
             
             dialogueHTML += `
                 <div class="message ${roleClass}">
                     <div>
-                        <div class="message-content">${message.content}</div>
+                        <div class="message-content"><span class="role-prefix">${rolePrefix}</span>${message.content}</div>
                     </div>
                 </div>
             `;
