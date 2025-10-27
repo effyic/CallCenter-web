@@ -222,7 +222,24 @@ function createRecordHTML() {
 // 从地址栏获取UUID参数
 function getUuidFromUrl() {
     const urlParams = new URLSearchParams(window.location.search);
-    return urlParams.get('uuid') || '2509100208520110001'; // 默认值作为后备
+    return urlParams.get('uuid'); // 默认值
+}
+
+// 获取callType
+async function getCallType(uuid) {
+        const response = await fetch(`http://172.16.1.17:8902/aicall/api/calltype/uuid?uuid=${uuid}`, {
+            method: 'GET',
+            headers: {
+                'Accept': 'application/json'
+            }
+        });
+        
+        if (!response.ok) {
+            throw new Error(`HTTP错误! 状态码: ${response.status}`);
+        }
+        
+        const data = await response.json();
+        return data?.data?.callType
 }
 
 // 查询通话记录的函数
@@ -235,6 +252,8 @@ async function queryRecords() {
     const uuid = getUuidFromUrl();
     
     try {
+        const callType = await getCallType(uuid);
+        
         // 调用接口
         const response = await fetch(`http://172.16.1.17:8902/aicall/api/records/list`, {
             method: 'POST',
@@ -244,7 +263,7 @@ async function queryRecords() {
             },
             body: JSON.stringify({
                 uuid: uuid,
-                callType: '01'
+                callType: callType
             })
         });
         
@@ -253,7 +272,7 @@ async function queryRecords() {
         }
         
         const data = await response.json();
-        const record = data.rows[0]?.dialogue;
+        const record = data.rows && data.rows[0]?.dialogue;
         console.log(record,'接口返回数据');
 
         
@@ -418,6 +437,7 @@ if (typeof module !== 'undefined' && module.exports) {
         formatDateTime,
         getCallStatusText,
         getUuidFromUrl,
+        getCallType,
         initRecordPage
     };
 }
