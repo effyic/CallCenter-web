@@ -12,8 +12,8 @@ COPY . /usr/share/nginx/html/
 
 # 创建nginx配置文件
 COPY default.conf /etc/nginx/conf.d/default.conf
-COPY server.crt /etc/nginx/ssl/server.crt
-COPY server.key /etc/nginx/ssl/server.key
+COPY ./cert/server.crt /etc/nginx/ssl/server.crt
+COPY ./cert/server.key /etc/nginx/ssl/server.key
 
 # 暴露80端口
 EXPOSE 80
