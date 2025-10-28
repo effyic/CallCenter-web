@@ -10,13 +10,11 @@ function createRecordHTML() {
         <style>
             body {
                 font-family: Arial, sans-serif;
-                margin: 20px;
                 background-color: #f5f5f5;
             }
             .container {
                 margin: 0 auto;
                 background-color: white;
-                padding: 20px;
                 border-radius: 8px;
                 box-shadow: 0 2px 10px rgba(0,0,0,0.1);
             }
@@ -106,7 +104,6 @@ function createRecordHTML() {
             .dialogue-container {
                 border-radius: 12px;
                 padding: 20px;
-                max-height: 500px;
                 overflow-y: auto;
             }
             .message {
@@ -300,6 +297,13 @@ function displayRecords(data, container) {
     const records = data.rows;
     
     let audioHTML = '';
+    
+    // 检查records是否存在且为数组
+    if (!records || !Array.isArray(records) || records.length === 0) {
+        audioHTML = '<div style="text-align: center; color: #666; padding: 20px;">暂无音频文件</div>';
+        container.innerHTML = audioHTML;
+        return;
+    }
     
     records.forEach((record, index) => {
         if (record.wavFileUrl) {
