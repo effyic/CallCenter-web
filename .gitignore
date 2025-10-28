@@ -77,12 +77,6 @@ temp/
 dist/
 build/
 
-# Certificate files (keep .pem files local only)
-*.pem
-*.key
-*.crt
-*.p12
-
 # Configuration files with sensitive data
 config/local.json
 config/production.json
