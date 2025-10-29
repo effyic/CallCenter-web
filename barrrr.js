@@ -1443,7 +1443,7 @@ class AudioPermissionChecker {
         try {
             // 检查浏览器是否支持getUserMedia
             if (!navigator.mediaDevices || !navigator.mediaDevices.getUserMedia) {
-                throw new Error('浏览器不支持录音功能，请使用Chrome、Firefox或Safari等现代浏览器');
+                throw new Error('不支持录音功能');
             }
 
             // 请求录音权限
@@ -1467,11 +1467,11 @@ class AudioPermissionChecker {
             let errorMessage = '录音权限获取失败：';
             
             if (error.name === 'NotAllowedError') {
-                errorMessage += '用户拒绝了录音权限。请在浏览器设置中允许此网站使用麦克风。';
+                errorMessage += '用户拒绝了录音权限。请允许此网站使用麦克风。';
             } else if (error.name === 'NotFoundError') {
                 errorMessage += '未找到录音设备。请检查麦克风是否正确连接。';
             } else if (error.name === 'NotSupportedError') {
-                errorMessage += '浏览器不支持录音功能。';
+                errorMessage += '不支持录音功能。';
             } else {
                 errorMessage += error.message || '未知错误';
             }
@@ -1525,15 +1525,6 @@ class AudioPermissionChecker {
                     </div>
                     <div class="audio-permission-body">
                         <p style="margin-bottom: 15px; line-height: 1.6;">${message}</p>
-                        <div style="background-color: #f8f9fa; padding: 15px; border-radius: 4px; margin-bottom: 20px;">
-                            <h4 style="margin-top: 0; color: #495057;">如何开启录音权限：</h4>
-                            <ol style="margin: 0; padding-left: 20px; line-height: 1.6;">
-                                <li>点击浏览器地址栏左侧的🔒或ℹ️图标</li>
-                                <li>在弹出菜单中找到"麦克风"或"录音"选项</li>
-                                <li>选择"允许"或"总是允许"</li>
-                                <li>刷新页面重新尝试</li>
-                            </ol>
-                        </div>
                         <div style="text-align: center;">
                             <button onclick="retryAudioPermission()" style="
                                 background-color: #007cba;
@@ -1545,16 +1536,6 @@ class AudioPermissionChecker {
                                 cursor: pointer;
                                 font-size: 14px;
                             ">重新检查权限</button>
-                            <button onclick="continueWithoutPermission()" style="
-                                background-color: #6c757d;
-                                color: white;
-                                border: none;
-                                padding: 10px 20px;
-                                margin: 5px;
-                                border-radius: 4px;
-                                cursor: pointer;
-                                font-size: 14px;
-                            ">暂时跳过</button>
                         </div>
                     </div>
                 </div>
