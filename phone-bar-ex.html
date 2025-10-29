@@ -23,12 +23,8 @@
 
     var call_uuid = null;
 
-    _phoneBar.on(ccPhoneBarSocket.eventList.new_inbound_call, function (msg) {
-      console.log("分配的新来电: ", msg.object.uuid);
-      call_uuid = msg.object.uuid;
-    });
-
     _phoneBar.on(ccPhoneBarSocket.eventList.callee_answered, function (msg) {
+      call_uuid = msg.object.uuid;
       console.log("呼叫已接通: ", call_uuid);
       // 调用工单回访接口
       if (call_uuid && workTicketId) {
