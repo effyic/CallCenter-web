@@ -21,21 +21,31 @@
   <script>
     window.onload = init
 
+    var call_uuid = null;
+
     _phoneBar.on(ccPhoneBarSocket.eventList.new_inbound_call, function (msg) {
       console.log("分配的新来电: ", msg.object.uuid);
+      call_uuid = msg.object.uuid;
     });
 
     _phoneBar.on(ccPhoneBarSocket.eventList.callee_answered, function (msg) {
-      console.log("呼叫已接通: ", msg.object.uuid);
+      console.log("呼叫已接通: ", call_uuid);
       // 调用工单回访接口
-      if (msg.object && msg.object.uuid && workTicketId) {
-        callWorkTicketAiRelApi(msg.object.uuid, workTicketId);
+      if (call_uuid && workTicketId) {
+        callWorkTicketAiRelApi(call_uuid, workTicketId);
       } else {
         console.warn("新来电事件缺少必要参数，无法调用工单回访接口", {
-          uuid: msg.object ? msg.object.uuid : null,
+          call_uuid: call_uuid,
           workTicketId: workTicketId
         });
       }
+    });
+
+    _phoneBar.on(ccPhoneBarSocket.eventListWithTextInfo.caller_hangup.code, function (msg) {
+      console.log(msg, "主叫挂断");
+      setTimeout(() => {
+        window.history.back();
+      }, 5000);
     });
 
     // phoneNumber: 呼叫号码
