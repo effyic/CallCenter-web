@@ -98,25 +98,101 @@ var phone = ''; // 要外呼的号码
 var tokenId = ''; // 签入token
 var workTicketId = ''; // 工单id
 
+// 根据uid获取用户信息的函数
+async function getUserInfoByUid(uid) {
+  if (!uid) {
+    throw new Error('用户ID不能为空');
+  }
+  
+  try {
+    console.log('正在获取用户信息，uid:', uid);
+    
+    const response = await fetch(`https://${scriptServer}/aicall/api/extension/usercode?userCode=${uid}`, {
+      method: 'GET',
+      headers: {
+        'Accept': 'application/json'
+      }
+    });
+    
+    if (!response.ok) {
+      throw new Error(`服务器响应错误，状态码: ${response.status}`);
+    }
+    
+    const data = await response.json();
+    
+    if (data.code === 0 && data.data) {
+      console.log('成功获取用户信息:', data.data);
+      return {
+        extNum: data.data.extNum,
+        extPass: data.data.extPass,
+        userCode: data.data.userCode
+      };
+    } else {
+      throw new Error(data.msg || '获取用户信息失败，请检查用户ID是否正确');
+    }
+  } catch (error) {
+    console.error('获取用户信息失败:', error);
+    
+    // 根据错误类型提供更友好的错误信息
+    if (error.name === 'TypeError' && error.message.includes('fetch')) {
+      throw new Error('网络连接失败，请检查网络连接或联系管理员');
+    } else if (error.message.includes('状态码')) {
+      throw new Error('服务器暂时不可用，请稍后重试');
+    } else {
+      throw error;
+    }
+  }
+}
+
 //  new1.自动从地址栏获取参数
 if (window.location.href.toString().indexOf("?") != -1) {
   console.log(ccPhoneBarSocket.utils);
-  extnum = ccPhoneBarSocket.utils.getQueryParam("extnum") || ccPhoneBarSocket.utils.getQueryParam("extNum");
-  opnum = ccPhoneBarSocket.utils.getQueryParam("opnum") || ccPhoneBarSocket.utils.getQueryParam("opNum");
-  pass = ccPhoneBarSocket.utils.getQueryParam("pass");
-  phone = ccPhoneBarSocket.utils.getQueryParam("phone");
-  groupId = ccPhoneBarSocket.utils.getQueryParam("groupId") || 1;
-  tokenId = ccPhoneBarSocket.utils.getQueryParam("tokenId");
-  workTicketId = ccPhoneBarSocket.utils.getQueryParam("workTicketId");
-  
-  console.log("extnum=", extnum, "opnum=", opnum, "pass=", pass, "phone=", phone, "groupId=", groupId, "tokenId=", tokenId, "workTicketId=", workTicketId);
-  
-  // 如果获取到所有必要参数，自动启动外呼流程
-  if (extnum && opnum && pass && phone) {
-    // 页面加载完成后自动启动 修改1017
-    $(document).ready(function() {
-      autoCallInit();
-    });
+  let uid = ccPhoneBarSocket.utils.getQueryParam("uid");
+
+  // 如果有uid参数，则通过接口获取用户信息
+  if (uid) {
+    getUserInfoByUid(uid).then(userInfo => {
+      extnum = userInfo.extNum;
+      opnum = userInfo.userCode; // 使用userCode作为opnum
+      pass = userInfo.extPass;
+      
+      console.log("从接口获取到的用户信息:", "extnum=", extnum, "opnum=", opnum, "pass=", pass);
+      
+      // 获取其他参数
+      phone = ccPhoneBarSocket.utils.getQueryParam("phone");
+      groupId = ccPhoneBarSocket.utils.getQueryParam("groupId") || 1;
+      tokenId = ccPhoneBarSocket.utils.getQueryParam("tokenId");
+      workTicketId = ccPhoneBarSocket.utils.getQueryParam("workTicketId");
+      
+      console.log("所有参数:", "extnum=", extnum, "opnum=", opnum, "pass=", pass, "phone=", phone, "groupId=", groupId, "tokenId=", tokenId, "workTicketId=", workTicketId);
+      
+      // 如果获取到所有必要参数，自动启动外呼流程
+      if (extnum && opnum && pass && phone) {
+        // 页面加载完成后自动启动 修改1017
+        $(document).ready(function() {
+          autoCallInit();
+        });
+      }
+    }).catch(error => {
+       console.error("获取用户信息失败:", error);
+       
+       // 显示用户友好的错误提示
+       const errorMsg = `获取用户信息失败: ${error.message}`;
+       alert(errorMsg);
+       
+       // 可以在页面上显示错误信息（如果有相应的UI元素）
+       const statusElement = document.getElementById('callStatus');
+       if (statusElement) {
+         statusElement.textContent = '用户信息获取失败';
+         statusElement.style.color = '#ff4757';
+       }
+     });
+  }else{
+    const statusElement = document.getElementById('callStatus');
+    if (statusElement) {
+      statusElement.textContent = '缺少uid参数';
+      statusElement.style.color = '#ff4757';
+    }
   }
 }
 
