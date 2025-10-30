@@ -68,9 +68,12 @@ function jsSipUA() {
     // 声音文件根目录路径
     var ctx = "";
     var _jsSipMediaFiles = {
-        outgoing_call_ringing: new Audio(ctx +" callcenter/sounds/ringing.wav"),
-        outgoing_call_rejected: new Audio(ctx + "callcenter/sounds/outgoing-call-rejected.wav"),
-        hangup: new Audio(ctx + "callcenter/sounds/hangup.wav"),
+        // outgoing_call_ringing: new Audio(ctx +" callcenter/sounds/ringing.wav"),
+        // outgoing_call_rejected: new Audio(ctx + "callcenter/sounds/outgoing-call-rejected.wav"),
+        // hangup: new Audio(ctx + "callcenter/sounds/hangup.wav"),
+        outgoing_call_ringing: new Audio(_jsSipMediaFileBase64.ringing),
+        outgoing_call_rejected: new Audio(_jsSipMediaFileBase64.outgoingcallrejected),
+        hangup: new Audio(_jsSipMediaFileBase64.hangup),
         dtmfDir: ctx + "callcenter/sounds/digits/",
         incomingcall: new Audio(_jsSipMediaFileBase64.incomingcall),
         answered: new Audio(_jsSipMediaFileBase64.answered)
