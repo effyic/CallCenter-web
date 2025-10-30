@@ -1130,7 +1130,7 @@ function ccPhoneBarSocket() {
 	  ccPhoneBarSocket.eventListWithTextInfo = {
 		"ws_connected": { "code": 200,  msg:"已签入",
 			btn_text:[{id:"#onLineBtn",name:"签出"}],
-			enabled_btn:['#setFree','#callBtn','#onLineBtn', '#consultationBtn']
+			enabled_btn:['#setFree','#callBtn','#onLineBtn']//1. '#consultationBtn'
 		},
 		"ws_disconnected": { "code" : 202, msg:"服务器连接断开",
 			btn_text:[{id:"#onLineBtn",name:"签入"}],
@@ -1154,19 +1154,19 @@ function ccPhoneBarSocket() {
 		},
 		"caller_hangup":{ "code" : 601, msg:"分机已挂断",
 			btn_text:[],
-			enabled_btn:['#onLineBtn', '#resetStatus', '#callBtn', '#setFree', '#consultationBtn' ]
+			enabled_btn:['#onLineBtn', '#resetStatus', '#callBtn', '#setFree']//10., '#consultationBtn'
 		},
 		"caller_busy":{ "code" : 602, msg:"分机忙,上一通电话未挂断",
 			btn_text:[],
-			enabled_btn:['#onLineBtn', '#resetStatus', '#callBtn', '#setFree', '#consultationBtn']
+			enabled_btn:['#onLineBtn', '#resetStatus', '#callBtn', '#setFree']//9., '#consultationBtn'
 		},
 		"caller_not_login":{ "code" : 603, msg:"分机未登录，请检查",
 			btn_text:[],
-			enabled_btn:['#onLineBtn', '#resetStatus', '#callBtn', '#setFree', '#consultationBtn']
+			enabled_btn:['#onLineBtn', '#resetStatus', '#callBtn', '#setFree']//8. '#consultationBtn'
 		},
 		"caller_respond_timeout":{ "code" : 604, msg:"分机未应答超时，请重新打开分机",
 			btn_text:[],
-			enabled_btn:['#onLineBtn', '#resetStatus', '#callBtn', '#setFree', '#consultationBtn']
+			enabled_btn:['#onLineBtn', '#resetStatus', '#callBtn', '#setFree']//7. '#consultationBtn'
 		},
 		"callee_answered":{ "code" : 605, msg:"被叫已接通",
 			btn_text:[],
@@ -1174,7 +1174,7 @@ function ccPhoneBarSocket() {
 		},
 		"callee_hangup":{ "code" : 606, msg:"通话结束",
 			btn_text:[],
-			enabled_btn:['#onLineBtn', '#resetStatus', '#callBtn', '#setFree' , '#consultationBtn']
+			enabled_btn:['#onLineBtn', '#resetStatus', '#callBtn', '#setFree']//6. , '#consultationBtn'
 		},
 		"callee_ringing":{ "code" : 607, msg:"被叫振铃中",
 			btn_text:[],
@@ -1186,15 +1186,15 @@ function ccPhoneBarSocket() {
 		},
 		"free":{ "code" : 0, msg:"空闲中",
 			btn_text:[],
-			enabled_btn:['#setBusy','#onLineBtn', '#consultationBtn']
+			enabled_btn:['#setBusy','#onLineBtn']//2. '#consultationBtn'
 		},
 		"busy":{ "code" : 1, msg:"忙碌",
 			btn_text:[],
-			enabled_btn:['#setFree', '#onLineBtn',  '#callBtn', '#consultationBtn']  //  '#transferBtn'
+			enabled_btn:['#setFree', '#onLineBtn',  '#callBtn']  // 3.'#consultationBtn'l
 		},
 		"customer_channel_hold" : { "code" : 623, msg:"通话已保持.",
 			btn_text:[],
-			enabled_btn:['#setFree',  '#callBtn', '#unHoldBtn', '#consultationBtn' ]
+			enabled_btn:['#setFree',  '#callBtn', '#unHoldBtn' ]//4.'#consultationBtn'
 		},
 	   "customer_channel_unhold" : { "code" : 624, msg:"通话已接回.",
 			  btn_text:[],
