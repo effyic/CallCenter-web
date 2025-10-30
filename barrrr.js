@@ -439,6 +439,7 @@ function init () {
           console.log('录音权限检查通过，可以正常使用电话功能');
       } else {
           console.warn('录音权限检查失败，部分功能可能受限');
+          return; // 拒绝签入
       }
   });
 
@@ -1146,6 +1147,7 @@ function init () {
                   console.log('录音权限检查通过，可以正常使用电话功能');
               } else {
                   console.warn('录音权限检查失败，部分功能可能受限');
+                  return; // 拒绝签入
               }
             });
         }
