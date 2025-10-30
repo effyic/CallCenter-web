@@ -625,6 +625,8 @@ input:checked + .slider:before {
     text-decoration: none;
     color: #122C4B;
     font-size: 13px;
+    pointer-events: none;
+    cursor: not-allowed;
 }
 
 .zixun_btn.on { /* 咨询 - on状态 */
@@ -640,6 +642,8 @@ input:checked + .slider:before {
     text-decoration: none;
     color: #122C4B;
     font-size: 13px;
+     pointer-events: auto; /* 允许点击 */
+    cursor: pointer; /* 显示可点击光标 */
 }
 
 .zixun_btn img, .zixun_btn.on img, .zixun_btn.off img {
