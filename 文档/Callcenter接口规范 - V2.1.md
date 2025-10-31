@@ -339,9 +339,9 @@ POST /aicall/stopTasks
 
 ```json
 {
-  "batchIds": [
-    0
-  ]
+    "ticketNos": [
+        "T20231001001"
+    ]
 }
 ```
 
