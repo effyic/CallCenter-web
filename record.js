@@ -221,8 +221,8 @@ function getUuidFromUrl() {
 
 // 获取当前地址
 function getCurrentHost() {
-    // return `${window.location.protocol}//${window.location.host}`;
-    return 'http://172.16.1.17:8902'
+    return `${window.location.protocol}//${window.location.host}`;
+    // return 'http://172.16.1.17:8902'
 }
 
 async function getCallType(uuid) {
@@ -279,7 +279,6 @@ async function queryRecords() {
         } else {
             data = jsonData;
         }
-        console.log(data,'data')
         const record = data.rows && data.rows[0]?.dialogue;
         displayRecords(data, recordsContainer);
         const dialogueContent = document.getElementById('dialogueContent');
