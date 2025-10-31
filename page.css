@@ -98,11 +98,11 @@
 }
 
 .status-info-item span {
-   color:rgba(255, 255, 255, 0.8);
+   color:rgba(255, 255, 255);
 }
 
 .status-info-item .status4 {
- color:rgba(255, 255, 255, 0.8);
+ color:rgba(255, 255, 255);
 }
 .normalColor{
     width:130px;
