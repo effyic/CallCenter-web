@@ -221,7 +221,8 @@ function getUuidFromUrl() {
 
 // 获取当前地址
 function getCurrentHost() {
-    return `${window.location.protocol}//${window.location.host}`;
+    // return `${window.location.protocol}//${window.location.host}`;
+    return 'http://172.16.1.17:8902'
 }
 
 async function getCallType(uuid) {
@@ -268,7 +269,17 @@ async function queryRecords() {
             throw new Error(`HTTP错误! 状态码: ${response.status}`);
         }
         
-        const data = await response.json();
+        let data;
+        const jsonData = await response.json();
+        if(jsonData?.rows?.length > 1) {
+            data = {
+                ...jsonData,
+                rows: jsonData.rows.filter(item => item.dialogue && item.dialogue.length > 0)
+            };
+        } else {
+            data = jsonData;
+        }
+        console.log(data,'data')
         const record = data.rows && data.rows[0]?.dialogue;
         displayRecords(data, recordsContainer);
         const dialogueContent = document.getElementById('dialogueContent');
@@ -324,6 +335,7 @@ function displayRecords(data, container) {
 
 // 显示AI对话记录
 function displayDialogue(dialogueData, container) {
+
     if (!dialogueData || !Array.isArray(dialogueData) || dialogueData.length === 0) {
         container.innerHTML = '<div class="no-dialogue">暂无AI对话记录</div>';
         return;
