@@ -282,7 +282,6 @@ var checks = {
     }
   }
 };
-
 exports.load = function (dst, src) {
   // Check Mandatory parameters.
   for (var parameter in checks.mandatory) {
