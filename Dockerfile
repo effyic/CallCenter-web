@@ -13,6 +13,7 @@ COPY . /usr/share/nginx/html/
 # 创建nginx配置文件
 RUN echo 'server {' > /etc/nginx/conf.d/default.conf && \
     echo '    listen 80;' >> /etc/nginx/conf.d/default.conf && \
+    echo '    listen [::]:80;' >> /etc/nginx/conf.d/default.conf && \
     echo '    server_name localhost;' >> /etc/nginx/conf.d/default.conf && \
     echo '    root /usr/share/nginx/html;' >> /etc/nginx/conf.d/default.conf && \
     echo '    index phone-bar-ex.html index.html;' >> /etc/nginx/conf.d/default.conf && \
