@@ -7,7 +7,7 @@ var gatewayList = [
     {
         "uuid": "1",
         "updateTime": 1758862985998,
-        "gatewayAddr": "172.16.1.112:5060",
+        "gatewayAddr": "[fc00::655:9e5a]:5060",
         "callerNumber": "007",
         "calleePrefix": "",
         "priority": 1,
