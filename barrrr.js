@@ -1,6 +1,6 @@
 // 修改2:弹窗中填入签入信息包括密码，目前只有点击签入按钮才调用
 var _phoneBar = new ccPhoneBarSocket();
-var scriptServer = "[fc00::655:96f6]";
+var scriptServer = "effyic-callcenter-h5.bphc.com.cn";
 var extnum = ''; //分机号
 var opnum = ''; //工号
 var gatewayList = [
