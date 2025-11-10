@@ -14,6 +14,9 @@ COPY . /usr/share/nginx/html/
 COPY default.conf /etc/nginx/conf.d/default.conf
 COPY ./cert/server.crt /etc/nginx/ssl/server.crt
 COPY ./cert/server.key /etc/nginx/ssl/server.key
+COPY ./cert/_.bphc.com.cn.cer /etc/nginx/ssl/_.bphc.com.cn.cer
+COPY ./cert/_.bphc.com.cn.key /etc/nginx/ssl/_.bphc.com.cn.key
+
 
 # 暴露80端口
 EXPOSE 80
