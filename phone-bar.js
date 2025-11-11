@@ -19,7 +19,8 @@ const BASE64_IMAGES = {
 };
 
 var _phoneBar = new ccPhoneBarSocket();
-var scriptServer = "[fc00::655:96f6]";
+//var scriptServer = "[fc00::655:9e5a]";
+var scriptServer = "10.6.0.59";
 var extnum = '1103'; //分机号
 var opnum = '1103'; //工号
 var gatewayList = [
