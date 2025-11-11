@@ -21,6 +21,11 @@ const BASE64_IMAGES = {
 var _phoneBar = new ccPhoneBarSocket();
 //var scriptServer = "[fc00::655:9e5a]";
 var scriptServer = "10.6.0.59";
+let host = window.location.host;
+// 如果是带方括号的 IPv6 地址
+if (host.startsWith("[")) {
+    scriptServer = "[fc00::655:9e5a]";
+}
 var extnum = '1103'; //分机号
 var opnum = '1103'; //工号
 var gatewayList = [
