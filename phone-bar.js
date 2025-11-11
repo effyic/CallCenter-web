@@ -20,7 +20,7 @@ const BASE64_IMAGES = {
 
 var _phoneBar = new ccPhoneBarSocket();
 //var scriptServer = "[fc00::655:9e5a]";
-var scriptServer = "10.6.0.59";
+var scriptServer = "172.16.1.111";
 let host = window.location.host;
 // 如果是带方括号的 IPv6 地址
 if (host.startsWith("[")) {
@@ -32,7 +32,7 @@ var gatewayList = [
     {
         "uuid": "1",
         "updateTime": 1758862985998,
-        "gatewayAddr": "[fc00::655:9e5a]:5060",
+        "gatewayAddr": "172.16.1.111:5060",
         "callerNumber": "007",
         "calleePrefix": "",
         "priority": 1,
