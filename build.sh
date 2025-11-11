@@ -1,4 +1,4 @@
-IMAGE_TAG=swr.cn-north-4.myhuaweicloud.com/registry-huawei/effyic/phone-record:latest
+IMAGE_TAG=swr.cn-north-4.myhuaweicloud.com/registry-huawei/effyic/phone-record-bzf:latest
 
 docker build . --platform linux/amd64 -t $IMAGE_TAG
 
