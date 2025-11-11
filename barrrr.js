@@ -1262,19 +1262,7 @@ function init () {
           }
 
           // 配置 gatewayList
-          _callConfig["gatewayList"] = [
-            {
-              "uuid": "1",
-              "updateTime": 1758862985998,
-              "gatewayAddr": "[fc00::655:9e5a]:5060",
-              "callerNumber": "007",
-              "calleePrefix": "",
-              "priority": 1,
-              "concurrency": 2,
-              "register": false,
-              "audioCodec": "pcma"
-            }
-        ];
+          _callConfig["gatewayList"] = gatewayList;
 
           // 初始化电话工具条
           _phoneBar.initConfig(_callConfig);
