@@ -1,13 +1,13 @@
 // 修改2:弹窗中填入签入信息包括密码，目前只有点击签入按钮才调用
 var _phoneBar = new ccPhoneBarSocket();
-var scriptServer = "effyic-callcenter-h5.bphc.com.cn";
+var scriptServer = "outbound.skiffchat.com";
 var extnum = ''; //分机号
 var opnum = ''; //工号
 var gatewayList = [
     {
         "uuid": "1",
         "updateTime": 1758862985998,
-        "gatewayAddr": "[fc00::655:9e5a]:5060",
+        "gatewayAddr": "172.16.1.111:5060",
         "callerNumber": "007",
         "calleePrefix": "",
         "priority": 1,
