@@ -148,6 +148,13 @@ async function getUserInfoByUid(uid) {
 if (window.location.href.toString().indexOf("?") != -1) {
   console.log(ccPhoneBarSocket.utils);
   let uid = ccPhoneBarSocket.utils.getQueryParam("uid");
+  // 获取其他参数
+  phone = ccPhoneBarSocket.utils.getQueryParam("phone");
+  groupId = ccPhoneBarSocket.utils.getQueryParam("groupId") || 1;
+  tokenId = ccPhoneBarSocket.utils.getQueryParam("tokenId");
+  workTicketId = ccPhoneBarSocket.utils.getQueryParam("workTicketId");
+
+  console.log("所有参数:", "extnum=", extnum, "opnum=", opnum, "pass=", pass, "phone=", phone, "groupId=", groupId, "tokenId=", tokenId, "workTicketId=", workTicketId);
 
   // 如果有uid参数，则通过接口获取用户信息
   if (uid) {
@@ -157,14 +164,6 @@ if (window.location.href.toString().indexOf("?") != -1) {
       pass = userInfo.extPass;
       
       console.log("从接口获取到的用户信息:", "extnum=", extnum, "opnum=", opnum, "pass=", pass);
-      
-      // 获取其他参数
-      phone = ccPhoneBarSocket.utils.getQueryParam("phone");
-      groupId = ccPhoneBarSocket.utils.getQueryParam("groupId") || 1;
-      tokenId = ccPhoneBarSocket.utils.getQueryParam("tokenId");
-      workTicketId = ccPhoneBarSocket.utils.getQueryParam("workTicketId");
-      
-      console.log("所有参数:", "extnum=", extnum, "opnum=", opnum, "pass=", pass, "phone=", phone, "groupId=", groupId, "tokenId=", tokenId, "workTicketId=", workTicketId);
       
       // 如果获取到所有必要参数，自动启动外呼流程
       if (extnum && opnum && pass && phone) {
@@ -1915,14 +1914,11 @@ function callWorkTicketAiRelApi(aiUuid, workTicketId) {
     return;
   }
 
-  const apiUrl = '/bzf-business-work-ticket/wtcWorkTicketAiRelEntity/insertRecord';
+  const apiUrl = '/api/aicall/insertWorkTicketRecord';
   
-  const wtcWorkTicketAiRelVoData = {
+  const requestData = {
     uuid: aiUuid,
     workTicketId: workTicketId
-  };
-  const requestData = {
-    vo: wtcWorkTicketAiRelVoData
   }
   
   // 使用 jQuery 发送 POST 请求
