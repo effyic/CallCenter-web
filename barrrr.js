@@ -444,240 +444,6 @@ function init () {
   });
 
 
-//   $('#phone-bar').html(`
-//   <div>
-//       <audio hidden="true" id="audioHandler" controls="controls" autoplay="autoplay"></audio>
-//   </div>
-//   <form>
-
-//     <table width="1224">
-//       <tr>
-//         <td width="70%" colspan="2" height="35" style="text-indent: 20px">
-//           <b>签入时间：</b> <span id="loginTime" title="" class="status4">00:00:00</span> &nbsp;&nbsp;
-//           <b>状态：</b> <span id="agentStatus" title="" class="status4">未签入</span> &nbsp;&nbsp;
-//           <b>当前排队人数：</b><span id="queueStat" title="" class="status4">0</span> &nbsp;&nbsp;
-//           <label style="cursor: pointer; vertical-align: middle;">
-//             <input type="checkbox" id="autoAnswerToggle" style="cursor: pointer; vertical-align: middle; margin: 0; position: relative; top: 0px;" />
-//             <b style="vertical-align: middle;">自动接听</b>
-//           </label>
-
-//         </td>
-//       </tr>
-//       <tr>
-//         <td width="70%">
-//           <div>
-//             <div class="head_dial" style="padding-left: 10px; ">
-
-//               <dl class="dial">
-//                 <dt>
-//                   <label for="ccphoneNumber"></label><input type="text" name="ccphoneNumber" id="ccphoneNumber"
-//                     placeholder="输入电话号码" class="tel_txt" />
-//                 </dt>
-//                 <dd>
-//                   <ul>
-//                     <li id="callStatus" title="" class="status4">没有连接</li>
-//                   </ul>
-//                   <span id="showCallLen" style="display:none"><b>00:00</b></span>
-//                 </dd>
-//               </dl>
-
-//               <ul class="dial_btn">
-//                 <li><a href="#" id="setFree" class="xz_btn off"></a><span>置闲</span></li>
-//                 <li><a href="#" id="setBusy" class="sm_btn off"></a><span>置忙</span></li>
-//                 <li><a href="#" id="callBtn" class="wh_btn"></a><span>外呼</span></li>
-//                 <li id="holdBtnLi"><a href="#" id="holdBtn" class="bc_btn off"></a><span>保 持</span></li>
-//                 <li id="unHoldBtnLi"><a href="#" id="unHoldBtn" class="bc2_btn off"></a><span>取消保持</span></li>
-//                 <li><a href="#" id="unmuteBtn" class="unmute_btn off"></a><span>静音</span></li>
-//                 <li><a href="#" id="transferBtn" class="zjie_btn"></a><span>转接</span></li>
-//                 <li><a href="#" id="consultationBtn" class="zixun_btn"></a><span>咨询</span></li>
-//                 <li><a href="#" id="conferenceBtn" class="hy_btn off"></a><span>会议</span></li>
-//                 <li><a href="#" id="hangUpBtn" class="gj_btn"></a><span>挂机</span></li>
-//                 <li><a href="#" id="resetStatus" class="qz_btn"></a><span>强置</span></li>
-//                 <li><a href="#" id="onLineBtn" class="sx_btn on"></a><span>签入</span></li>
-//                 <li><a href="#" id="answer_btn" onclick="answer()" class="answer_btn off"></a><span>接听</span></li>
-//               </ul>
-//             </div>
-//           </div>
-//         </td>
-//         <td width="30%" style="display: none;">
-//           <div>
-//             <div style="padding-left: 10px; ">
-//               &nbsp; &nbsp; 外呼设置：
-//               <label for="videoCallBtn"> <input type="radio" value="video" name="callType"
-//                   id="videoCallBtn" />视频外呼</label> &nbsp;&nbsp;
-//               <label for="audioCallBtn"> <input type="radio" value="audio" name="callType" checked="checked"
-//                   id="audioCallBtn" />语音外呼</label> <br />
-
-//               &nbsp; &nbsp; 视频清晰度:
-//               <label for="videoLevelSelect"></label><select id="videoLevelSelect">
-//               </select>
-//               <input type="button" id="reInviteVideoBtn" title="发送视频邀请，可把音频通话转换为视频通话。"
-//                 onclick="_phoneBar.reInviteVideoCall();" value="视频邀请" disabled="disabled">
-
-//               &nbsp;&nbsp;&nbsp;&nbsp;
-//               <label for="videoListSelect"></label>
-//               <select id="videoListSelect">
-//                 <option value="">请选择视频</option>
-//                 <option value="/usr/local/freeswitchvideo/share/freeswitch/sounds/bank.mp4">客服实例视频</option>
-//                 <option value="/usr/local/freeswitchvideo/share/freeswitch/sounds/conference.mp4">多方会议视频</option>
-//                 <option value="/usr/local/freeswitchvideo/share/freeswitch/sounds/15-seconds.mp4">15-seconds-demo
-//                 </option>
-
-//               </select>
-//               <input type="button" id="sendVideoFileBtn" title="推送视频给对方，以便结束当前通话。"
-//                 onclick="_phoneBar.sendVideoFile($('#videoListSelect').val());" value="推送视频" disabled="disabled">
-
-//             </div>
-//           </div>
-//         </td>
-//       </tr>
-
-//       <tr id="conference_area" style="display: none">
-
-//         <td colspan="2" style="padding-left: 130px; padding-top: 30px;">
-//           <div>
-//             <div>
-//               <div id="conference_start" style="display: block">
-//                 <!-- 会议布局: &nbsp; -->
-//                 <select id="conf_layout" name="conf_layout" style="display: none">
-//                   <option value="2x2">2x2</option>
-//                   <option value="3x3">3x3</option>
-//                   <option value="1up_top_left+3">一主三从</option>
-//                 </select>
-//                 &nbsp;
-//                 <!-- 画布尺寸: -->
-//                 <select id="conf_template" name="conf_template" style="display: none">
-//                   <option value="480p" selected="selected">480x640</option>
-//                   <option value="720p">720x1080</option>
-//                   <option value="default">default</option>
-//                 </select>
-//                 &nbsp;
-//                 会议类型:
-//                 <select id="conf_call_type2" name="conf_call_type2">
-//                   <!-- <option value="video">视频</option> -->
-//                   <option value="audio">音频</option>
-//                 </select>
-//                 <input type="hidden" value="audio" id="conf_call_type" name="conf_call_type" />
-//                 &nbsp;
-//                 <input type="button" name="startConference" id="startConference"
-//                   onclick="conferenceStartBtnUI('')" style="width: 70px;" value="启动会议">
-//                 &nbsp;
-//                 <input type="button" name="endConference" id="endConference" onclick="_phoneBar.conferenceEnd()"
-//                   disabled="disabled" style="width: 70px;" value="结束会议">
-//               </div>
-
-//               <div style="width: 100%;"> &nbsp; </div>
-
-//               <div id="conference_member_list" style="display: none">
-//                 <ul>
-//                   <li id="conference_header">
-//                     <span class="conf_name"> <input id="member_name" name="member_name" placeholder="姓名"
-//                         style="width: 60px;" /> </span> &nbsp;
-//                     <span class="conf_phone"> <input id="member_phone" name="member_phone" placeholder="手机号"
-//                         style="width: 110px;" /> </span> &nbsp;
-//                     <span class="conf_call_type">
-//                       <select id="member_call_type" name="member_call_type" style="display: none">
-//                         <option value="video">视频</option>
-//                         <option value="audio" selected>音频</option>
-//                       </select>
-//                     </span>
-//                     <span class="conf_video_level" style="display: none">
-//                       <select id="member_video_level" name="member_video_level">
-//                       </select>
-//                     </span>
-
-//                     <span class="conf_name">
-//                       <input type="button" name="addConfMember" id="addConfMember"
-//                         onclick="_phoneBar.conferenceAddMemberBtnUI(0)" style="width: 70px;" value="加入会议">
-//                     </span>
-//                   </li>
-
-//                   <!-- 会议成员展示模版html  -->
-//                   <li id="conf_member_template" style="display: none;">
-//                     <span class="conf_name">{member_name}</span>
-//                     <span class="conf_phone">{member_phone}</span>
-//                     <span class="conf_mute"><a href="javascript:void(0)"
-//                         onclick="_phoneBar.conferenceMuteMember('{member_phone}')"><img alt="禁言该成员。"
-//                           src="images/mute.jpg" width="15" height="17" /> </a> </span>
-//                     <span class="conf_vmute" style="display: none"><a href="javascript:void(0)"
-//                         onclick="_phoneBar.conferenceVMuteMember('{member_phone}')"><img alt="关闭该成员的视频。"
-//                           src="images/video.jpg" /> </a></span>
-//                     <span class="conf_remove"><a href="javascript:void(0)"
-//                         onclick="_phoneBar.conferenceRemoveMembers('{member_phone}')" title="踢除会议成员。">移除</a></span>
-//                     <span class="conf_re_invite"><a href="javascript:void(0)"
-//                         onclick="_phoneBar.conferenceAddMemberBtnUI(1, '{member_phone}', '{member_name}')"
-//                         title="重新呼叫。">重呼</a></span>
-//                     <span class="conf_status">{member_status}</span>
-//                   </li>
-
-
-//                   <li></li>
-//                 </ul>
-//               </div>
-
-
-//             </div>
-//           </div>
-//         </td>
-
-//       </tr>
-
-//       <tr id="transfer_area" width="100%" style="display: none">
-
-//         <td colspan="2" width="100%" style="padding-left: 140px; padding-top: 30px;">
-//           <table width="100%">
-//             <tr>
-//               <td width="90">业务组 </td>
-//               <td width="90">坐席成员</td>
-//               <td>&nbsp; </td>
-//             </tr>
-//             <tr>
-//               <td>
-//                 <select size="10" id="transfer_to_groupIds" name="transfer_to_groupIds">
-//                   <option value="">请选择</option>
-//                 </select>
-//               </td>
-
-//               <td>
-//                 <select size="10" id="transfer_to_member" name="transfer_to_member">
-//                   <option value="">请选择</option>
-//                 </select>
-//               </td>
-//               <td valign="middle">
-
-
-//                 &nbsp;&nbsp; <input type="text" name="externalPhoneNumber" id="externalPhoneNumber" placeholder="电话号码"
-//                   title="可以把当前通话转接到外线号码上。 如果该文本框留空，则忽略处理。" class="tel_txt" />
-//                 <br /> <br />
-
-//                 &nbsp;&nbsp; <input type="button" name="doTransferBtn" id="doTransferBtn"
-//                   onclick="transferBtnClickUI()" style="width: 70px;" value="转接电话" title="把当前电话转接给他/她处理。" />
-//                 &nbsp;
-
-//                 &nbsp;&nbsp; <input type="button" name="stopCallWait" id="stopCallWait"
-//                   onclick="stopCallWaitBtnClickUI()" style="width: 70px;" value="接回客户"
-//                   title="在咨询失败的情况下使用该按钮，接回处于等待中的电话。" /> &nbsp;
-
-//                 &nbsp;&nbsp; <input type="button" name="transferCallWait" id="transferCallWait"
-//                   onclick="transferCallWaitBtnClickUI()" style="width: 70px;" value="转接客户"
-//                   title="在咨询成功的情况下使用该按钮，把电话转接给专家坐席。" /> &nbsp;
-
-//                 <input type="button" name="doConsultationBtn" id="doConsultationBtn"
-//                   onclick="consultationBtnClickUI()" style="width: 70px;" value="拨号咨询" title="" />
-
-//               </td>
-//             </tr>
-//           </table>
-//         </td>
-
-//       </tr>
-
-//     </table>
-//   </form>
-
- 
-// `)
-
   $("#unHoldBtnLi").hide();
   $("#conferenceBtn").removeClass("on").addClass("off");
   
@@ -693,41 +459,6 @@ function init () {
   populateVideoLevelDropdown('videoLevelSelect');
   populateVideoLevelDropdown('member_video_level');
 
-  //工具条对象断开事件
-  // _phoneBar.on(ccPhoneBarSocket.eventList.ws_disconnected, function(msg){
-  // 	console.log(msg);
-  // });
-  //
-  // //工具条对象连接成功
-  // _phoneBar.on(ccPhoneBarSocket.eventList.ws_connected, function(msg){
-  //     console.log(msg);
-  // });
-  //
-  // _phoneBar.on(ccPhoneBarSocket.eventList.callee_ringing, function(msg){
-  // 	console.log(msg.content, "被叫振铃事件");
-  // });
-  // _phoneBar.on(ccPhoneBarSocket.eventList.caller_answered, function(msg){
-  // 	console.log(msg, "主叫接通" );
-  // });
-  // _phoneBar.on(ccPhoneBarSocket.eventList.caller_hangup, function(msg){
-  //     console.log(msg, "主叫挂断");
-  // });
-  //
-  // _phoneBar.on(ccPhoneBarSocket.eventList.callee_answered, function(msg){
-  // 	console.log(msg, "被叫接通");
-  // });
-  // _phoneBar.on(ccPhoneBarSocket.eventList.callee_hangup, function(msg){
-  // 	console.log(msg, "被叫挂断");
-  // });
-  //
-  // _phoneBar.on(ccPhoneBarSocket.eventList.status_changed, function(msg){
-  // 	console.log("座席状态改变: " ,msg);
-  // });
-  //
-  // // 一次外呼结束;
-  // _phoneBar.on(ccPhoneBarSocket.eventList.outbound_finished, function(msg){
-  // 	console.log('一次外呼结束', msg);
-  // });
 
   // websocket通信对象断开事件;
   _phoneBar.on(ccPhoneBarSocket.eventListWithTextInfo.ws_disconnected.code, function (msg) {
@@ -766,7 +497,11 @@ function init () {
   });
   _phoneBar.on(ccPhoneBarSocket.eventListWithTextInfo.caller_answered.code, function (msg) {
     console.log(msg, "主叫接通");
-    $("#agentStatus").text("通话中");
+    // 1112 start
+    $('.auto-call-status-container').css("background-image","url(images/icon/calling.png)")
+    $('.auto-call-status-container').css("min-height","300px")
+    // 1112 end
+    $("#agentStatus").text("通话中").css('color', '#2FC77D');
     _phoneBar.updatePhoneBar(msg, ccPhoneBarSocket.eventListWithTextInfo.caller_answered.code);
   });
   _phoneBar.on(ccPhoneBarSocket.eventListWithTextInfo.caller_hangup.code, function (msg) {
@@ -783,7 +518,7 @@ function init () {
   function updateAgentStatus() {
     const hangupImg = $("#hangUpBtn img");
     hangupImg.attr("src", "images/grayHangup.png");
-    hangupImg.css("box-shadow", "0 0 10px rgba(128, 128, 128, 0.3)");
+    hangupImg.css("box-shadow", "0 0 10px rgba(224, 260, 156, 0.3)");
   }
   _phoneBar.on(ccPhoneBarSocket.eventListWithTextInfo.callee_answered.code, function (msg) {
     console.log(msg, "被叫接通");
@@ -1670,79 +1405,78 @@ function autoCallInit() {
   window.groupId = groupId;
   window.skillLevel = skillLevel;
   
-  // 简化UI，只显示必要的状态信息
+  // 1112 start 通话计时器变量
+  var callDurationTimer = null;
+  var callStartTime = null;
+  
+  // 1112 end
   $('#phone-bar').html(`
-    <div style="max-width: 100%; min-height: 100vh; background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%); padding: 0; box-sizing: border-box;">
-      <!-- 导航栏 -->
-      <div class="phone-bar-nav">
-        <button id="backBtn" class="back-btn">← 返回</button>
-        <div class="nav-title">呼叫中心html客户端工具条</div>
-        <div style="width: 60px;"></div> <!-- 占位元素，保持标题居中 -->
-      </div>
-      
-      <div style="padding: 20px;">
-        <div style="background: white; border-radius: 20px; box-shadow: 0 8px 20px rgba(0,0,0,0.1); padding: 30px; max-width: 500px; margin: 0 auto;">
+    <div style="max-width: 100%; max-height: 100vh; background: linear-gradient(180deg, #C5D1EC 0%, #EFF0F3 42.79%, #FFFFFF 100%);
+ padding: 0; box-sizing: border-box;">
+      <div style="padding: 20px 24px;height:100vh;box-sizing:border-box;" class="auto-call-container-box;">
+        <div class="auto-call-container">
           <div><audio hidden="true" id="audioHandler" controls="controls" autoplay="autoplay"></audio></div>
-        
-        <div style="text-align: center; margin-bottom: 30px;">
-          <div style="font-size: 24px; color: #333; font-weight: bold; margin-bottom: 10px;">智能客服系统</div>
-          <div style="font-size: 16px; color: #666;">自动外呼模式</div>
-        </div>
-
-        <div style="display: flex; justify-content: center; align-items: center; margin: 40px 0;">
-          <div style="position: relative;">
-            <a href="#" id="hangUpBtn" class="gj_btn">
-              <img src="images/hangup.png" alt="挂机" style="
-                width: 80px; 
-                height: 80px; 
-                border-radius: 50%;
-                box-shadow: 0 6px 15px rgba(255,71,87,0.3);
-                transition: all 0.3s ease;
-                cursor: pointer;
-              ">
-            </a>
+        <div style="text-align: center; margin-bottom: 30px;" class='auto-call-title-container'>
+          <div style="font-size: 24px; color: #122C4B; font-weight: 500;">智能客服系统</div>
+          <div style="display: flex;align-items: center;gap:3px;">
+             <div class="auto-call-icon-container">
+              <img src="images/icon/autocall.png" alt="" class="auto-call-icon">
+             </div>
+            <span class="auto-call-title-text">自动外呼模式</span>
           </div>
         </div>
 
         <div style="
-          background: #f8f9fa;
-          border-radius: 12px;
-          padding: 20px;
-          margin-top: 40px;
-        ">
+          margin-top: 64px;
+          margin-bottom:170px;
+          "
+          class="auto-call-status-container"
+        >
+          <img src="images/icon/connect.png" alt="" class="auto-call-status-icon">
           <div id="autoCallStatus" style="
             text-align: center;
-            color: #2d98da;
-            font-size: 16px;
+            color: #122C4B;
+            font-size: 18px;
             font-weight: 500;
-            margin-bottom: 15px;
-          ">正在初始化...</div>
+          ">
+          正在初始化...
+          </div>
+
           <div id="callStatus" style="
             text-align: center;
-            color: #666;
-            font-size: 14px;
-            padding: 10px;
+            color:rgba(18,44,75,0.8);
+            font-size: 16px;
             border-radius: 8px;
-            background: rgba(128,128,128,0.1);
           ">准备连接...</div>
+          </div>
+          <div style="display: flex; justify-content: center; align-items: center;">
+            <div>
+              <a href="#" id="hangUpBtn" class="gj_btn">
+                <img src="images/hangup.png" alt="挂机" style="
+                  width: 80px; 
+                  height: 80px; 
+                  border-radius: 50%;
+                  box-shadow: 0 6px 15px rgba(255,71,87,0.3);
+                  transition: all 0.3s ease;
+                  cursor: pointer;
+                ">
+              </a>
+            </div>
+          </div>
         </div>
-        </div>
+
       </div>
     </div>
   `);
   
   // 开始自动签入流程
   $("#autoCallStatus").text("正在自动签入...")
-    .css('color', '#2d98da');
   $("#callStatus").text("准备连接...")
-    .css('background', 'rgba(128,128,128,0.1)')
-    .css('color', '#666');
-  
-  // 加载 token 和密码
+    .css('color', 'rgba(18,44,75,0.8)');
+  // ----------------------------------1112start----------------------------------
   loadLoginToken();
   loadExtPassword(pass);
-  
-  // 等待异步加载完成
+
   let checkCount = 0;
   const maxCheckCount = 100; // 10秒超时
   const checkInterval = setInterval(() => {
@@ -1753,7 +1487,6 @@ function autoCallInit() {
     if (tokenLoaded && passwordLoaded) {
       clearInterval(checkInterval);
       
-      // 配置参数
       _callConfig = {
         'useDefaultUi': false,
         'loginToken': loginToken,
@@ -1762,12 +1495,13 @@ function autoCallInit() {
         'gatewayEncrypted': false,
         'extPassword': _phoneEncryptPassword
       };
-      
+  // 1112 1.
+      $(".auto-call-status-icon").attr("src","images/icon/connect.png")
       $("#autoCallStatus").text("签入成功，准备外呼...")
-        .css('color', '#2d98da');
+      // 1112 2.注释background、color
       $("#callStatus").text("准备外呼...")
-        .css('background', 'rgba(45,152,218,0.1)')
-        .css('color', '#2d98da');
+        // .css('background', 'rgba(45,152,218,0.1)')
+        // .css('color', '#2d98da');
       
       // 初始化电话条
       _phoneBar.initConfig(_callConfig);
@@ -1781,40 +1515,44 @@ function autoCallInit() {
         audioHandler: document.getElementById("audioHandler")
       });
       
-      // 连接WebSocket并等待连接成功
       $("#autoCallStatus").text("正在连接服务器...")
-        .css('color', '#2d98da');
       _phoneBar.connect();
-      
-      // 监听连接成功事件
       _phoneBar.on(ccPhoneBarSocket.eventList.ws_connected, function() {
+  // 1112
+      $(".auto-call-status-icon").attr("src","images/icon/connected.png")
         $("#autoCallStatus").text("连接成功，3秒后自动外呼...")
-          .css('color', '#2d98da');
+        // 1112 3.注释background、color
         $("#callStatus").text("连接就绪")
-          .css('background', 'rgba(45,152,218,0.1)')
-          .css('color', '#2d98da');
-        
-        // 启动倒计时自动外呼
+          // .css('background', 'rgba(45,152,218,0.1)')
+          // .css('color', '#2d98da');
         let countdown = 3;
         const countdownTimer = setInterval(() => {
           countdown--;
+  // 1112
+      $(".auto-call-status-icon").attr("src","images/icon/alarm.png")
           $("#autoCallStatus").text(`准备外呼：${countdown}秒...`);
           
           if (countdown <= 0) {
             clearInterval(countdownTimer);
             if (_phoneBar.getIsConnected()) {
-              $("#autoCallStatus").text("正在外呼：" + phone)
-                .css('color', '#2d98da');
+              // $("#autoCallStatus").text("正在外呼：" + phone)
+              $("#autoCallStatus").text(phone)
+  // 1112
+        $('.auto-call-status-container').css("background-image","url(images/icon/calling.png)")
+      $(".auto-call-status-icon").attr("src","images/icon/call.png")
+      // 1112 4.注释background、color
               $("#callStatus").text("呼叫中...")
-                .css('background', 'rgba(45,152,218,0.1)')
-                .css('color', '#2d98da');
+                // .css('background', 'rgba(45,152,218,0.1)')
+                // .css('color', '#2d98da');
               _phoneBar.call(phone, 'audio');
             } else {
+  // 1112
+      $(".auto-call-status-icon").attr("src","images/icon/call.png")
               $("#autoCallStatus").text("连接未就绪，无法外呼！")
                 .css('color', '#ff4757');
+                // 1112 6.注释background、修改color
               $("#callStatus").text("连接失败")
-                .css('background', 'rgba(255,71,87,0.1)')
-                .css('color', '#ff4757');
+                .css('color', '#E0544E');
             }
           }
         }, 1000);
@@ -1833,51 +1571,95 @@ function autoCallInit() {
       clearInterval(checkInterval);
       $("#autoCallStatus").text("自动签入失败，超时！")
         .css('color', '#ff4757');
+        // 1112 7.注释background、修改color
       $("#callStatus").text("签入超时")
-        .css('background', 'rgba(255,71,87,0.1)')
-        .css('color', '#ff4757');
+        .css('color', '#E0544E');
     }
   }, 100);
-  
+
   // 挂机按钮事件处理
   $('#hangUpBtn').off('click').on('click', function(e) {
     e.preventDefault();
-    // 添加点击动画
-    $(this).css('transform', 'scale(0.95)');
-    setTimeout(() => $(this).css('transform', 'scale(1)'), 200);
-    
-    if (jsSipUAInstance.hangup) {
-      jsSipUAInstance.hangup();
-    }
-    if (_phoneBar.disconnect) {
-      _phoneBar.disconnect();
-    }
-    $("#autoCallStatus").text("已挂机");
-    $("#callStatus").text("通话结束")
-      .css('background', 'rgba(255,71,87,0.1)')
-      .css('color', '#ff4757');
+      // 添加点击动画
+      $(this).css('transform', 'scale(0.95)');
+      setTimeout(() => $(this).css('transform', 'scale(1)'), 200);
+      
+      if (jsSipUAInstance.hangup) {
+        jsSipUAInstance.hangup();
+      }
+      if (_phoneBar.disconnect) {
+        _phoneBar.disconnect();
+      }
+     // 1112 修改图片 开始
+     $(".auto-call-status-icon").attr("src","images/icon/finishCalling.png")
+     // 结束
+      $("#autoCallStatus").text("已挂机").css('color', '#122C4B');
+      $("#callStatus").text("通话结束")
+     // 1112 修改color、删除bgc
+       // .css('background', '#E0544E')
+       .css('color', '#E0544E');
+     
+     // 停止通话计时器
+     if (callDurationTimer) {
+       clearInterval(callDurationTimer);
+       callDurationTimer = null;
+     }
+     $("#callDuration").text("00:00:00");
   });
   
   // 监听通话状态
   // 被叫接通
   _phoneBar.on(ccPhoneBarSocket.eventListWithTextInfo.callee_answered.code, function (msg) {
-    $("#callStatus").text("通话中")
-      .css('background', 'rgba(45,152,218,0.1)')
-      .css('color', '#2d98da');
-    $("#autoCallStatus").text("通话中...")
-      .css('color', '#2d98da');
-    console.log(msg, "被叫接通");
+  // 1112 start 3行
+      $(".auto-call-status-icon").attr("src","images/icon/nowCalling.png")
+      $('.auto-call-status-container').css("min-height","300px")
+   $('.auto-call-status-container').css("background-image","url(images/icon/calling.png)")
+  // 1112end
+  // 1112 5.注释background、修改color
+    $("#callStatus").text("通话中669")
+      // .css('background', 'rgba(45,152,218,0.1)')
+      .css('color', '#2FC77D');
+    console.log(msg, "被叫接通222");
+    
+    // 1112 start
+    callStartTime = new Date();
+    callDurationTimer = setInterval(function() {
+      var now = new Date();
+      var elapsed = Math.floor((now - callStartTime) / 1000);
+      var hours = Math.floor(elapsed / 3600);
+      var minutes = Math.floor((elapsed % 3600) / 60);
+      var seconds = elapsed % 60;
+      var timeStr = 
+        (hours < 10 ? '0' : '') + hours + ':' +
+        (minutes < 10 ? '0' : '') + minutes + ':' +
+        (seconds < 10 ? '0' : '') + seconds;
+      $("#callStatus").text("通话中 " + timeStr).css('color', '#2FC77D');
+    }, 1000);
+    // 立即显示一次
+    $("#callStatus").text("通话中 00:00:00").css('color', '#2FC77D');
+    //1112 end
     _phoneBar.updatePhoneBar(msg, ccPhoneBarSocket.eventListWithTextInfo.callee_answered.code);
   });
 
   // 主叫挂断（我方挂断）通话结束
   _phoneBar.on(ccPhoneBarSocket.eventListWithTextInfo.caller_hangup.code, function (msg) {
+  // 1112 start
+      $(".auto-call-status-icon").attr("src","images/icon/finishCalling.png")
+  $('.auto-call-status-container').css("background-image","url(images/icon/calling.png)")
+  // 1112 end
     console.log(msg, "主叫挂断");
+    // 1112 8.注释background、修改color
     $("#callStatus").text("通话结束")
-      .css('background', 'rgba(255,71,87,0.1)')
-      .css('color', '#ff4757');
+      .css('color', '#E0544E');
     $("#autoCallStatus").text("")
-      .css('color', '#ff4757');
+      .css('color', '#E0544E');
+    
+    // 1112start
+    if (callDurationTimer) {
+      clearInterval(callDurationTimer);
+      callDurationTimer = null;
+    }
+    // 1112 end
     _phoneBar.updatePhoneBar(msg, ccPhoneBarSocket.eventListWithTextInfo.caller_hangup.code);
   });
 
@@ -1889,8 +1671,16 @@ function autoCallInit() {
       .css('color', '#ff4757');
     $("#autoCallStatus").text("")
       .css('color', '#ff4757');
+    
+    // 1112 start
+    if (callDurationTimer) {
+      clearInterval(callDurationTimer);
+      callDurationTimer = null;
+    }
+    // 1112 end
     _phoneBar.updatePhoneBar(msg, ccPhoneBarSocket.eventListWithTextInfo.callee_hangup.code);
   });
+  // 1112end
 }
 
 // 返回按钮点击事件
