@@ -1692,7 +1692,7 @@ function autoCallInit() {
 
         <div style="
           margin-top: 64px;
-          margin-bottom:170px;
+          margin-bottom:30%;
           "
           class="auto-call-status-container"
         >
