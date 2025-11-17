@@ -1088,3 +1088,54 @@ qiangjie_btn,.qiangjie_btn.on{background:url(./images/phonebar/qiangjie.png) no-
     color: #333 !important;
     margin: 0;
 }
+.auto-call-container{
+    height:100%;
+}
+.auto-call-title-container{
+    display: flex;
+    justify-content: space-between;
+}
+.auto-call-icon-container{
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width:24px;
+    height: 18px;
+    background-color: #2FC77D;
+    border-radius:5px;
+    img{
+        display: inline-block;
+        width:16px;
+        height:16px;
+    }
+}
+.auto-call-title-text{
+    color:#2FC77D;
+    font-size:14px;
+}
+.auto-call-status-container{
+    width:100%;
+    min-height: 300px;
+    max-height: 300px;
+    background:url(./images/icon/halfCircle.png) no-repeat;
+    background-size: contain;
+    background-position: center center;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap:15px;
+    position: relative;
+}
+.auto-call-status-icon{
+    display: inline-block;
+    width:38px;
+    height:38px;
+    padding-bottom:8px;
+}
+.auto-call-container-box{
+    display: flex;
+    flex-direction: column;
+    justify-content: space-around;
+    padding-bottom:120px;
+}

@@ -765,7 +765,9 @@ function init () {
   });
   _phoneBar.on(ccPhoneBarSocket.eventListWithTextInfo.caller_answered.code, function (msg) {
     console.log(msg, "主叫接通");
-    $("#agentStatus").text("通话中");
+    $('.auto-call-status-container').css("background-image","url(images/icon/calling.png)")
+    $('.auto-call-status-container').css("min-height","300px")
+    $("#agentStatus").text("通话中").css('color', '#2FC77D');
     _phoneBar.updatePhoneBar(msg, ccPhoneBarSocket.eventListWithTextInfo.caller_answered.code);
   });
   _phoneBar.on(ccPhoneBarSocket.eventListWithTextInfo.caller_hangup.code, function (msg) {
@@ -1669,73 +1671,72 @@ function autoCallInit() {
   window.groupId = groupId;
   window.skillLevel = skillLevel;
   
+  var callDurationTimer = null;
+  var callStartTime = null;
   // 简化UI，只显示必要的状态信息
   $('#phone-bar').html(`
-    <div style="max-width: 100%; min-height: 100vh; background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%); padding: 0; box-sizing: border-box;">
-      <!-- 导航栏 -->
-      <div class="phone-bar-nav">
-        <button id="backBtn" class="back-btn">← 返回</button>
-        <div class="nav-title">呼叫中心html客户端工具条</div>
-        <div style="width: 60px;"></div> <!-- 占位元素，保持标题居中 -->
-      </div>
-      
-      <div style="padding: 20px;">
-        <div style="background: white; border-radius: 20px; box-shadow: 0 8px 20px rgba(0,0,0,0.1); padding: 30px; max-width: 500px; margin: 0 auto;">
+    <div style="max-width: 100%; max-height: 100vh; background: linear-gradient(180deg, #C5D1EC 0%, #EFF0F3 42.79%, #FFFFFF 100%);
+ padding: 0; box-sizing: border-box;">
+      <div style="padding: 20px 24px;height:100vh;box-sizing:border-box;" class="auto-call-container-box;">
+        <div class="auto-call-container">
           <div><audio hidden="true" id="audioHandler" controls="controls" autoplay="autoplay"></audio></div>
-        
-        <div style="text-align: center; margin-bottom: 30px;">
-          <div style="font-size: 24px; color: #333; font-weight: bold; margin-bottom: 10px;">智能客服系统</div>
-          <div style="font-size: 16px; color: #666;">自动外呼模式</div>
-        </div>
-
-        <div style="display: flex; justify-content: center; align-items: center; margin: 40px 0;">
-          <div style="position: relative;">
-            <a href="#" id="hangUpBtn" class="gj_btn">
-              <img src="images/hangup.png" alt="挂机" style="
-                width: 80px; 
-                height: 80px; 
-                border-radius: 50%;
-                box-shadow: 0 6px 15px rgba(255,71,87,0.3);
-                transition: all 0.3s ease;
-                cursor: pointer;
-              ">
-            </a>
+        <div style="text-align: center; margin-bottom: 30px;" class='auto-call-title-container'>
+          <div style="font-size: 24px; color: #122C4B; font-weight: 500;">智能客服系统</div>
+          <div style="display: flex;align-items: center;gap:3px;">
+             <div class="auto-call-icon-container">
+              <img src="images/icon/autocall.png" alt="" class="auto-call-icon">
+             </div>
+            <span class="auto-call-title-text">自动外呼模式</span>
           </div>
         </div>
 
         <div style="
-          background: #f8f9fa;
-          border-radius: 12px;
-          padding: 20px;
-          margin-top: 40px;
-        ">
+          margin-top: 64px;
+          margin-bottom:170px;
+          "
+          class="auto-call-status-container"
+        >
+          <img src="images/icon/connect.png" alt="" class="auto-call-status-icon">
           <div id="autoCallStatus" style="
             text-align: center;
-            color: #2d98da;
-            font-size: 16px;
+            color: #122C4B;
+            font-size: 18px;
             font-weight: 500;
-            margin-bottom: 15px;
-          ">正在初始化...</div>
+          ">
+          正在初始化...
+          </div>
+
           <div id="callStatus" style="
             text-align: center;
-            color: #666;
-            font-size: 14px;
-            padding: 10px;
+            color:rgba(18,44,75,0.8);
+            font-size: 16px;
             border-radius: 8px;
-            background: rgba(128,128,128,0.1);
           ">准备连接...</div>
+          </div>
+          <div style="display: flex; justify-content: center; align-items: center;">
+            <div>
+              <a href="#" id="hangUpBtn" class="gj_btn">
+                <img src="images/hangup.png" alt="挂机" style="
+                  width: 80px; 
+                  height: 80px; 
+                  border-radius: 50%;
+                  box-shadow: 0 6px 15px rgba(255,71,87,0.3);
+                  transition: all 0.3s ease;
+                  cursor: pointer;
+                ">
+              </a>
+            </div>
+          </div>
         </div>
-        </div>
+
       </div>
     </div>
   `);
   
   // 开始自动签入流程
   $("#autoCallStatus").text("正在自动签入...")
-    .css('color', '#2d98da');
   $("#callStatus").text("准备连接...")
-    .css('background', 'rgba(128,128,128,0.1)')
-    .css('color', '#666');
+  .css('color', 'rgba(18,44,75,0.8)');
   
   // 加载 token 和密码
   loadLoginToken();
@@ -1761,13 +1762,9 @@ function autoCallInit() {
         'gatewayEncrypted': false,
         'extPassword': _phoneEncryptPassword
       };
-      
+      $(".auto-call-status-icon").attr("src","images/icon/connect.png")
       $("#autoCallStatus").text("签入成功，准备外呼...")
-        .css('color', '#2d98da');
       $("#callStatus").text("准备外呼...")
-        .css('background', 'rgba(45,152,218,0.1)')
-        .css('color', '#2d98da');
-      
       // 初始化电话条
       _phoneBar.initConfig(_callConfig);
       
@@ -1782,38 +1779,34 @@ function autoCallInit() {
       
       // 连接WebSocket并等待连接成功
       $("#autoCallStatus").text("正在连接服务器...")
-        .css('color', '#2d98da');
       _phoneBar.connect();
       
       // 监听连接成功事件
       _phoneBar.on(ccPhoneBarSocket.eventList.ws_connected, function() {
+        $(".auto-call-status-icon").attr("src","images/icon/connected.png")
         $("#autoCallStatus").text("连接成功，3秒后自动外呼...")
-          .css('color', '#2d98da');
         $("#callStatus").text("连接就绪")
-          .css('background', 'rgba(45,152,218,0.1)')
-          .css('color', '#2d98da');
         
         // 启动倒计时自动外呼
         let countdown = 3;
         const countdownTimer = setInterval(() => {
           countdown--;
+          $(".auto-call-status-icon").attr("src","images/icon/alarm.png")
           $("#autoCallStatus").text(`准备外呼：${countdown}秒...`);
           
           if (countdown <= 0) {
             clearInterval(countdownTimer);
             if (_phoneBar.getIsConnected()) {
-              $("#autoCallStatus").text("正在外呼：" + phone)
-                .css('color', '#2d98da');
+              $("#autoCallStatus").text(phone)
+                $('.auto-call-status-container').css("background-image","url(images/icon/calling.png)")
+                $(".auto-call-status-icon").attr("src","images/icon/call.png")
               $("#callStatus").text("呼叫中...")
-                .css('background', 'rgba(45,152,218,0.1)')
-                .css('color', '#2d98da');
               _phoneBar.call(phone, 'audio');
             } else {
+              $(".auto-call-status-icon").attr("src","images/icon/call.png")
               $("#autoCallStatus").text("连接未就绪，无法外呼！")
                 .css('color', '#ff4757');
-              $("#callStatus").text("连接失败")
-                .css('background', 'rgba(255,71,87,0.1)')
-                .css('color', '#ff4757');
+              $("#callStatus").text("连接失败").css('color', '#E0544E');
             }
           }
         }, 1000);
@@ -1831,10 +1824,9 @@ function autoCallInit() {
     } else if (checkCount >= maxCheckCount) {
       clearInterval(checkInterval);
       $("#autoCallStatus").text("自动签入失败，超时！")
-        .css('color', '#ff4757');
+      .css('color', '#ff4757');
       $("#callStatus").text("签入超时")
-        .css('background', 'rgba(255,71,87,0.1)')
-        .css('color', '#ff4757');
+      .css('color', '#E0544E');
     }
   }, 100);
   
@@ -1851,32 +1843,50 @@ function autoCallInit() {
     if (_phoneBar.disconnect) {
       _phoneBar.disconnect();
     }
-    $("#autoCallStatus").text("已挂机");
+    $(".auto-call-status-icon").attr("src","images/icon/finishCalling.png")
+    $("#autoCallStatus").text("已挂机").css('color', '#122C4B');
     $("#callStatus").text("通话结束")
-      .css('background', 'rgba(255,71,87,0.1)')
-      .css('color', '#ff4757');
+    .css('color', '#E0544E');
   });
   
   // 监听通话状态
   // 被叫接通
   _phoneBar.on(ccPhoneBarSocket.eventListWithTextInfo.callee_answered.code, function (msg) {
+    $(".auto-call-status-icon").attr("src","images/icon/nowCalling.png")
+    $('.auto-call-status-container').css("min-height","300px")
+ $('.auto-call-status-container').css("background-image","url(images/icon/calling.png)")
     $("#callStatus").text("通话中")
-      .css('background', 'rgba(45,152,218,0.1)')
-      .css('color', '#2d98da');
-    $("#autoCallStatus").text("通话中...")
-      .css('color', '#2d98da');
+    $("#autoCallStatus").text("通话中...").css('color', '#2FC77D');
     console.log(msg, "被叫接通");
+    callStartTime = new Date();
+    callDurationTimer = setInterval(function() {
+      var now = new Date();
+      var elapsed = Math.floor((now - callStartTime) / 1000);
+      var hours = Math.floor(elapsed / 3600);
+      var minutes = Math.floor((elapsed % 3600) / 60);
+      var seconds = elapsed % 60;
+      var timeStr = 
+        (hours < 10 ? '0' : '') + hours + ':' +
+        (minutes < 10 ? '0' : '') + minutes + ':' +
+        (seconds < 10 ? '0' : '') + seconds;
+      $("#callStatus").text("通话中 " + timeStr).css('color', '#2FC77D');
+    }, 1000);
+    $("#callStatus").text("通话中 00:00:00").css('color', '#2FC77D');
     _phoneBar.updatePhoneBar(msg, ccPhoneBarSocket.eventListWithTextInfo.callee_answered.code);
   });
 
   // 主叫挂断（我方挂断）通话结束
   _phoneBar.on(ccPhoneBarSocket.eventListWithTextInfo.caller_hangup.code, function (msg) {
-    console.log(msg, "主叫挂断");
+    $(".auto-call-status-icon").attr("src","images/icon/finishCalling.png")
+    $('.auto-call-status-container').css("background-image","url(images/icon/calling.png)")
     $("#callStatus").text("通话结束")
-      .css('background', 'rgba(255,71,87,0.1)')
-      .css('color', '#ff4757');
+    .css('color', '#E0544E');
     $("#autoCallStatus").text("")
-      .css('color', '#ff4757');
+    .css('color', '#E0544E');
+    if (callDurationTimer) {
+      clearInterval(callDurationTimer);
+      callDurationTimer = null;
+    }
     _phoneBar.updatePhoneBar(msg, ccPhoneBarSocket.eventListWithTextInfo.caller_hangup.code);
   });
 
@@ -1884,10 +1894,14 @@ function autoCallInit() {
   _phoneBar.on(ccPhoneBarSocket.eventListWithTextInfo.callee_hangup.code, function (msg) {
     console.log(msg, "被叫挂断");
     $("#callStatus").text("通话结束")
-      .css('background', 'rgba(255,71,87,0.1)')
-      .css('color', '#ff4757');
-    $("#autoCallStatus").text("")
-      .css('color', '#ff4757');
+    .css('background', 'rgba(255,71,87,0.1)')
+    .css('color', '#ff4757');
+  $("#autoCallStatus").text("")
+    .css('color', '#ff4757');
+    if (callDurationTimer) {
+      clearInterval(callDurationTimer);
+      callDurationTimer = null;
+    }
     _phoneBar.updatePhoneBar(msg, ccPhoneBarSocket.eventListWithTextInfo.callee_hangup.code);
   });
 }
