@@ -97,6 +97,7 @@ var pass = ''; // 密码
 var phone = ''; // 要外呼的号码
 var tokenId = ''; // 签入token
 var workTicketId = ''; // 工单id
+var userId = ''; //用户id
 
 // 根据uid获取用户信息的函数
 async function getUserInfoByUid(uid) {
@@ -154,20 +155,21 @@ if (window.location.href.toString().indexOf("?") != -1) {
   //tokenId = ccPhoneBarSocket.utils.getQueryParam("tokenId");
   tokenId = ccPhoneBarSocket.utils.getQueryParam("tokenId") || 'token';
   workTicketId = ccPhoneBarSocket.utils.getQueryParam("workTicketId");
+  userId = ccPhoneBarSocket.utils.getQueryParam("userId");
 
   console.log("所有参数:", "extnum=", extnum, "opnum=", opnum, "pass=", pass, "phone=", phone, "groupId=", groupId, "tokenId=", tokenId, "workTicketId=", workTicketId);
 
   // 如果有uid参数，则通过接口获取用户信息
-  if (uid) {
+  if (uid && userId) {
     getUserInfoByUid(uid).then(userInfo => {
       extnum = userInfo.extNum;
       opnum = userInfo.userCode; // 使用userCode作为opnum
       pass = userInfo.extPass;
       
-      console.log("从接口获取到的用户信息:", "extnum=", extnum, "opnum=", opnum, "pass=", pass);
+      console.log("从接口获取到的用户信息:", "extnum=", extnum, "opnum=", opnum, "pass=", pass , "userId=", userId);
       
       // 如果获取到所有必要参数，自动启动外呼流程
-      if (extnum && opnum && pass && phone) {
+      if (extnum && opnum && pass && phone && userId) {
         // 页面加载完成后自动启动 修改1017
         $(document).ready(function() {
           autoCallInit();

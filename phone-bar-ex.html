@@ -31,7 +31,8 @@
       } else {
         console.warn("新来电事件缺少必要参数，无法调用工单回访接口", {
           call_uuid: call_uuid,
-          workTicketId: workTicketId
+          workTicketId: workTicketId,
+          userId: userId
         });
       }
     });
