@@ -151,7 +151,8 @@ if (window.location.href.toString().indexOf("?") != -1) {
   // 获取其他参数
   phone = ccPhoneBarSocket.utils.getQueryParam("phone");
   groupId = ccPhoneBarSocket.utils.getQueryParam("groupId") || 1;
-  tokenId = ccPhoneBarSocket.utils.getQueryParam("tokenId");
+  //tokenId = ccPhoneBarSocket.utils.getQueryParam("tokenId");
+  tokenId = ccPhoneBarSocket.utils.getQueryParam("tokenId") || 'token';
   workTicketId = ccPhoneBarSocket.utils.getQueryParam("workTicketId");
 
   console.log("所有参数:", "extnum=", extnum, "opnum=", opnum, "pass=", pass, "phone=", phone, "groupId=", groupId, "tokenId=", tokenId, "workTicketId=", workTicketId);
