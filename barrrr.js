@@ -6,16 +6,16 @@ var opnum = ''; //工号
 var gatewayList = [
     {
         "uuid": "1",
-        "updateTime": 1758862985998,
-        "gatewayAddr": "[fc00::655:9e5a]:5060",
-        "callerNumber": "007",
+        "updateTime": 1765022363076,
+        "gatewayAddr": "[FC00::1020:2]:5060",
+        "callerNumber": "80835244",
         "calleePrefix": "",
         "priority": 1,
-        "concurrency": 2,
+        "concurrency": 10,
         "register": false,
         "audioCodec": "pcma"
     }
-  ]
+]
 
 var jsSipUAInstance = new jsSipUA();
 
