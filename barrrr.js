@@ -1489,7 +1489,7 @@ function autoCallInit() {
         'loginToken': loginToken,
         'ipccServer': scriptServer + ':38701',
         'gatewayList': gatewayList,
-        'gatewayEncrypted': false,
+        'gatewayEncrypted': true,
         'extPassword': _phoneEncryptPassword
       };
   // 1112 1.
