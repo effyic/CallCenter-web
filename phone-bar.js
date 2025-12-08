@@ -1701,6 +1701,14 @@ $(document).on('click', '#unmuteBtn', function(e) {
   }
 })
 
+$(document).on('click', '#callBtn', function(e) {
+  if (!jsSipUAInstance.getAutoAnswer()) {
+    jsSipUAInstance.setAutoAnswer(true);
+    setTimeout(() => {
+        jsSipUAInstance.setAutoAnswer(false);
+    }, 3000);
+  }
+})
 
 // 接回客户
 function stopCallWaitBtnClickUI() {
