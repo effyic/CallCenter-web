@@ -28,19 +28,7 @@ if (host.startsWith("[")) {
 }
 var extnum = '1103'; //分机号
 var opnum = '1103'; //工号
-var gatewayList = [
-    {
-        "uuid": "1",
-        "updateTime": 1758862985998,
-        "gatewayAddr": "172.16.1.112:5060",
-        "callerNumber": "007",
-        "calleePrefix": "",
-        "priority": 1,
-        "concurrency": 2,
-        "register": false,
-        "audioCodec": "pcma"
-    }
-  ]
+var gatewayList = []
 
 var jsSipUAInstance = new jsSipUA();
 
@@ -133,6 +121,7 @@ function autoSignin() {
   // 执行自动签入流程
   loadLoginToken();
   loadExtPassword(savedPassword);
+  loadGatewayList();
   
   // 等待所有脚本加载完成后初始化配置
   var checkCount = 0;
@@ -142,7 +131,8 @@ function autoSignin() {
     
     // 检查必需的全局变量是否都已加载
     if (typeof loginToken !== 'undefined' && loginToken && 
-        typeof _phoneEncryptPassword !== 'undefined' && _phoneEncryptPassword) {
+        typeof _phoneEncryptPassword !== 'undefined' && _phoneEncryptPassword &&
+        typeof _configGatewayList !== 'undefined' && _configGatewayList) {
       
       clearInterval(checkInterval);
       
@@ -151,7 +141,9 @@ function autoSignin() {
       _callConfig["extPassword"] = _phoneEncryptPassword;
       
       console.log('自动签入配置已更新，开始连接');
-       _callConfig["gatewayList"] = gatewayList;
+      //_callConfig["gatewayList"] = gatewayList;
+      _callConfig["gatewayList"] = _configGatewayList;
+
       // 初始化并连接
       _phoneBar.initConfig(_callConfig);
             var _phoneConfig = {
@@ -262,7 +254,6 @@ function loadGatewayList () {
   script.src = url;
   document.getElementsByTagName('head')[0].appendChild(script);
 }
-loadGatewayList();
 
 // 将视频级别填充到下拉列表中的函数
 function populateVideoLevelDropdown (objId) {
@@ -1312,6 +1303,7 @@ function init () {
       // 按顺序调用加载函数
       loadLoginToken();
       loadExtPassword(passwordValue);
+      loadGatewayList();
       
       // 等待所有脚本加载完成后初始化配置
       var checkCount = 0;
@@ -1325,8 +1317,9 @@ function init () {
         // 检查必需的全局变量是否都已加载
         var tokenLoaded = typeof(loginToken) !== "undefined";
         var passwordLoaded = typeof(_phoneEncryptPassword) !== "undefined";
+        var configGatewayList = typeof(_configGatewayList) !== "undefined";
         
-        if (tokenLoaded && passwordLoaded) {
+        if (tokenLoaded && passwordLoaded && configGatewayList) {
           clearInterval(checkInterval);
           
           // 配置 loginToken
@@ -1346,7 +1339,14 @@ function init () {
           }
 
           // 配置 gatewayList
-         _callConfig["gatewayList"] = gatewayList;
+          //_callConfig["gatewayList"] = gatewayList;
+          if (typeof (_configGatewayList) != "undefined") {
+            _callConfig["gatewayList"] = _configGatewayList;
+          } else {
+            alert("电话工具条：无法获取 _configGatewayList!");
+            return;
+          }
+          
           // 初始化电话工具条
           _phoneBar.initConfig(_callConfig);
           console.log(_callConfig,'✅ 电话工具条配置初始化完成');
@@ -1354,7 +1354,7 @@ function init () {
           var _phoneConfig = {
               'extnum': extnumValue,		//分机号
               'password': passwordValue,	//分机密码  
-            'fsHost': scriptServer,//电话服务器主机host地址，必须是 "域名格式的"，不能是ip地址
+              'fsHost': scriptServer,//电话服务器主机host地址，必须是 "域名格式的"，不能是ip地址
               'fsPort': '5066',		//电话服务器端口，必须是数字
               'audioHandler': document.getElementById("audioHandler"),
           };
