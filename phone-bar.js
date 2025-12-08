@@ -1092,6 +1092,9 @@ function init () {
       
       // 取消按钮点击事件
       $(document).off('click', '#rejectCallBtn').on('click', '#rejectCallBtn', function() {
+        // 立即停止响铃
+        jsSipUAInstance.stopRinging();
+        
         jsSipUAInstance.hangup();
         ModalUtil.hide('incomingCallModal');
         setTimeout(function() {
