@@ -1850,6 +1850,11 @@ function autoCallInit() {
     $("#autoCallStatus").text("已挂机").css('color', '#122C4B');
     $("#callStatus").text("通话结束")
     .css('color', '#E0544E');
+    if (callDurationTimer) {
+      clearInterval(callDurationTimer);
+      callDurationTimer = null;
+    }
+    $("#callDuration").text("00:00:00");
   });
   
   // 监听通话状态
