@@ -3,19 +3,7 @@ var _phoneBar = new ccPhoneBarSocket();
 var scriptServer = "effyic-callcenter-h5.bphc.com.cn";
 var extnum = ''; //分机号
 var opnum = ''; //工号
-var gatewayList = [
-    {
-        "uuid": "1",
-        "updateTime": 1765022363076,
-        "gatewayAddr": "[FC00::1020:2]:5060",
-        "callerNumber": "80835244",
-        "calleePrefix": "",
-        "priority": 1,
-        "concurrency": 10,
-        "register": false,
-        "audioCodec": "pcma"
-    }
-]
+var gatewayList = []
 
 var jsSipUAInstance = new jsSipUA();
 
@@ -237,7 +225,7 @@ function loadGatewayList () {
   script.src = url;
   document.getElementsByTagName('head')[0].appendChild(script);
 }
-loadGatewayList();
+
 
 // 将视频级别填充到下拉列表中的函数
 function populateVideoLevelDropdown (objId) {
@@ -1235,6 +1223,7 @@ function init () {
       // 按顺序调用加载函数
       loadLoginToken();
       loadExtPassword(passwordValue);
+      loadGatewayList();
       
       // 等待所有脚本加载完成后初始化配置
       var checkCount = 0;
@@ -1245,8 +1234,9 @@ function init () {
         // 检查必需的全局变量是否都已加载
         var tokenLoaded = typeof(loginToken) !== "undefined";
         var passwordLoaded = typeof(_phoneEncryptPassword) !== "undefined";
+        var configGatewayList = typeof(_configGatewayList) !== "undefined";
         
-        if (tokenLoaded && passwordLoaded) {
+        if (tokenLoaded && passwordLoaded && configGatewayList) {
           clearInterval(checkInterval);
           
           // 配置 loginToken
@@ -1266,7 +1256,14 @@ function init () {
           }
 
           // 配置 gatewayList
-          _callConfig["gatewayList"] = gatewayList;
+          //_callConfig["gatewayList"] = gatewayList;
+          if (typeof (_configGatewayList) != "undefined") {
+            _callConfig["gatewayList"] = _configGatewayList;
+            _callConfig["gatewayEncrypted"] = true;
+          } else {
+            alert("电话工具条：无法获取 _configGatewayList!");
+            return;
+          }
 
           // 初始化电话工具条
           _phoneBar.initConfig(_callConfig);
@@ -1275,7 +1272,7 @@ function init () {
           var _phoneConfig = {
               'extnum': extnumValue,		//分机号
               'password': passwordValue,	//分机密码  
-            'fsHost': scriptServer,//电话服务器主机host地址，必须是 "域名格式的"，不能是ip地址
+              'fsHost': scriptServer,//电话服务器主机host地址，必须是 "域名格式的"，不能是ip地址
               'fsPort': '38700',		//电话服务器端口，必须是数字
               'audioHandler': document.getElementById("audioHandler"),
           };
@@ -1744,6 +1741,7 @@ function autoCallInit() {
   // 加载 token 和密码
   loadLoginToken();
   loadExtPassword(pass);
+  loadGatewayList();
   
   // 等待异步加载完成
   let checkCount = 0;
@@ -1752,8 +1750,9 @@ function autoCallInit() {
     checkCount++;
     const tokenLoaded = typeof(loginToken) !== "undefined" && loginToken;
     const passwordLoaded = typeof(_phoneEncryptPassword) !== "undefined" && _phoneEncryptPassword;
+    const configGatewayList = typeof(_configGatewayList) !== "undefined" && _configGatewayList;
     
-    if (tokenLoaded && passwordLoaded) {
+    if (tokenLoaded && passwordLoaded && configGatewayList) {
       clearInterval(checkInterval);
       
       // 配置参数
@@ -1761,8 +1760,8 @@ function autoCallInit() {
         'useDefaultUi': false,
         'loginToken': loginToken,
         'ipccServer': scriptServer + ':38701',
-        'gatewayList': gatewayList,
-        'gatewayEncrypted': false,
+        'gatewayList': _configGatewayList,
+        'gatewayEncrypted': true,
         'extPassword': _phoneEncryptPassword
       };
       $(".auto-call-status-icon").attr("src","images/icon/connect.png")
