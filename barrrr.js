@@ -1835,16 +1835,23 @@ function autoCallInit() {
   
   // 挂机按钮事件处理
   $('#hangUpBtn').off('click').on('click', function(e) {
+    console.log('挂机按钮点击事件')
     e.preventDefault();
     // 添加点击动画
     $(this).css('transform', 'scale(0.95)');
     setTimeout(() => $(this).css('transform', 'scale(1)'), 200);
     
     if (jsSipUAInstance.hangup) {
+      console.log('挂机按钮点击事件，调用jsSipUAInstance.hangup()')
       jsSipUAInstance.hangup();
     }
     if (_phoneBar.disconnect) {
       _phoneBar.disconnect();
+    }
+     if (callDurationTimer) {
+      console.log('挂机按钮点击事件，清除通话时长定时器')
+      clearInterval(callDurationTimer);
+      callDurationTimer = null;
     }
     $(".auto-call-status-icon").attr("src","images/icon/finishCalling.png")
     $("#autoCallStatus").text("已挂机").css('color', '#122C4B');
@@ -1855,6 +1862,7 @@ function autoCallInit() {
   // 监听通话状态
   // 被叫接通
   _phoneBar.on(ccPhoneBarSocket.eventListWithTextInfo.callee_answered.code, function (msg) {
+    console.log('在通话')
     $(".auto-call-status-icon").attr("src","images/icon/nowCalling.png")
     $('.auto-call-status-container').css("min-height","300px")
  $('.auto-call-status-container').css("background-image","url(images/icon/calling.png)")
@@ -1880,6 +1888,7 @@ function autoCallInit() {
 
   // 主叫挂断（我方挂断）通话结束
   _phoneBar.on(ccPhoneBarSocket.eventListWithTextInfo.caller_hangup.code, function (msg) {
+     console.log(msg, "主叫挂断！！！");
     $(".auto-call-status-icon").attr("src","images/icon/finishCalling.png")
     $('.auto-call-status-container').css("background-image","url(images/icon/calling.png)")
     $("#callStatus").text("通话结束")
@@ -1895,7 +1904,7 @@ function autoCallInit() {
 
   // 被叫挂断（对方挂断）
   _phoneBar.on(ccPhoneBarSocket.eventListWithTextInfo.callee_hangup.code, function (msg) {
-    console.log(msg, "被叫挂断");
+    console.log(msg, "被叫挂断！！！");
     $("#callStatus").text("通话结束")
     .css('background', 'rgba(255,71,87,0.1)')
     .css('color', '#ff4757');
