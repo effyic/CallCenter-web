@@ -143,6 +143,7 @@ function autoSignin() {
       console.log('自动签入配置已更新，开始连接');
       //_callConfig["gatewayList"] = gatewayList;
       _callConfig["gatewayList"] = _configGatewayList;
+      _callConfig["gatewayEncrypted"] = true;
 
       // 初始化并连接
       _phoneBar.initConfig(_callConfig);
@@ -1166,7 +1167,7 @@ function init () {
     'gatewayList': gatewayList,
 
     // 网关列表信息是否为加密模式;
-    'gatewayEncrypted': false
+    'gatewayEncrypted': true
   };
 
   // 使用工具条之前需要先初始化 _callConfig 参数， 填充各个字段的值： 合计7个字段，必须填写正确 ；
@@ -1342,6 +1343,7 @@ function init () {
           //_callConfig["gatewayList"] = gatewayList;
           if (typeof (_configGatewayList) != "undefined") {
             _callConfig["gatewayList"] = _configGatewayList;
+            _callConfig["gatewayEncrypted"] = true;
           } else {
             alert("电话工具条：无法获取 _configGatewayList!");
             return;
