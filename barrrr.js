@@ -825,7 +825,7 @@ function init () {
     'gatewayList': gatewayList,
 
     // 网关列表信息是否为加密模式;
-    'gatewayEncrypted': false
+    'gatewayEncrypted': true
   };
 
   // 使用工具条之前需要先初始化 _callConfig 参数， 填充各个字段的值： 合计7个字段，必须填写正确 ；
