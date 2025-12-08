@@ -28,19 +28,7 @@ if (host.startsWith("[")) {
 }
 var extnum = '1103'; //分机号
 var opnum = '1103'; //工号
-var gatewayList = [
-    {
-        "uuid": "1",
-        "updateTime": 1765022363076,
-        "gatewayAddr": "[FC00::1020:2]:5060",
-        "callerNumber": "80835244",
-        "calleePrefix": "",
-        "priority": 1,
-        "concurrency": 10,
-        "register": false,
-        "audioCodec": "pcma"
-    }
-]
+var gatewayList = []
 
 var jsSipUAInstance = new jsSipUA();
 
@@ -142,16 +130,19 @@ function autoSignin() {
     
     // 检查必需的全局变量是否都已加载
     if (typeof loginToken !== 'undefined' && loginToken && 
-        typeof _phoneEncryptPassword !== 'undefined' && _phoneEncryptPassword) {
+        typeof _phoneEncryptPassword !== 'undefined' && _phoneEncryptPassword &&
+        typeof _configGatewayList !== 'undefined' && _configGatewayList) {
       
       clearInterval(checkInterval);
       
       // 更新配置对象
       _callConfig["loginToken"] = loginToken;
       _callConfig["extPassword"] = _phoneEncryptPassword;
+      _callConfig["gatewayEncrypted"] = true;
+      _callConfig["gatewayList"] = _configGatewayList;
       
       console.log('自动签入配置已更新，开始连接');
-       _callConfig["gatewayList"] = gatewayList;
+      //_callConfig["gatewayList"] = gatewayList;
       // 初始化并连接
       _phoneBar.initConfig(_callConfig);
             var _phoneConfig = {
@@ -1328,8 +1319,9 @@ function init () {
         // 检查必需的全局变量是否都已加载
         var tokenLoaded = typeof(loginToken) !== "undefined";
         var passwordLoaded = typeof(_phoneEncryptPassword) !== "undefined";
+        var configGatewayList = typeof(_configGatewayList) !== "undefined";
         
-        if (tokenLoaded && passwordLoaded) {
+        if (tokenLoaded && passwordLoaded && configGatewayList) {
           clearInterval(checkInterval);
           
           // 配置 loginToken
@@ -1348,8 +1340,16 @@ function init () {
             return;
           }
 
+          if (typeof (_configGatewayList) != "undefined") {
+            _callConfig["gatewayList"] = _configGatewayList;
+            _callConfig["gatewayEncrypted"] = true;
+          } else {
+            alert("电话工具条：无法获取 _configGatewayList!");
+            return;
+          }
+
           // 配置 gatewayList
-         _callConfig["gatewayList"] = gatewayList;
+         //_callConfig["gatewayList"] = gatewayList;
           // 初始化电话工具条
           _phoneBar.initConfig(_callConfig);
           console.log(_callConfig,'✅ 电话工具条配置初始化完成');
