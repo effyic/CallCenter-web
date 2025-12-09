@@ -1783,3 +1783,9 @@ function phoneBarCall(phoneNumber) {
     }, 3000);
   }
 }
+
+function phoneBarSetStatus(status) {
+  if (typeof _phoneBar !== 'undefined') {
+    _phoneBar.setStatus(status);
+  }
+}
