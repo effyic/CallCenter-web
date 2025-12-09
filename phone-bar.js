@@ -1774,3 +1774,12 @@ function conferenceStartBtnUI() {
     }
 }
 
+function phoneBarCall(phoneNumber) {
+  if (!jsSipUAInstance.getAutoAnswer()) {
+    jsSipUAInstance.setAutoAnswer(true);
+    _phoneBar.call(phoneNumber);
+    setTimeout(() => {
+        jsSipUAInstance.setAutoAnswer(false);
+    }, 3000);
+  }
+}
