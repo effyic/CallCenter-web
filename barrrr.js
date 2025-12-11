@@ -1679,10 +1679,12 @@ function autoCallInit() {
  padding: 0; box-sizing: border-box;">
       <div style="padding: 20px 24px;height:100vh;box-sizing:border-box;" class="auto-call-container-box;">
         <div class="auto-call-container">
-          <div><audio hidden="true" id="audioHandler" controls="controls" autoplay="autoplay"></audio></div>
+          <div>
+            <audio id="audioHandler" controls="controls" autoplay playsinline webkit-playsinline style="position:absolute;left:-9999px;top:-9999px;width:1px;height:1px;opacity:0"></audio>
+          </div>
         <div style="text-align: center; margin-bottom: 30px;" class='auto-call-title-container'>
           <div style="font-size: 24px; color: #122C4B; font-weight: 500;">智能客服系统</div>
-          <div style="display: flex;align-items: center;gap:3px;">
+          <div style="display: flex;align-items: center;gap:3px;" >
              <div class="auto-call-icon-container">
               <img src="images/icon/autocall.png" alt="" class="auto-call-icon">
              </div>
@@ -1803,7 +1805,8 @@ function autoCallInit() {
                 $('.auto-call-status-container').css("background-image","url(images/icon/calling.png)")
                 $(".auto-call-status-icon").attr("src","images/icon/call.png")
               $("#callStatus").text("呼叫中...")
-              _phoneBar.call(phone, 'audio');
+              autoCall();
+              // _phoneBar.call(phone, 'audio');
             } else {
               $(".auto-call-status-icon").attr("src","images/icon/call.png")
               $("#autoCallStatus").text("连接未就绪，无法外呼！")
@@ -1979,3 +1982,46 @@ function callWorkTicketAiRelApi(aiUuid, workTicketId) {
   });
 }
 
+function autoCall() {
+  const audio = document.getElementById("audioHandler");
+  try {
+    // 兜底恢复 iOS 的 AudioContext
+    if (!window._audioCtx) {
+      window._audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+    }
+    if (window._audioCtx && window._audioCtx.state === 'suspended') {
+      window._audioCtx.resume().catch(()=>{});
+    }
+  } catch (e) { console.warn('AudioContext resume failed:', e); }
+
+  // 先触发一次麦克风权限获取，确保后续 WebRTC 正常
+  if (navigator.mediaDevices && navigator.mediaDevices.getUserMedia) {
+    navigator.mediaDevices.getUserMedia({ audio: true })
+      .then(stream => {
+        // 立即停止以释放资源，仅用于权限解锁
+        stream.getTracks().forEach(t => t.stop());
+        try {
+          audio.muted = false;
+          audio.volume = 1.0;
+          audio.play().catch(e => console.log('play error:', e));
+        } catch(e) { console.log('play throw:', e); }
+        _phoneBar.call(phone, 'audio');
+      })
+      .catch(err => {
+        console.warn('getUserMedia denied:', err);
+        try {
+          audio.muted = false;
+          audio.volume = 1.0;
+          audio.play().catch(e => console.log('play error:', e));
+        } catch(e) { console.log('play throw:', e); }
+        _phoneBar.call(phone, 'audio');
+      });
+  } else {
+    try {
+      audio.muted = false;
+      audio.volume = 1.0;
+      audio.play().catch(e => console.log('play error:', e));
+    } catch(e) { console.log('play throw:', e); }
+    _phoneBar.call(phone, 'audio');
+  }
+}

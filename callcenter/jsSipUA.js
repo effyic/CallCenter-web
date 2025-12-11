@@ -468,8 +468,32 @@ function jsSipUA() {
 
                 data.session.connection.addEventListener("addstream", function (ev) {
                     console.info('onaddstream from remote1 - ', ev.stream);
-                    _jsSipUA.audioHandler.srcObject  = ev.stream; 
+                    _jsSipUA.audioHandler.srcObject  = ev.stream;
+                    _jsSipUA.audioHandler.muted = false;
+                    _jsSipUA.audioHandler.volume = 1.0;
+                    try {
+                        var p = _jsSipUA.audioHandler.play();
+                        if (p && typeof p.then === 'function') {
+                            p.catch(function(err){ console.warn('audio.play() failed (outgoing):', err); });
+                        }
+                    } catch(e) { console.warn('audio.play() threw (outgoing):', e); }
                  });
+                // iOS/Safari 采用 ontrack 事件
+                data.session.connection.addEventListener('track', function(ev){
+                    var stream = (ev.streams && ev.streams[0]) ? ev.streams[0] : null;
+                    if (stream) {
+                        console.info('ontrack from remote1 - ', stream);
+                        _jsSipUA.audioHandler.srcObject = stream;
+                        _jsSipUA.audioHandler.muted = false;
+                        _jsSipUA.audioHandler.volume = 1.0;
+                        try {
+                            var p = _jsSipUA.audioHandler.play();
+                            if (p && typeof p.then === 'function') {
+                                p.catch(function(err){ console.warn('audio.play() failed (outgoing track):', err); });
+                            }
+                        } catch(e) { console.warn('audio.play() threw (outgoing track):', e); }
+                    }
+                });
  
                 data.session.on('sdp', function(data){
                     // console.info('onSDP, type - ', data.type, ' sdp - ', data.sdp);
@@ -510,6 +534,30 @@ function jsSipUA() {
             _jsSipUA.incomingSession.connection.addEventListener("addstream", function (ev) {
                 console.info('onaddstream from remote - ', ev.stream);
                 _jsSipUA.audioHandler.srcObject  = ev.stream;
+                _jsSipUA.audioHandler.muted = false;
+                _jsSipUA.audioHandler.volume = 1.0;
+                try {
+                    var p = _jsSipUA.audioHandler.play();
+                    if (p && typeof p.then === 'function') {
+                        p.catch(function(err){ console.warn('audio.play() failed (incoming):', err); });
+                    }
+                } catch(e) { console.warn('audio.play() threw (incoming):', e); }
+            });
+            // iOS/Safari 采用 ontrack 事件
+            _jsSipUA.incomingSession.connection.addEventListener('track', function(ev){
+                var stream = (ev.streams && ev.streams[0]) ? ev.streams[0] : null;
+                if (stream) {
+                    console.info('ontrack from remote - ', stream);
+                    _jsSipUA.audioHandler.srcObject = stream;
+                    _jsSipUA.audioHandler.muted = false;
+                    _jsSipUA.audioHandler.volume = 1.0;
+                    try {
+                        var p = _jsSipUA.audioHandler.play();
+                        if (p && typeof p.then === 'function') {
+                            p.catch(function(err){ console.warn('audio.play() failed (incoming track):', err); });
+                        }
+                    } catch(e) { console.warn('audio.play() threw (incoming track):', e); }
+                }
             });
         } 
     };
