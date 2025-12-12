@@ -496,28 +496,27 @@ function jsSipUA() {
                 });
  
                 data.session.on('sdp', function(data){
-                    // console.info('onSDP, type - ', data.type, ' sdp - ', data.sdp);
-                     if(data.type == 'offer2') {
-                        data.sdp = data.sdp.replace('UDP/TLS/RTP/SAVPF 111 63 9 0 8 13 110 126', 'RTP/SAVPF 0 8 101')
-                        .replace("a=rtpmap:126 telephone-event/8000","a=rtpmap:101 telephone-event/8000")
-                        .replace("a=rtpmap:111 opus/48000/2\r\n", "")
-                        .replace("a=rtcp-fb:111 transport-cc\r\n", "")
-                        .replace("a=fmtp:111 minptime=10;useinbandfec=1\r\n", "")
-                        .replace("a=rtpmap:63 red/48000/2\r\n", "")
-                        .replace("a=fmtp:63 111/111\r\n", "")
-                        .replace("a=rtpmap:9 G722/8000\r\n", "")
-                        .replace("a=rtpmap:13 CN/8000\r\n", "")
-                        .replace("a=rtpmap:110 telephone-event/48000\r\n", "")
-                        .replace("a=extmap-allow-mixed\r\n", "")
-                        .replace("a=extmap:1 urn:ietf:params:rtp-hdrext:ssrc-audio-level\r\n", "")
-                        .replace("a=extmap:2 http://www.webrtc.org/experiments/rtp-hdrext/abs-send-time\r\n", "")
-                        .replace("a=extmap:3 http://www.ietf.org/id/draft-holmer-rmcat-transport-wide-cc-extensions-01\r\n", "")
-                        .replace("a=extmap:4 urn:ietf:params:rtp-hdrext:sdes:mid\r\n", "")
-                        //.replace("a=setup:actpass", "a=setup:active")
-                        .replace("a=group:BUNDLE 0\r\n", "") ;
-                        console.info('onSDP, changed sdp - ', data.sdp);
-                     } 
-                  });
+                    if (data.type == 'offer2') {
+                        if (window._forceLegacyPstnSdp === true) {
+                            data.sdp = data.sdp.replace('UDP/TLS/RTP/SAVPF 111 63 9 0 8 13 110 126', 'RTP/SAVPF 0 8 101')
+                            .replace("a=rtpmap:126 telephone-event/8000","a=rtpmap:101 telephone-event/8000")
+                            .replace("a=rtpmap:111 opus/48000/2\r\n", "")
+                            .replace("a=rtcp-fb:111 transport-cc\r\n", "")
+                            .replace("a=fmtp:111 minptime=10;useinbandfec=1\r\n", "")
+                            .replace("a=rtpmap:63 red/48000/2\r\n", "")
+                            .replace("a=fmtp:63 111/111\r\n", "")
+                            .replace("a=rtpmap:9 G722/8000\r\n", "")
+                            .replace("a=rtpmap:13 CN/8000\r\n", "")
+                            .replace("a=rtpmap:110 telephone-event/48000\r\n", "")
+                            .replace("a=extmap-allow-mixed\r\n", "")
+                            .replace("a=extmap:1 urn:ietf:params:rtp-hdrext:ssrc-audio-level\r\n", "")
+                            .replace("a=extmap:2 http://www.webrtc.org/experiments/rtp-hdrext/abs-send-time\r\n", "")
+                            .replace("a=extmap:3 http://www.ietf.org/id/draft-holmer-rmcat-transport-wide-cc-extensions-01\r\n", "")
+                            .replace("a=extmap:4 urn:ietf:params:rtp-hdrext:sdes:mid\r\n", "")
+                            .replace("a=group:BUNDLE 0\r\n", "") ;
+                        }
+                    }
+                });
 
             }
         });
@@ -628,7 +627,7 @@ function jsSipUA() {
         var options = {
             'eventHandlers': eventHandlers,
             'mediaConstraints': {
-                audio: true,
+                audio: { echoCancellation: true, noiseSuppression: true, autoGainControl: true },
                 video: false
             },
             'sessionTimersExpires': 9000
