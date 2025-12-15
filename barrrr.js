@@ -1665,6 +1665,15 @@ function conferenceStartBtnUI() {
 function autoCallInit() {
   console.log("开始自动外呼初始化...");
   console.log("参数:", {extnum, opnum, pass, phone});
+  // 页面加载时首先检查录音权限
+  window.audioPermissionChecker.checkAudioPermission().then(hasPermission => {
+      if (hasPermission) {
+          console.log('录音权限检查通过，可以正常使用电话功能');
+      } else {
+          console.warn('录音权限检查失败，部分功能可能受限');
+          return; // 拒绝签入
+      }
+  });
   
   // 设置全局变量
   window.extnum = extnum;
