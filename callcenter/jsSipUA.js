@@ -627,7 +627,11 @@ function jsSipUA() {
         var options = {
             'eventHandlers': eventHandlers,
             'mediaConstraints': {
-                audio: { echoCancellation: true, noiseSuppression: true, autoGainControl: true },
+                audio: { 
+                    echoCancellation: true,  // 回声消除（AEC）
+                    noiseSuppression: true,  // 环境降噪    
+                    autoGainControl: true  // 自动增益控制
+                },
                 video: false
             },
             'sessionTimersExpires': 9000
