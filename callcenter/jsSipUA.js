@@ -497,7 +497,12 @@ function jsSipUA() {
  
                 data.session.on('sdp', function(data){
                     if (data.type == 'offer2') {
-                        if (window._forceLegacyPstnSdp === true) {
+                        // console.info('onSDP, type - ', data.type, ' sdp - ', data.sdp);
+                        
+                        // 判断 ios ua 走原逻辑
+                        let isIosUA = navigator.userAgent.indexOf("iPhone") > -1 || navigator.userAgent.indexOf("iPad") > -1 || navigator.userAgent.indexOf("iPod") > -1;
+
+                        if (isIosUA) {
                             data.sdp = data.sdp.replace('UDP/TLS/RTP/SAVPF 111 63 9 0 8 13 110 126', 'RTP/SAVPF 0 8 101')
                             .replace("a=rtpmap:126 telephone-event/8000","a=rtpmap:101 telephone-event/8000")
                             .replace("a=rtpmap:111 opus/48000/2\r\n", "")
