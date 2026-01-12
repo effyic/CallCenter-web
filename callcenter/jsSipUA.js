@@ -360,7 +360,7 @@ function jsSipUA() {
             useragent.start();//断开后自动重新连接
         });
         
-        //New incoming or outgoing call event
+        //New incoming or outgoing call event 接打电话coming
         useragent.on('newRTCSession', function (data) {
             if (data.session.direction == "incoming") {
                 //有新来电时，先判断用户是否在通话中，如果用户忙则拒绝新来电

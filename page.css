@@ -167,13 +167,21 @@
   transform: translateY(-1px);
 }
 
-/* 置忙按钮默认状态样式 */
+/* 置忙按钮默认状态样式  改动3*/
 .default-status-busy {
   background-color: #6BC79B !important;
-  color: white !important;
+  color: white;
   line-height:22px;
+  border:none;
+  outline: none;
+  font-size:13px;
 }
-
+.status-busy{
+    .default-status-busy {
+        background-color: rgba(255,255,255,0) !important;
+        }
+}
+/* 改动结束 */
 /* 选中状态：仅有status-toggle-btn类名（没有on类名）为选中 */
 .status-toggle-btn:not(.on) {
   background-color: #2FC77D;
@@ -189,6 +197,10 @@
   color: #2FC77D;
   transform: translateZ(0) scale(1);
   box-shadow: none;
+  /* 改动5 */
+  .status-toggle-dropdown{
+    color:#2FC77D;
+  }
 }
 
 .default-status-free{

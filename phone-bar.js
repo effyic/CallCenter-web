@@ -485,7 +485,16 @@ function init () {
               <div class="status-info-item noborder setStatus">
                 <div class="status-toggle-container">
                   <a href="#" id="setFree" class="status-toggle-btn status-free default-status-free">置闲</a>
-                  <a href="#" id="setBusy" class="status-toggle-btn status-busy default-status-busy">置忙</a>
+                  <a href="#" id="setBusy" class="status-toggle-btn status-busy default-status-busy">
+                    <div class="status-toggle-dropdown-container" >
+                      <select id="setBusySubList" class="status-toggle-dropdown default-status-busy">
+                        <option value="3">置忙</option>
+                        <option value="31">小休</option>
+                        <option value="32">会议</option>
+                      </select>
+                    </div>
+                  
+                  </a>
                 </div>
               </div>
             </div>
@@ -807,7 +816,29 @@ function init () {
   //用户已在其他设备登录
   _phoneBar.on(ccPhoneBarSocket.eventListWithTextInfo.user_login_on_other_device.code, function (msg) {
     _phoneBar.updatePhoneBar(msg, ccPhoneBarSocket.eventListWithTextInfo.user_login_on_other_device.code);
-    alert(ccPhoneBarSocket.eventListWithTextInfo.user_login_on_other_device.msg);
+    
+    // 业务优化：使用非阻塞模态框替代alert，避免阻塞心跳
+    var noticeHtml = 
+      '<div class="modal-overlay" id="systemNoticeModal-overlay"></div>' +
+      '<div class="modal" id="systemNoticeModal">' +
+        '<div class="modal-dialog">' +
+          '<div class="modal-content">' +
+            '<div class="modal-header">' +
+              '<p class="modal-title" style="color: #ff4d4f;">账号异常</p>' +
+            '</div>' +
+            '<div class="modal-body" style="text-align: center; padding: 20px;">' +
+              '<div style="font-size: 16px;">' + ccPhoneBarSocket.eventListWithTextInfo.user_login_on_other_device.msg + '</div>' +
+            '</div>' +
+            '<div class="modal-footer" style="text-align: center;">' +
+              '<button type="button" class="btn btn-primary" onclick="ModalUtil.remove(\'systemNoticeModal\')">知道了</button>' +
+            '</div>' +
+          '</div>' +
+        '</div>' +
+      '</div>';
+      
+    ModalUtil.remove('systemNoticeModal');
+    $('body').append(noticeHtml);
+    ModalUtil.show('systemNoticeModal');
   });
 
   //websocket连接成功
@@ -860,12 +891,29 @@ function init () {
 
   _phoneBar.on(ccPhoneBarSocket.eventListWithTextInfo.status_changed.code, function (msg) {
     console.log("座席状态改变: ", msg["object"]["text"]);
+    // if(msg["object"]["text"] == "置忙"){
+    //   msg["object"]["text"] = "小休";
+    // }else if(msg["object"]["text"] == "置闲"){
+    //   msg["object"]["text"] = '闲'
+    // ----------改动2--------------
     if(msg["object"]["text"] == "置忙"){
-      msg["object"]["text"] = "小休";
+      msg["object"]["text"] = "置忙";
     }else if(msg["object"]["text"] == "置闲"){
       msg["object"]["text"] = '闲'
+    }else if(msg["object"]["text"] == "会议"){
+      msg["object"]["text"] = '会议'
+    }else if(msg["object"]["text"] == "小休"){
+      msg["object"]["text"] = '小休'
     }
     $("#agentStatus").text(msg["object"]["text"]);
+    
+    // 改动4
+    if (msg["object"]["status"]) {
+        var status = parseInt(msg["object"]["status"]);
+         if ([3, 31, 32, 33].indexOf(status) !== -1) {
+             $('#setBusySubList').val(status);
+         }
+    }
 
     _phoneBar.updatePhoneBar(msg, ccPhoneBarSocket.eventListWithTextInfo.status_changed.code);
   });
