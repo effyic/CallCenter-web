@@ -1,5 +1,5 @@
 // 修改2:弹窗中填入签入信息包括密码，目前只有点击签入按钮才调用
-(function(){try{localStorage.setItem('enableVConsole','0');var e=/(?:^|[?&])vconsole=1(?:&|$)/.test(location.search)||function(){try{return localStorage.getItem("enableVConsole")==="1"}catch(t){return!1}}();if(!e)return;var n=function(){try{window.vConsole=new VConsole}catch(t){}};if(window.VConsole)n();else{var o=document.createElement("script");o.src="callcenter/vconsole.min.js",o.async=!0,o.onload=n,document.head.appendChild(o)}}catch(t){}})();
+(function(){try{localStorage.setItem('enableVConsole','1');var e=/(?:^|[?&])vconsole=1(?:&|$)/.test(location.search)||function(){try{return localStorage.getItem("enableVConsole")==="1"}catch(t){return!1}}();if(!e)return;var n=function(){try{window.vConsole=new VConsole}catch(t){}};if(window.VConsole)n();else{var o=document.createElement("script");o.src="callcenter/vconsole.min.js",o.async=!0,o.onload=n,document.head.appendChild(o)}}catch(t){}})();
 var _phoneBar = new ccPhoneBarSocket();
 var scriptServer = "effyic-callcenter-h5.bphc.com.cn";
 var extnum = ''; //分机号
