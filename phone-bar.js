@@ -484,7 +484,16 @@ function init () {
               <div class="status-info-item noborder setStatus">
                 <div class="status-toggle-container">
                   <a href="#" id="setFree" class="status-toggle-btn status-free default-status-free">置闲</a>
-                  <a href="#" id="setBusy" class="status-toggle-btn status-busy default-status-busy">置忙</a>
+                  <a href="#" id="setBusy" class="status-toggle-btn status-busy default-status-busy">
+                    <div class="status-toggle-dropdown-container" >
+                      <select id="setBusySubList" class="status-toggle-dropdown default-status-busy">
+                        <option value="3">置忙</option>
+                        <option value="31">小休</option>
+                        <option value="32">会议</option>
+                      </select>
+                    </div>
+                  
+                  </a>
                 </div>
               </div>
             </div>
@@ -859,10 +868,26 @@ function init () {
 
   _phoneBar.on(ccPhoneBarSocket.eventListWithTextInfo.status_changed.code, function (msg) {
     console.log("座席状态改变: ", msg["object"]["text"]);
+    // if(msg["object"]["text"] == "置忙"){
+    //   msg["object"]["text"] = "小休";
+    // }else if(msg["object"]["text"] == "置闲"){
+    //   msg["object"]["text"] = '闲'
+    // }
     if(msg["object"]["text"] == "置忙"){
-      msg["object"]["text"] = "小休";
+      msg["object"]["text"] = "置忙";
     }else if(msg["object"]["text"] == "置闲"){
       msg["object"]["text"] = '闲'
+    }else if(msg["object"]["text"] == "会议"){
+      msg["object"]["text"] = '会议'
+    }else if(msg["object"]["text"] == "小休"){
+      msg["object"]["text"] = '小休'
+    }
+    
+    if (msg["object"]["status"]) {
+        var status = parseInt(msg["object"]["status"]);
+         if ([3, 31, 32, 33].indexOf(status) !== -1) {
+             $('#setBusySubList').val(status);
+         }
     }
     $("#agentStatus").text(msg["object"]["text"]);
 

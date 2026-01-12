@@ -172,6 +172,9 @@
   background-color: #6BC79B !important;
   color: white !important;
   line-height:22px;
+     .default-status-busy {
+        background-color: rgba(255,255,255,0) !important;
+        }
 }
 
 /* 选中状态：仅有status-toggle-btn类名（没有on类名）为选中 */
@@ -189,6 +192,9 @@
   color: #2FC77D;
   transform: translateZ(0) scale(1);
   box-shadow: none;
+  .status-toggle-dropdown{
+    color:#2FC77D;
+  }
 }
 
 .default-status-free{
