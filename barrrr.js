@@ -409,16 +409,16 @@ function scrollToBottom () {
   chatMessages.scrollTop = chatMessages.scrollHeight;
 }
 
-document.addEventListener('visibilitychange', () => {
-  if (document.visibilityState === 'hidden') {
-    // 页面被切走
-    // 判断分机是否
-    if (!jsSipUAInstance.isExtensionFree()) {
-        jsSipUAInstance.hangup();
-    }
-    _phoneBar.disconnect();
-  }
-})
+// document.addEventListener('visibilitychange', () => {
+//   if (document.visibilityState === 'hidden') {
+//     // 页面被切走
+//     // 判断分机是否
+//     if (!jsSipUAInstance.isExtensionFree()) {
+//         jsSipUAInstance.hangup();
+//     }
+//     _phoneBar.disconnect();
+//   }
+// })
 
 //页面刷新或者关闭时，自动挂机; 避免导致投诉
 window.onbeforeunload = function () {
@@ -1928,6 +1928,12 @@ function autoCallInit() {
       callDurationTimer = null;
     }
     _phoneBar.updatePhoneBar(msg, ccPhoneBarSocket.eventListWithTextInfo.caller_hangup.code);
+
+    if (!jsSipUAInstance.isExtensionFree()) {
+      jsSipUAInstance.hangup();
+    }
+    jsSipUAInstance.unregister();
+    _phoneBar.disconnect();
   });
 
   // 被叫挂断（对方挂断）

@@ -352,9 +352,10 @@ function jsSipUA() {
            console.log("Successfully connected to freeswitch server.")
         });
         useragent.on('disconnected', function () {
-        	_jsSipUA.notifyAll('disconnected','尝试登录分机中.');
-            console.log("trying to re-register to freeswitch server.");
-            useragent.start();//断开后自动重新连接
+            console.log('分机已断开连接.','disconnected');
+        	//_jsSipUA.notifyAll('disconnected','尝试登录分机中.');
+            //console.log("trying to re-register to freeswitch server.");
+            //useragent.start();//断开后自动重新连接
         });
         
         //New incoming or outgoing call event
