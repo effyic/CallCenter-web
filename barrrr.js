@@ -1929,11 +1929,8 @@ function autoCallInit() {
     }
     _phoneBar.updatePhoneBar(msg, ccPhoneBarSocket.eventListWithTextInfo.caller_hangup.code);
 
-    if (!jsSipUAInstance.isExtensionFree()) {
-      jsSipUAInstance.hangup();
-    }
-    jsSipUAInstance.unregister();
-    _phoneBar.disconnect();
+    //触发hangUpBtn点击事件
+    $('#hangUpBtn').click();
   });
 
   // 被叫挂断（对方挂断）
