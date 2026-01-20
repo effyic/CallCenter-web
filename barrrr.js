@@ -145,8 +145,9 @@ if (window.location.href.toString().indexOf("?") != -1) {
   tokenId = ccPhoneBarSocket.utils.getQueryParam("tokenId") || 'token';
   workTicketId = ccPhoneBarSocket.utils.getQueryParam("workTicketId");
   userId = ccPhoneBarSocket.utils.getQueryParam("userId");
+  loginPhone = ccPhoneBarSocket.utils.getQueryParam("loginPhone");
 
-  console.log("所有参数:", "extnum=", extnum, "opnum=", opnum, "pass=", pass, "phone=", phone, "groupId=", groupId, "tokenId=", tokenId, "workTicketId=", workTicketId);
+  console.log("所有参数:", "extnum=", extnum, "opnum=", opnum, "pass=", pass, "phone=", phone, "groupId=", groupId, "tokenId=", tokenId, "workTicketId=", workTicketId, "userId=", userId, "loginPhone=", loginPhone);
 
   // 如果有uid参数，则通过接口获取用户信息
   if (uid && userId) {
