@@ -5,8 +5,7 @@
   'use strict';
 
   const CONFIG = {
-    API_BASE: 'http://[fc00::655:9e5a]:8880/',
-    USER_INFO_API: 'https://outbound.skiffchat.com/aicall/api/extension/usercode'
+    API_BASE: ''
   };
 
   /**
@@ -43,7 +42,7 @@
     try {
       console.log('正在获取用户信息，uid:', uid);
 
-      const response = await fetch(`${CONFIG.USER_INFO_API}?userCode=${uid}`, {
+      const response = await fetch(`${CONFIG.API_BASE}/aicall/api/extension/usercode?userCode=${uid}`, {
         method: 'GET',
         headers: {
           'Accept': 'application/json'
@@ -273,7 +272,7 @@
           ext: extNum
         });
 
-        const url = CONFIG.API_BASE + 'call-center/conferenceDualNoModerator?' + queryParams.toString();
+        const url = CONFIG.API_BASE +  '/call-center/conferenceDualNoModerator?' + queryParams.toString();
         console.log('调用外呼接口:', url);
 
         const res = await fetch(url, {
