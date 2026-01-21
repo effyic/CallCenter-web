@@ -7,49 +7,11 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 
   <link rel="stylesheet" href="page.css" />
-  <!-- <script type="text/javascript" src="jquery-1.11.0.js"></script> -->
-     <script type="text/javascript" src="jquery-3.7.1.min.js"></script>
-  <script type="text/javascript" src="ccPhoneBarSocket.js?ver=1.0.0"></script>
+  <script type="text/javascript" src="jquery-3.7.1.min.js"></script>
 
-  <script type="text/javascript" src="callcenter/jsSipMediaFile.js"></script>
-  <script type="text/javascript" src="callcenter/jssip-3.10.0.js?ver=1.0.0"></script>
-  <script src="callcenter/jsSipUA.js?ver=1.0.17"></script>
-  <script src="barrrr.js?ver=1.0.21"></script>
-  <!-- <script src="./phone-bar.js"></script> -->
+  <script src="doubleCall.js"></script>
 
-  <script>
-    window.onload = init
 
-    var call_uuid = null;
-
-    _phoneBar.on(ccPhoneBarSocket.eventList.callee_answered, function (msg) {
-      call_uuid = msg.object.uuid;
-      console.log("呼叫已接通: ", call_uuid);
-      // 调用工单回访接口
-      if (call_uuid && workTicketId) {
-        callWorkTicketAiRelApi(call_uuid, workTicketId);
-      } else {
-        console.warn("新来电事件缺少必要参数，无法调用工单回访接口", {
-          call_uuid: call_uuid,
-          workTicketId: workTicketId,
-          userId: userId
-        });
-      }
-    });
-
-    _phoneBar.on(ccPhoneBarSocket.eventListWithTextInfo.caller_hangup.code, function (msg) {
-      console.log(msg, "主叫挂断");
-      setTimeout(() => {
-        window.history.back();
-      }, 5000);
-    });
-
-    // phoneNumber: 呼叫号码
-    //_phoneBar.call(phoneNumber);
-
-    // 对方引入我的js文件，是否可以直接使用js中的on监听事件 var _phoneBar = new ccPhoneBarSocket();
-    // 如果on事件写了两个相同的，是否会冲突 电话接通事件、new_in
-  </script>
 </head>
 
 <body>
