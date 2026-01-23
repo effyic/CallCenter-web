@@ -125,45 +125,56 @@
       <div style="padding: 20px 24px; height: 100vh; box-sizing: border-box;" class="auto-call-container-box">
         <div class="auto-call-container">
           <div>
-            <audio id="audioHandler" controls="controls" autoplay playsinline webkit-playsinline style="position:absolute;left:-9999px;top:-9999px;width:1px;height:1px;opacity:0"></audio>
+            <audio id="audioHandler" controls="controls" autoplay playsinline webkit-playsinline style="position: absolute; left: -9999px; top: -9999px; width: 1px; height: 1px; opacity: 0;"></audio>
           </div>
           <div style="text-align: center; margin-bottom: 30px;" class="auto-call-title-container">
             <div style="font-size: 24px; color: #122C4B; font-weight: 500;">智能客服系统</div>
-            <div style="display: flex;align-items: center;gap:3px;" class="auto-call-title-row">
+            <div style="display: flex; align-items: center; gap: 3px;" class="auto-call-title-row">
               <div class="auto-call-icon-container">
                 <img src="images/icon/autocall.png" alt="" class="auto-call-icon">
               </div>
-              <span class="auto-call-title-text" style="color:#0f9b7a;font-size:14px;font-weight:500;">自动外呼模式</span>
+              <span class="auto-call-title-text" style="color: #0f9b7a; font-size: 14px; font-weight: 500;">自动外呼模式</span>
             </div>
           </div>
 
-          <div style="margin-top: 64px; margin-bottom:30%;" class="auto-call-status-container">
+          <div style="margin-top: 64px; margin-bottom: 30%;" class="auto-call-status-container">
             <img src="images/icon/call.png" alt="" class="auto-call-status-icon">
-            <div id="autoCallStatus" style="text-align: center; color: #122C4B; font-size: 14px;line-height: 22px; width: 200px; font-weight: 500;">你将收到010 88150800的来电请注意接听</div>
-            <div id="callStatus" style="text-align: center; color:#2FC77D; font-size: 16px; border-radius: 8px;">呼叫中</div>
-
-            <div id="mainCallCard" style="position:absolute;margin-top: 28px; background: #fff; box-shadow: 0 6px 20px rgba(0, 0, 0, 0.08); border-radius: 8px; padding: 26px 20px 20px; width: 320px; text-align: center;">
-              <div style="color: #666; font-size: 14px; margin-bottom: 12px;">将使用该号码呼出</div>
-              <div style="font-size: 30px; font-weight: 700; color: #122C4B; letter-spacing: 1px; margin-bottom: 12px;">${displayPhone}</div>
-              <a id="modifyPhoneLink" style="font-size: 13px; color: #0f8bda; text-decoration: none; display: inline-block; margin-bottom: 16px; cursor: pointer;" href="javascript:void(0);">非本机号请修改 ></a>
-              <div style="display: flex; justify-content: center; gap: 12px;">
-                <button type="button" id="cancelCallBtn" style="flex: 1; padding: 10px 12px; border-radius: 4px; border: 1px solid #d9d9d9; background: #fff; color: #555; cursor: pointer; font-size: 14px;">取消</button>
-                <button type="button" id="confirmCallBtn" style="flex: 1; padding: 10px 12px; border-radius: 4px; border: 1px solid #2d98da; background: #2d98da; color: #fff; cursor: pointer; font-size: 14px; box-shadow: 0 6px 15px rgba(45, 152, 218, 0.35);">立即呼叫</button>
+            <div id="autoCallStatus" style="text-align: center; color: #122C4B; font-size: 12px; line-height: 22px; width: 200px; font-weight: 500; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 2px;">
+              你将收到
+              <div style="font-size: 24px; font-weight: 500; color: #122C4B; line-height: 34px;">
+                010 88150800
               </div>
+              来电请注意接听
             </div>
+            <div id="callStatus" style="text-align: center; color: #122C4BCC; font-size: 16px; border-radius: 8px;">呼叫中...</div>
           </div>
         </div>
       </div>
-      
+      <div id="mainCallCard" style="position: fixed; left: 50%; top: 50%; transform: translate(-50%, -50%); background: #fff; box-shadow: 0 6px 20px rgba(0, 0, 0, 0.08); border-radius: 12px; padding: 32px 24px; width: 280px; text-align: center; display: flex; flex-direction: column; align-items: center; box-sizing: border-box; z-index: 999;">
+        <div style="position: relative; width: 100%; margin-bottom: 8px;">
+          <button id="closeMainCardBtn" style="position: absolute; top: -8px; right: -8px; background: none; border: none; color: #4545454D; font-size: 20px; cursor: pointer; width: 20px; height: 20px; display: flex; align-items: center; justify-content: center; padding: 0; line-height: 1; z-index: 10;">×</button>
+        </div>
+        <img src="images/icon/dialogIcon.png" alt="" style="width: 96px; height: 96px; z-index: 1;">
+        <div style="color: #333; font-size: 14px; margin: 16px 0 8px; line-height: 20px;">将使用该号码呼出</div>
+        <div style="font-size: 28px; font-weight: 600; color: #333; line-height: 40px;">${displayPhone}</div>
+        <div style="display: flex; justify-content: center; gap: 9px; margin: 32px 0 16px; width: 100%;">
+          <button type="button" id="cancelCallBtn" style="flex: 1; height: 40px; border-radius: 20px; border: none; background: #D6D6D6; color: #666; font-size: 14px; display: flex; align-items: center; justify-content: center; cursor: pointer;">取消</button>
+          <button type="button" id="confirmCallBtn" style="flex: 1; height: 40px; border-radius: 20px; border: none; background: #4D98D5; color: #fff; cursor: pointer; font-size: 14px; display: flex; align-items: center; justify-content: center;">立即呼叫</button>
+        </div>
+        <a id="modifyPhoneLink" style="font-size: 14px; color: #4D98D5; text-decoration: none; display: inline-block; cursor: pointer; margin-top: 8px;" href="javascript:void(0);">非本机号请修改 ></a>
+      </div>
       <!-- 修改号码弹窗 -->
       <div id="phoneModal" style="display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0, 0, 0, 0.5); z-index: 1000; align-items: center; justify-content: center;">
-        <div style="background: #fff; border-radius: 8px; padding: 26px 20px 20px; width: 320px; text-align: center; box-shadow: 0 6px 20px rgba(0, 0, 0, 0.15); position: relative;">
-          <div style="color: #666; font-size: 14px; margin-bottom: 16px;">输入本机号码</div>
-          <input type="text" id="phoneInput" placeholder="请输入电话号码" style="width: 100%; padding: 12px; border: 1px solid #d9d9d9; border-radius: 4px; font-size: 16px; margin-bottom: 8px; box-sizing: border-box; text-align: center;" />
-          <div id="phoneError" style="color: #ff4757; font-size: 12px; margin-bottom: 12px; min-height: 18px; display: none;"></div>
-          <div style="display: flex; justify-content: center; gap: 12px;">
-            <button type="button" id="modalCancelBtn" style="flex: 1; padding: 10px 12px; border-radius: 4px; border: 1px solid #d9d9d9; background: #fff; color: #555; cursor: pointer; font-size: 14px;">取消</button>
-            <button type="button" id="modalConfirmBtn" style="flex: 1; padding: 10px 12px; border-radius: 4px; border: 1px solid #2d98da; background: #2d98da; color: #fff; cursor: pointer; font-size: 14px; box-shadow: 0 6px 15px rgba(45, 152, 218, 0.35);">立即呼叫</button>
+        <div style="background: #fff; border-radius: 12px; padding: 32px 24px; width: 280px; text-align: center; box-shadow: 0 6px 20px rgba(0, 0, 0, 0.15); display: flex; flex-direction: column; align-items: center; box-sizing: border-box; position: relative;">
+          <div style="position: relative; width: 100%; margin-bottom: 8px;">
+            <button id="closeModalBtn" style="position: absolute; top: -8px; right: -8px; background: none; border: none; color: #4545454D; font-size: 20px; cursor: pointer; width: 20px; height: 20px; display: flex; align-items: center; justify-content: center; padding: 0; line-height: 1; z-index: 10;">×</button>
+          </div>
+          <div style="color: #333; font-size: 16px; font-weight: 500; margin: 0 0 20px; line-height: 22px;">修改为本机号码</div>
+          <input type="text" id="phoneInput" placeholder="请输入本机号码" style="width: 100%; padding: 12px; border: 1px solid #d9d9d9; border-radius: 6px; font-size: 16px; margin-bottom: 8px; box-sizing: border-box; text-align: center; outline: none; transition: border-color 0.2s;" />
+          <div id="phoneError" style="color: #ff4757; font-size: 12px; margin-bottom: 12px; min-height: 18px; display: none; text-align: left; padding-left: 4px; width: 100%;"></div>
+          <div style="display: flex; justify-content: center; gap: 9px; margin: 8px 0 0; width: 100%;">
+            <button type="button" id="modalCancelBtn" style="flex: 1; height: 40px; border-radius: 20px; border: none; background: #D6D6D6; color: #666; font-size: 14px; display: flex; align-items: center; justify-content: center; cursor: pointer;">取消</button>
+            <button type="button" id="modalConfirmBtn" style="flex: 1; height: 40px; border-radius: 20px; border: none; background: #4D98D5; color: #fff; cursor: pointer; font-size: 14px; display: flex; align-items: center; justify-content: center;">立即呼叫</button>
           </div>
         </div>
       </div>
@@ -181,7 +192,9 @@
       phoneError: container.querySelector('#phoneError'),
       autoCallStatus: container.querySelector('#autoCallStatus'),
       callStatus: container.querySelector('#callStatus'),
-      mainCallCard: container.querySelector('#mainCallCard')
+      mainCallCard: container.querySelector('#mainCallCard'),
+      closeMainCardBtn: container.querySelector('#closeMainCardBtn'),
+      closeModalBtn: container.querySelector('#closeModalBtn')
     };
 
     /**
@@ -220,6 +233,23 @@
     }
 
     /**
+     * 更新立即呼叫按钮状态
+     */
+    function updateCallButtonState (isValid) {
+      if (elements.modalConfirmBtn) {
+        if (isValid) {
+          elements.modalConfirmBtn.disabled = false;
+          elements.modalConfirmBtn.style.background = '#4D98D5';
+          elements.modalConfirmBtn.style.cursor = 'pointer';
+        } else {
+          elements.modalConfirmBtn.disabled = true;
+          elements.modalConfirmBtn.style.background = '#4D98D599';
+          elements.modalConfirmBtn.style.cursor = 'not-allowed';
+        }
+      }
+    }
+
+    /**
      * 显示弹窗
      */
     function showModal () {
@@ -227,7 +257,16 @@
         elements.phoneModal.style.display = 'flex';
         clearError();
         if (elements.phoneInput) {
-          setTimeout(() => elements.phoneInput.focus(), 100);
+          setTimeout(() => {
+            elements.phoneInput.focus();
+            // 检查初始状态
+            const phoneNumber = elements.phoneInput.value.trim();
+            const validation = validatePhoneNumber(phoneNumber);
+            updateCallButtonState(validation.valid);
+          }, 100);
+        } else {
+          // 如果没有输入框，默认禁用按钮
+          updateCallButtonState(false);
         }
       }
     }
@@ -242,6 +281,8 @@
           elements.phoneInput.value = '';
         }
         clearError();
+        // 重置按钮状态
+        updateCallButtonState(false);
       }
     }
 
@@ -272,7 +313,7 @@
           ext: extNum
         });
 
-        const url = CONFIG.API_BASE +  '/call-center/conferenceDualNoModerator?' + queryParams.toString();
+        const url = CONFIG.API_BASE + '/call-center/conferenceDualNoModerator?' + queryParams.toString();
         console.log('调用外呼接口:', url);
 
         const res = await fetch(url, {
@@ -295,10 +336,9 @@
       } catch (err) {
         console.error('外呼接口调用失败:', err);
 
-        // 如果是获取分机号失败，在弹窗中显示错误
+        // 如果是获取分机号失败，不关闭弹窗，让用户可以重试
         if (err.message.includes('uid') || err.message.includes('分机号')) {
-          showError(err.message);
-          // 不关闭弹窗，让用户可以重试
+          // 不显示错误提示，只记录日志
           return;
         }
 
@@ -343,15 +383,18 @@
     // 弹窗立即呼叫按钮
     if (elements.modalConfirmBtn) {
       elements.modalConfirmBtn.addEventListener('click', async function () {
+        // 如果按钮被禁用，不执行任何操作
+        if (this.disabled) {
+          return;
+        }
+
         const phoneNumber = elements.phoneInput ? elements.phoneInput.value.trim() : '';
         const validation = validatePhoneNumber(phoneNumber);
 
         if (!validation.valid) {
-          showError(validation.message);
           return;
         }
 
-        clearError();
         await triggerCall(validation.phone);
       });
     }
@@ -364,25 +407,42 @@
 
         if (!validation.valid) {
           showModal();
-          showError(validation.message);
           return;
         }
 
-        clearError();
         await triggerCall(validation.phone);
       });
     }
 
     // 输入框事件
     if (elements.phoneInput) {
-      // 输入时清除错误提示
-      elements.phoneInput.addEventListener('input', clearError);
+      // 输入时实时校验并更新按钮状态
+      elements.phoneInput.addEventListener('input', function () {
+        const phoneNumber = this.value.trim();
+        const validation = validatePhoneNumber(phoneNumber);
+        updateCallButtonState(validation.valid);
+        clearError();
+      });
 
-      // 支持回车键提交
+      // 支持回车键提交（仅在按钮启用时）
       elements.phoneInput.addEventListener('keypress', function (e) {
-        if (e.key === 'Enter' && elements.modalConfirmBtn) {
+        if (e.key === 'Enter' && elements.modalConfirmBtn && !elements.modalConfirmBtn.disabled) {
           elements.modalConfirmBtn.click();
         }
+      });
+    }
+
+    // 关闭主卡片按钮
+    if (elements.closeMainCardBtn) {
+      elements.closeMainCardBtn.addEventListener('click', function () {
+        hideMainCard();
+      });
+    }
+
+    // 关闭弹窗按钮
+    if (elements.closeModalBtn) {
+      elements.closeModalBtn.addEventListener('click', function () {
+        hideModal();
       });
     }
 
@@ -394,6 +454,29 @@
         }
       });
     }
+
+    // 添加按钮hover效果样式
+    const style = document.createElement('style');
+    style.textContent = `
+      #cancelCallBtn:hover, #modalCancelBtn:hover {
+        background: #f5f5f5 !important;
+        border-color: #bbb !important;
+      }
+      #confirmCallBtn:hover, #modalConfirmBtn:hover {
+        background: #2589c7 !important;
+        box-shadow: 0 4px 12px rgba(45, 152, 218, 0.4) !important;
+        transform: translateY(-1px);
+      }
+      #closeMainCardBtn:hover, #closeModalBtn:hover {
+        color: #333 !important;
+        background: #f5f5f5 !important;
+        border-radius: 50%;
+      }
+      #phoneInput:focus {
+        border-color: #2d98da !important;
+      }
+    `;
+    document.head.appendChild(style);
 
     // 提供给外部调用的空 init（已渲染，无需额外逻辑）
     if (typeof window !== 'undefined') {
