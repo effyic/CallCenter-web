@@ -1,22 +1,26 @@
-# 使用官方的nginx镜像作为基础镜像
-FROM nginx:alpine
+# 使用金蝶ALB镜像
+FROM harbor.apusic.com/apusic/alb:V2.0.5-se.20251231-kylin-amd64
 
 # 设置工作目录
-WORKDIR /usr/share/nginx/html
+WORKDIR /opt/ALB-V2.0.5-SE
 
-# 删除nginx默认的静态文件
-RUN rm -rf /usr/share/nginx/html/*
+# 复制自定义的 alb.conf (包含 conf.d/*.conf)
+COPY alb_custom.conf /opt/ALB-V2.0.5-SE/conf/alb.conf
 
-# 复制项目文件到nginx的html目录
-COPY . /usr/share/nginx/html/
+# 创建 conf.d 目录
+RUN mkdir -p /opt/ALB-V2.0.5-SE/conf/conf.d
 
-COPY default.conf /etc/nginx/conf.d/default.conf
+# 复制项目文件到 html 目录
+COPY . /opt/ALB-V2.0.5-SE/html/
+
+# 复制配置文件
+COPY default.conf /opt/ALB-V2.0.5-SE/conf/conf.d/default.conf
 
 # 暴露80端口
-EXPOSE 80
+EXPOSE 80 8080
 
-# 启动nginx
-CMD ["nginx", "-g", "daemon off;"]
+# 启动命令
+CMD ["bash", "/opt/ALB-V2.0.5-SE/bin/start-alb-and-console.sh"]
 
 # 添加健康检查
 HEALTHCHECK --interval=30s --timeout=3s --start-period=5s --retries=3 \
