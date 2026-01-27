@@ -151,9 +151,6 @@
         </div>
       </div>
       <div id="mainCallCard" style="position: fixed; left: 50%; top: 50%; transform: translate(-50%, -50%); background: #fff; box-shadow: 0 6px 20px rgba(0, 0, 0, 0.08); border-radius: 12px; padding: 32px 24px; width: 280px; text-align: center; display: flex; flex-direction: column; align-items: center; box-sizing: border-box; z-index: 999;">
-        <div style="position: relative; width: 100%; margin-bottom: 8px;">
-          <button id="closeMainCardBtn" style="position: absolute; top: -8px; right: -8px; background: none; border: none; color: #4545454D; font-size: 20px; cursor: pointer; width: 20px; height: 20px; display: flex; align-items: center; justify-content: center; padding: 0; line-height: 1; z-index: 10;">×</button>
-        </div>
         <img src="images/icon/dialogIcon.png" alt="" style="width: 96px; height: 96px; z-index: 1;">
         <div style="color: #333; font-size: 14px; margin: 16px 0 8px; line-height: 20px;">将使用该号码呼出</div>
         <div style="font-size: 28px; font-weight: 600; color: #333; line-height: 40px;">${displayPhone}</div>
@@ -193,7 +190,6 @@
       autoCallStatus: container.querySelector('#autoCallStatus'),
       callStatus: container.querySelector('#callStatus'),
       mainCallCard: container.querySelector('#mainCallCard'),
-      closeMainCardBtn: container.querySelector('#closeMainCardBtn'),
       closeModalBtn: container.querySelector('#closeModalBtn')
     };
 
@@ -432,12 +428,6 @@
       });
     }
 
-    // 关闭主卡片按钮
-    if (elements.closeMainCardBtn) {
-      elements.closeMainCardBtn.addEventListener('click', function () {
-        hideMainCard();
-      });
-    }
 
     // 关闭弹窗按钮
     if (elements.closeModalBtn) {
