@@ -1,12 +1,13 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <license
     product="Apusic Load Balancer"
-    edition="Agile Edition"
-    version="2.0"
-    licensee="金蝶天燕苍穹测试用户"
-    datefrom="2024-01-01"
-    expiration="2024-06-30"
+    edition="Standard Edition"
+    version="V2.0"
+    licensee="测试"
+    datefrom="2025-11-21"
+    expiration="2026-06-30"
+    CPUs="1"
     license_ver="59"
-    signature="KBIghpflpLLquWc+LZ6MubIBVxJ+9E2HIzyvAyXD2ORTH1KuQfOlveWjF43WPmHg7CYgiDn/l3vWGyV9lnRMVUMAGcIxW2g/HiTDfYadU/s6SHmsouMlRDapWq9rGEssri9xwEDEn8UKEhduDwqEXw8+MyMvfDtDcEAX+/MMO40MhLxFifWNsSINguHPdquexU2lSTRrfcHF/zsj9DedCEB4Ys9MsEjaW7xqeAKIpAltfcuyJ4Du4Bl6TJ+wuuZ7WMpXmxiLxs/hkQQyfXBHNyKCMIRdW9pMbBWx1LVTK+qOqSBSGRq4RO6iP+rBhFOCLHisAgSsIcxNi0buwB7zHgp3/aDzRrQha5rCpfazaTsMKFSGSmhxmUQkaJ/ZeireMXchOA9hcrAoqs1LKzHsQhrIBafkJi3yYiGSJKUTsUyBQ72INKyfNO6HOeTjmak05iMI9SEx9XJFVhKU4hZAcpaQlmqjAIZE2Wnxb72tHWNpKNgvtE7Ve7N3A8ryYe4U"
+    extraAttrs="null"
+    signature="Y8hvOofvsV1RpAGLxXUBe6m9/VIj0DPiq2nk9/v38ebXEQBZCNRNDkVK4Kti5PCBuNKm96wKWu/iHcSj+suIw0fcRC5ukev3WBkmuPOkpdcQwcBClCfH1OPeoYl7Sf8IUjjG354syGsSpfBO9g4Slp++4McdFE7XjW3pPMmXEPVxL+KYlDjfcInJAHQTvL4kB+kKFe7ETGbUOohiWu4DbpAhfZeCCOGVY5sAGDn+qPeLEsceSfmx5cE3DQV4KFt4exGYBOZXgPEuDLhOuYIVP52pNwp8NrsAyMs8AB3tQUEPIKyWnoi16bsBrsCW60ZWtvWocN2Ai1jURUm5D8Fx+AgTCVNTpj+b/G5XvstAPJ1stL4pebJI0o2Y0CnywGNj6Rx+ObRVLWVZMkgh54fbScffAMuuI5QqOZETe0pDTZFJru8vwE9vQA8sGvv9d505Ict1261jc8pwNmXOeTyev+ysjndifbEl0HgiaS7+t16Zu0TOKdK2Bw9kzadCjcSx"
 />
-
