@@ -1,12 +1,17 @@
 version: '3.8'
 services:
   phone-bar-web:
-    image: swr.cn-north-4.myhuaweicloud.com/registry-huawei/effyic/phone-bar-h5:latest
+    image: swr.cn-north-4.myhuaweicloud.com/registry-huawei/effyic/phone-bar-h5-bzf:latest
     container_name: phone-bar-sdk
     ports:
       - "8900:80"
     restart: always
     pull_policy: always
+    volumes:
+      - ./alb/conf:/opt/ALB-V2.0.5-SE/conf:z
+      - ./alb/license.xml:/opt/ALB-V2.0.5-SE/license.xml:z
+      - ./alb/.LICENSEINFO:/opt/ALB-V2.0.5-SE/.LICENSEINFO:z
+      - ./alb/logs:/opt/ALB-V2k.0.5-SE/logs:z
     networks:
       - phone-bar-sdk
 networks:
