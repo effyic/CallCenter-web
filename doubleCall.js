@@ -158,7 +158,6 @@
           <button type="button" id="cancelCallBtn" style="flex: 1; height: 40px; border-radius: 20px; border: none; background: #D6D6D6; color: #666; font-size: 14px; display: flex; align-items: center; justify-content: center; cursor: pointer;">取消</button>
           <button type="button" id="confirmCallBtn" style="flex: 1; height: 40px; border-radius: 20px; border: none; background: #4D98D5; color: #fff; cursor: pointer; font-size: 14px; display: flex; align-items: center; justify-content: center;">立即呼叫</button>
         </div>
-        <a id="modifyPhoneLink" style="font-size: 14px; color: #4D98D5; text-decoration: none; display: inline-block; cursor: pointer; margin-top: 8px;" href="javascript:void(0);">非本机号请修改 ></a>
       </div>
       <!-- 修改号码弹窗 -->
       <div id="phoneModal" style="display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0, 0, 0, 0.5); z-index: 1000; align-items: center; justify-content: center;">
@@ -181,7 +180,6 @@
     const elements = {
       cancelBtn: container.querySelector('#cancelCallBtn'),
       confirmBtn: container.querySelector('#confirmCallBtn'),
-      modifyLink: container.querySelector('#modifyPhoneLink'),
       phoneModal: container.querySelector('#phoneModal'),
       modalCancelBtn: container.querySelector('#modalCancelBtn'),
       modalConfirmBtn: container.querySelector('#modalConfirmBtn'),
