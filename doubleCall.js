@@ -133,7 +133,7 @@
               <div class="auto-call-icon-container">
                 <img src="images/icon/autocall.png" alt="" class="auto-call-icon">
               </div>
-              <span class="auto-call-title-text" style="color: #0f9b7a; font-size: 14px; font-weight: 500;">自动外呼模式</span>
+              <span class="auto-call-title-text" style="color: #0f9b7a; font-size: 14px; font-weight: 500;">外呼模式</span>
             </div>
           </div>
 
@@ -154,8 +154,7 @@
         <img src="images/icon/dialogIcon.png" alt="" style="width: 96px; height: 96px; z-index: 1;">
         <div style="color: #333; font-size: 14px; margin: 16px 0 8px; line-height: 20px;">将使用该号码呼出</div>
         <div style="font-size: 28px; font-weight: 600; color: #333; line-height: 40px;">${displayPhone}</div>
-        <div style="display: flex; justify-content: center; gap: 9px; margin: 32px 0 16px; width: 100%;">
-          <button type="button" id="cancelCallBtn" style="flex: 1; height: 40px; border-radius: 20px; border: none; background: #D6D6D6; color: #666; font-size: 14px; display: flex; align-items: center; justify-content: center; cursor: pointer;">取消</button>
+        <div style="display: flex; justify-content: center; gap: 9px; margin: 32px 0 16px; width: 80%;">
           <button type="button" id="confirmCallBtn" style="flex: 1; height: 40px; border-radius: 20px; border: none; background: #4D98D5; color: #fff; cursor: pointer; font-size: 14px; display: flex; align-items: center; justify-content: center;">立即呼叫</button>
         </div>
       </div>
@@ -178,7 +177,6 @@
     `;
 
     const elements = {
-      cancelBtn: container.querySelector('#cancelCallBtn'),
       confirmBtn: container.querySelector('#confirmCallBtn'),
       phoneModal: container.querySelector('#phoneModal'),
       modalCancelBtn: container.querySelector('#modalCancelBtn'),
@@ -356,6 +354,7 @@
     if (elements.cancelBtn) {
       elements.cancelBtn.addEventListener('click', function () {
         console.log('取消按钮被点击');
+        window.history.back();
       });
     }
 
@@ -446,10 +445,6 @@
     // 添加按钮hover效果样式
     const style = document.createElement('style');
     style.textContent = `
-      #cancelCallBtn:hover, #modalCancelBtn:hover {
-        background: #f5f5f5 !important;
-        border-color: #bbb !important;
-      }
       #confirmCallBtn:hover, #modalConfirmBtn:hover {
         background: #2589c7 !important;
         box-shadow: 0 4px 12px rgba(45, 152, 218, 0.4) !important;
