@@ -8,6 +8,8 @@
     API_BASE: ''
   };
 
+  let pollingTimer = null;
+
   /**
    * 解析路由参数
    */
@@ -29,6 +31,16 @@
   function maskPhone (num) {
     if (!num || num.length < 7) return num || '';
     return num.replace(/(\d{3})\d{4}(\d+)/, '$1****$2');
+  }
+
+  /**
+   * 格式化通话时长 (秒 -> mm:ss)
+   */
+  function formatDuration (seconds) {
+    if (!seconds && seconds !== 0) return '00:00';
+    const mins = Math.floor(seconds / 60);
+    const secs = Math.floor(seconds % 60);
+    return `${mins.toString().padStart(2, '0')}:${secs.toString().padStart(2, '0')}`;
   }
 
   /**
@@ -147,6 +159,7 @@
               来电请注意接听
             </div>
             <div id="callStatus" style="text-align: center; color: #122C4BCC; font-size: 16px; border-radius: 8px;">呼叫中...</div>
+            <div id="callDuration" style="text-align: center; color: #122C4B; font-size: 20px; font-weight: 600; margin-top: -10px; display: none;">00:00</div>
           </div>
         </div>
       </div>
@@ -185,6 +198,7 @@
       phoneError: container.querySelector('#phoneError'),
       autoCallStatus: container.querySelector('#autoCallStatus'),
       callStatus: container.querySelector('#callStatus'),
+      callDuration: container.querySelector('#callDuration'),
       mainCallCard: container.querySelector('#mainCallCard'),
       closeModalBtn: container.querySelector('#closeModalBtn')
     };
@@ -279,6 +293,62 @@
     }
 
     /**
+     * 停止轮询
+     */
+    function stopPolling () {
+      if (pollingTimer) {
+        clearInterval(pollingTimer);
+        pollingTimer = null;
+      }
+    }
+
+    /**
+     * 开始轮询呼叫状态
+     */
+    function startPolling (uuid) {
+      stopPolling();
+      console.log('开始轮询通话状态, uuid:', uuid);
+
+      pollingTimer = setInterval(async () => {
+        try {
+          const response = await fetch(CONFIG.API_BASE + '/aicall/api/records/list', {
+            method: 'POST',
+            headers: {
+              'Content-Type': 'application/json',
+              'Accept': 'application/json'
+            },
+            body: JSON.stringify({
+              uuid: uuid,
+              callType: '03'
+            })
+          });
+
+          if (!response.ok) return;
+
+          const result = await response.json();
+          if (result.code === 0 && result.rows && result.rows.length > 0) {
+            const record = result.rows[0];
+            console.log('获取到通话记录:', record);
+
+            if (elements.callStatus) {
+              elements.callStatus.textContent = '通话已结束';
+            }
+
+            if (elements.callDuration) {
+              elements.callDuration.textContent = formatDuration(record.timeLen);
+              elements.callDuration.style.display = 'block';
+            }
+
+            // 获取到数据（通话结束）后停止轮询
+            stopPolling();
+          }
+        } catch (error) {
+          // 通话过程中可能出现断网，静默处理查询失败
+        }
+      }, 1000);
+    }
+
+    /**
      * 统一外呼函数
      */
     async function triggerCall (validPhone) {
@@ -315,11 +385,16 @@
           }
         });
 
-        const data = await res.json().catch(() => ({}));
+        const data = await res.text().catch(() => ({}));
         console.log('外呼接口响应:', res.status, data);
 
         if (!res.ok) {
           throw new Error(data.message || `接口返回错误，状态码 ${res.status}`);
+        }
+
+        // 获取 uuid 并开始轮询
+        if (data) {
+          startPolling(data);
         }
 
         // 成功后才关闭弹窗和卡片
