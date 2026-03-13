@@ -319,7 +319,6 @@
      */
     function startPolling (uuid) {
       stopPolling();
-      console.log('开始轮询通话状态, uuid:', uuid);
 
       pollingTimer = setInterval(async () => {
         try {
@@ -340,7 +339,6 @@
           const result = await response.json();
           if (result.code === 0 && result.rows && result.rows.length > 0) {
             const record = result.rows[0];
-            console.log('获取到通话记录:', record);
 
             if (elements.callStatus) {
               elements.callStatus.textContent = '通话已结束';
