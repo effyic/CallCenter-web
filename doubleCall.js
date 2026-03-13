@@ -34,6 +34,21 @@
   }
 
   /**
+   * HTML 转义函数，防止 XSS 攻击
+   */
+  function escapeHTML (str) {
+    if (!str) return '';
+    const map = {
+      '&': '&amp;',
+      '<': '&lt;',
+      '>': '&gt;',
+      '"': '&quot;',
+      "'": '&#39;'
+    };
+    return str.replace(/[&<>"']/g, (m) => map[m]);
+  }
+
+  /**
    * 格式化通话时长 (秒 -> mm:ss)
    */
   function formatDuration (seconds) {
@@ -52,9 +67,7 @@
     }
 
     try {
-      console.log('正在获取用户信息，uid:', uid);
-
-      const response = await fetch(`${CONFIG.API_BASE}/aicall/api/extension/usercode?userCode=${uid}`, {
+      const response = await fetch(`${CONFIG.API_BASE}/aicall/api/extension/usercode?userCode=${encodeURIComponent(uid)}`, {
         method: 'GET',
         headers: {
           'Accept': 'application/json'
@@ -68,7 +81,6 @@
       const data = await response.json();
 
       if (data.code === 0 && data.data) {
-        console.log('成功获取用户信息:', data.data);
         return {
           extNum: data.data.extNum,
           extPass: data.data.extPass,
@@ -166,7 +178,7 @@
       <div id="mainCallCard" style="position: fixed; left: 50%; top: 50%; transform: translate(-50%, -50%); background: #fff; box-shadow: 0 6px 20px rgba(0, 0, 0, 0.08); border-radius: 12px; padding: 32px 24px; width: 280px; text-align: center; display: flex; flex-direction: column; align-items: center; box-sizing: border-box; z-index: 999;">
         <img src="images/icon/dialogIcon.png" alt="" style="width: 96px; height: 96px; z-index: 1;">
         <div style="color: #333; font-size: 14px; margin: 16px 0 8px; line-height: 20px;">将使用该号码呼出</div>
-        <div style="font-size: 28px; font-weight: 600; color: #333; line-height: 40px;">${displayPhone}</div>
+        <div style="font-size: 28px; font-weight: 600; color: #333; line-height: 40px;">${escapeHTML(displayPhone)}</div>
         <div style="display: flex; justify-content: center; gap: 9px; margin: 32px 0 16px; width: 80%;">
           <button type="button" id="confirmCallBtn" style="flex: 1; height: 40px; border-radius: 20px; border: none; background: #4D98D5; color: #fff; cursor: pointer; font-size: 14px; display: flex; align-items: center; justify-content: center;">立即呼叫</button>
         </div>
@@ -365,7 +377,6 @@
         }
 
         const extNum = userInfo.extNum;
-        console.log('获取用户信息成功，extNum:', extNum);
 
         // 构建查询参数
         const queryParams = new URLSearchParams({
@@ -376,7 +387,6 @@
         });
 
         const url = CONFIG.API_BASE + '/call-center/conferenceDualNoModerator?' + queryParams.toString();
-        console.log('调用外呼接口:', url);
 
         const res = await fetch(url, {
           method: 'GET',
@@ -386,7 +396,6 @@
         });
 
         const data = await res.text().catch(() => ({}));
-        console.log('外呼接口响应:', res.status, data);
 
         if (!res.ok) {
           throw new Error(data.message || `接口返回错误，状态码 ${res.status}`);
