@@ -318,7 +318,7 @@ function displayRecords(data, container) {
     records.forEach((record, index) => {
         if (record.wavFileUrl) {
             audioHTML += `
-                <div style="margin: 10px 0; padding: 15px; background: white; border-radius: 8px; box-shadow: 0 2px 8px rgba(0,0,0,0.1);">
+                <div style="margin: 50px 0 10px; padding: 15px; background: white; border-radius: 8px; box-shadow: 0 2px 8px rgba(0,0,0,0.1);">
                     <audio controls src="${ip+record.wavFileUrl}" style="width: 100%;"></audio>
                 </div>
             `;
