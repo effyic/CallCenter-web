@@ -1,0 +1,56 @@
+﻿<!DOCTYPE html>
+<html>
+
+<head>
+  <title>呼叫中心html客户端工具条</title>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+  <script type="text/javascript" src="./callbar/jquery-3.7.1.min.js"></script>
+  <script type="text/javascript" src="./callbar/ccPhoneBarSocket.js"></script>
+
+  <script type="text/javascript" src="./callbar/callcenter/jsSipMediaFile.js"></script>
+  <script type="text/javascript" src="./callbar/callcenter/jssip-3.10.0.mini.js"></script>
+  <script src="./callbar/callcenter/jsSipUA.js"></script>
+
+  <link rel="stylesheet" href="./callbar/page.css" />
+  <script src="./callbar/phone-bar.js"></script>
+
+  <script>
+    window.onload = init
+
+    _phoneBar.on(ccPhoneBarSocket.eventList.new_inbound_call, function (msg) {
+      console.log("新来电-手机号: ", msg.object.caller);
+      console.log("新来电-uuid: ", msg.object.uuid);
+    });
+
+    _phoneBar.on(ccPhoneBarSocket.eventListWithTextInfo.caller_answered.code, function (msg) {
+      console.log( "被叫接通",msg.object.uuid);
+    });
+
+    _phoneBar.on(ccPhoneBarSocket.eventListWithTextInfo.callee_answered.code, function (msg) {
+      console.log( "主叫接通",msg.object.uuid);
+    });
+
+    _phoneBar.on(ccPhoneBarSocket.eventListWithTextInfo.caller_hangup.code, function (msg) {
+      console.log(msg, "主叫挂断");
+    });
+
+    // phoneNumber: 呼叫号码
+    //_phoneBar.call(phoneNumber);
+
+    // 状态变更为话后整理
+    //_phoneBar.setStatus(ccPhoneBarSocket.agentStatusEnum.fill_form) 
+    // 状态变更为空闲
+    //_phoneBar.setStatus(ccPhoneBarSocket.agentStatusEnum.free) 
+    // 状态变更为忙碌
+    //_phoneBar.setStatus(ccPhoneBarSocket.agentStatusEnum.busy) 
+
+  </script>
+</head>
+
+<body>
+  <div id="phone-bar"></div>
+</body>
+
+</html>
