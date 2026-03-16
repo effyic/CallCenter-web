@@ -182,7 +182,7 @@
       <div id="mainCallCard" style="position: fixed; left: 50%; top: 50%; transform: translate(-50%, -50%); background: #fff; box-shadow: 0 6px 20px rgba(0, 0, 0, 0.08); border-radius: 12px; padding: 32px 24px; width: 280px; text-align: center; display: flex; flex-direction: column; align-items: center; box-sizing: border-box; z-index: 999;">
         <img src="images/icon/dialogIcon.png" alt="" style="width: 96px; height: 96px; z-index: 1;">
         <div style="color: #333; font-size: 14px; margin: 16px 0 8px; line-height: 20px;">将使用该号码呼出</div>
-        <div style="font-size: 28px; font-weight: 600; color: #333; line-height: 40px;">${escapeHTML(displayPhone)}</div>
+        <div id="displayPhone" style="font-size: 28px; font-weight: 600; color: #333; line-height: 40px;"></div>
         <div style="display: flex; justify-content: center; gap: 9px; margin: 32px 0 16px; width: 80%;">
           <button type="button" id="confirmCallBtn" style="flex: 1; height: 40px; border-radius: 20px; border: none; background: #4D98D5; color: #fff; cursor: pointer; font-size: 14px; display: flex; align-items: center; justify-content: center;">立即呼叫</button>
         </div>
@@ -216,8 +216,16 @@
       callStatus: container.querySelector('#callStatus'),
       callDuration: container.querySelector('#callDuration'),
       mainCallCard: container.querySelector('#mainCallCard'),
-      closeModalBtn: container.querySelector('#closeModalBtn')
+      closeModalBtn: container.querySelector('#closeModalBtn'),
+      displayPhoneEl: container.querySelector('#displayPhone')
     };
+
+    // 为了彻底避免基于 DOM 的 XSS，将来自 URL 的号码只通过 textContent 写入
+    if (elements.displayPhoneEl) {
+      // 仅允许数字、空格和星号，其他字符全部丢弃
+      const safeDisplayPhone = (displayPhone || '').replace(/[^\d*\s]/g, '');
+      elements.displayPhoneEl.textContent = safeDisplayPhone;
+    }
 
     /**
      * 隐藏外层卡片
