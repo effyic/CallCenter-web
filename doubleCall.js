@@ -13,22 +13,26 @@
   /**
    * 解析路由参数
    */
-  function getQueryParams () {
+  function getQueryParams() {
     const params = new URLSearchParams(window.location.search || '');
+
+    // fix: 防止 XSS 攻击
+    const sanitize = str => (str || '').replace(/[<>"'&]/g, '');
+
     return {
-      uid: params.get('uid') || '',
-      phone: params.get('phone') || '',
-      tokenId: params.get('tokenId') || '',
-      workTicketId: params.get('workTicketId') || '',
-      userId: params.get('userId') || '',
-      loginPhone: params.get('loginPhone') || ''
+      uid: sanitize(params.get('uid')),
+      phone: sanitize(params.get('phone')),
+      tokenId: sanitize(params.get('tokenId')),
+      workTicketId: sanitize(params.get('workTicketId')),
+      userId: sanitize(params.get('userId')),
+      loginPhone: sanitize(params.get('loginPhone'))
     };
   }
 
   /**
    * 手机号掩码处理：仅掩盖中间四位
    */
-  function maskPhone (num) {
+  function maskPhone(num) {
     if (!num || num.length < 7) return num || '';
     return num.replace(/(\d{3})\d{4}(\d+)/, '$1****$2');
   }
@@ -36,7 +40,7 @@
   /**
    * HTML 转义函数，防止 XSS 攻击
    */
-  function escapeHTML (str) {
+  function escapeHTML(str) {
     if (!str) return '';
     const map = {
       '&': '&amp;',
@@ -51,7 +55,7 @@
   /**
    * 格式化通话时长 (秒 -> mm:ss)
    */
-  function formatDuration (seconds) {
+  function formatDuration(seconds) {
     if (!seconds && seconds !== 0) return '00:00';
     const mins = Math.floor(seconds / 60);
     const secs = Math.floor(seconds % 60);
@@ -61,7 +65,7 @@
   /**
    * 根据uid获取用户信息
    */
-  async function getUserInfoByUid (uid) {
+  async function getUserInfoByUid(uid) {
     if (!uid) {
       throw new Error('用户ID不能为空');
     }
@@ -106,7 +110,7 @@
   /**
    * 手机号校验函数（只允许11位手机号）
    */
-  function validatePhoneNumber (phone) {
+  function validatePhoneNumber(phone) {
     const cleanedPhone = phone.replace(/\s|-/g, '');
 
     if (!cleanedPhone || cleanedPhone.trim() === '') {
@@ -131,7 +135,7 @@
   /**
    * 渲染主界面
    */
-  function render () {
+  function render() {
     const container = document.getElementById('phone-bar') || document.body;
     if (!container) {
       console.warn('未找到可用的容器 #phone-bar 或 body，渲染跳过');
@@ -218,7 +222,7 @@
     /**
      * 隐藏外层卡片
      */
-    function hideMainCard () {
+    function hideMainCard() {
       if (elements.mainCallCard) {
         elements.mainCallCard.style.display = 'none';
       }
@@ -227,7 +231,7 @@
     /**
      * 显示错误提示
      */
-    function showError (message) {
+    function showError(message) {
       if (elements.phoneError) {
         elements.phoneError.textContent = message;
         elements.phoneError.style.display = 'block';
@@ -240,7 +244,7 @@
     /**
      * 清除错误提示
      */
-    function clearError () {
+    function clearError() {
       if (elements.phoneError) {
         elements.phoneError.textContent = '';
         elements.phoneError.style.display = 'none';
@@ -253,7 +257,7 @@
     /**
      * 更新立即呼叫按钮状态
      */
-    function updateCallButtonState (isValid) {
+    function updateCallButtonState(isValid) {
       if (elements.modalConfirmBtn) {
         if (isValid) {
           elements.modalConfirmBtn.disabled = false;
@@ -270,7 +274,7 @@
     /**
      * 显示弹窗
      */
-    function showModal () {
+    function showModal() {
       if (elements.phoneModal) {
         elements.phoneModal.style.display = 'flex';
         clearError();
@@ -292,7 +296,7 @@
     /**
      * 隐藏弹窗
      */
-    function hideModal () {
+    function hideModal() {
       if (elements.phoneModal) {
         elements.phoneModal.style.display = 'none';
         if (elements.phoneInput) {
@@ -307,7 +311,7 @@
     /**
      * 停止轮询
      */
-    function stopPolling () {
+    function stopPolling() {
       if (pollingTimer) {
         clearInterval(pollingTimer);
         pollingTimer = null;
@@ -317,7 +321,7 @@
     /**
      * 开始轮询呼叫状态
      */
-    function startPolling (uuid) {
+    function startPolling(uuid) {
       stopPolling();
 
       pollingTimer = setInterval(async () => {
@@ -361,7 +365,7 @@
     /**
      * 统一外呼函数
      */
-    async function triggerCall (validPhone) {
+    async function triggerCall(validPhone) {
       try {
         // 必须提供uid才能获取分机号
         if (!routeParams.uid) {
