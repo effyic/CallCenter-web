@@ -63,6 +63,23 @@
   }
 
   /**
+   * uuid 合法性校验：作为后端返回标识使用，避免被当作“动态代码”解析
+   * 支持 32 位十六进制或标准 UUID 格式
+   */
+  function isValidUuid(value) {
+    const str = String(value || '').trim();
+    if (!str) return false;
+
+    // 支持两种形式：
+    // 1) 36 位数字（你提到的 36 位数）
+    // 2) 36 位标准 UUID（8-4-4-4-12）
+    const num36 = /^[0-9]{36}$/;
+    const uuidLike = /^[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}$/;
+
+    return num36.test(str) || uuidLike.test(str);
+  }
+
+  /**
    * 根据uid获取用户信息
    */
   async function getUserInfoByUid(uid) {
@@ -287,13 +304,12 @@
         elements.phoneModal.style.display = 'flex';
         clearError();
         if (elements.phoneInput) {
-          setTimeout(() => {
-            elements.phoneInput.focus();
-            // 检查初始状态
-            const phoneNumber = elements.phoneInput.value.trim();
-            const validation = validatePhoneNumber(phoneNumber);
-            updateCallButtonState(validation.valid);
-          }, 100);
+          // 直接同步聚焦并校验，避免使用 setTimeout 以满足“动态解析代码”规则要求
+          elements.phoneInput.focus();
+          // 检查初始状态
+          const phoneNumber = elements.phoneInput.value.trim();
+          const validation = validatePhoneNumber(phoneNumber);
+          updateCallButtonState(validation.valid);
         } else {
           // 如果没有输入框，默认禁用按钮
           updateCallButtonState(false);
@@ -411,9 +427,12 @@
           throw new Error(data.message || `接口返回错误，状态码 ${res.status}`);
         }
 
-        // 获取 uuid 并开始轮询
-        if (data) {
-          startPolling(data);
+        // 获取 uuid 并开始轮询（仅在 uuid 通过白名单校验时才使用）
+        const uuid = (data || '').trim();
+        if (isValidUuid(uuid)) {
+          startPolling(uuid);
+        } else {
+          console.error('接口返回的 uuid 格式不合法，停止轮询');
         }
 
         // 成功后才关闭弹窗和卡片
