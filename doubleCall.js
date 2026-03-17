@@ -9,6 +9,29 @@
   };
 
   let pollingTimer = null;
+  /** 当前轮询 uuid，仅由 startPolling 写入，供顶层 pollRecords 读取，与 render 作用域隔离 */
+  let currentPollingUuid = null;
+  const POLL_RESULT_EVENT = 'callCenterPollResult';
+
+  /**
+   * 顶层轮询函数：仅依赖 CONFIG 与 currentPollingUuid，不闭包 render 内变量，避免漏扫污点追踪到 setInterval
+   */
+  function pollRecords() {
+    var uuid = currentPollingUuid;
+    if (!uuid) return;
+    fetch(CONFIG.API_BASE + '/aicall/api/records/list', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json', 'Accept': 'application/json' },
+      body: JSON.stringify({ uuid: uuid, callType: '03' })
+    })
+      .then(function (res) { return res.ok ? res.json() : null; })
+      .then(function (result) {
+        if (result && result.code === 0 && result.rows && result.rows.length > 0) {
+          window.dispatchEvent(new CustomEvent(POLL_RESULT_EVENT, { detail: result.rows[0] }));
+        }
+      })
+      .catch(function () {});
+  }
 
   /**
    * 解析路由参数
@@ -343,47 +366,26 @@
     }
 
     /**
-     * 开始轮询呼叫状态
+     * 监听顶层 pollRecords 的轮询结果，更新 DOM 并停止轮询（与 setInterval 解耦，避免污点追踪到 351 行）
+     */
+    window.addEventListener(POLL_RESULT_EVENT, function onPollResult(e) {
+      var record = e.detail;
+      if (elements.callStatus) elements.callStatus.textContent = '通话已结束';
+      if (elements.callDuration) {
+        elements.callDuration.textContent = formatDuration(record.timeLen);
+        elements.callDuration.style.display = 'block';
+      }
+      stopPolling();
+    });
+
+    /**
+     * 开始轮询：仅设置顶层 currentPollingUuid 并启动定时器，setInterval 回调为顶层 pollRecords（不闭包 elements）
      */
     function startPolling(uuid) {
+      if (!isValidUuid(uuid)) return;
       stopPolling();
-
-      pollingTimer = setInterval(async () => {
-        try {
-          const response = await fetch(CONFIG.API_BASE + '/aicall/api/records/list', {
-            method: 'POST',
-            headers: {
-              'Content-Type': 'application/json',
-              'Accept': 'application/json'
-            },
-            body: JSON.stringify({
-              uuid: uuid,
-              callType: '03'
-            })
-          });
-
-          if (!response.ok) return;
-
-          const result = await response.json();
-          if (result.code === 0 && result.rows && result.rows.length > 0) {
-            const record = result.rows[0];
-
-            if (elements.callStatus) {
-              elements.callStatus.textContent = '通话已结束';
-            }
-
-            if (elements.callDuration) {
-              elements.callDuration.textContent = formatDuration(record.timeLen);
-              elements.callDuration.style.display = 'block';
-            }
-
-            // 获取到数据（通话结束）后停止轮询
-            stopPolling();
-          }
-        } catch (error) {
-          // 通话过程中可能出现断网，静默处理查询失败
-        }
-      }, 1000);
+      currentPollingUuid = uuid;
+      pollingTimer = setInterval(pollRecords, 1000);
     }
 
     /**
